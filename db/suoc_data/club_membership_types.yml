@@ -1,0 +1,14 @@
+#
+# SUOC Membership Types
+
+year:
+  name: Year
+  description: Membersip for a whole year.
+
+spring:
+  name: Spring
+  description: Membership for a single Spring Semester.
+
+fall:
+  name: Fall
+  description: Membership for a single Fall Semester.

@@ -1,0 +1,19 @@
+active:
+  name: Active
+  description: Member who is currently taking and/or going on trips with SUOC.
+
+inactive:
+  name: Inactive
+  description: Member who is not currently taking and/or going on trips with SUOC.
+
+life:
+  name: Life
+  description: Member who has achieved life status and are active.
+
+retired:
+  name: Retired
+  description: Member who has achieved life status and is inactive.
+
+deceased:
+  name: Deceased
+  description: Member who has climbed that eternal mountain.

@@ -1,0 +1,35 @@
+#
+# SUOC Account Categories
+#
+transfer: 
+  name: Transfer
+
+membership:
+  name: Membership
+    
+reimbursement:
+  name: Reimbursement
+    
+tshirts: 
+  name: Tshirts
+    
+supplies:
+  name: Supplies
+    
+rentals: 
+  name: Rentals
+    
+rental_deposits: 
+  name: Rental Deposit
+    
+gear: 
+  name: Gear
+    
+gas: 
+  name: Gas
+    
+cabin: 
+  name: Cabins
+    
+wva: 
+  name: West Virgina

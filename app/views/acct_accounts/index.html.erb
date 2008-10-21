@@ -1,0 +1,35 @@
+<%
+#
+# Index View
+#
+%>
+
+<div class="box">
+  <h2>Chart of Accounts</h2>
+  
+  <%= will_paginate @accounts,
+      :params => { :action => :index } %></td>
+  
+  <table>
+    <tr>
+      <th>Account</th>
+      <th>Type</th>
+      <th>Balance<ht>
+    </tr>
+  
+  <% for account in @accounts %>
+    <tr>
+      <td><%= link_to account.name, :action => :show, :id => account %></td>
+      <td><%= account.type_name %></td>
+      <td class="decimal"><%= sprintf("%0.2f",account.balance) %></td>
+    </tr>
+  <% end %>
+  </table>
+  
+  <%= will_paginate @accounts, 
+      :params => { :action => :index } %>
+  
+  <br />
+  
+  <%= link_to 'New acct_account', new_acct_account_path %>
+</div>

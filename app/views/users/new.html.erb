@@ -1,0 +1,65 @@
+<div class="yui-b">
+  <div class="box">
+    <h3><%= "Why Sign up?".l %></h3>
+    <ul class="list checks">
+      <li>Required if you are a student member of SUOC.</li>
+      <li>You are an alumni member of SUOC for fun</li>
+    </ul>
+  </div>
+  <div class="box alt">
+    <h3><%= "Tips".l %></h3>
+    <p><%= "After signing up, you'll receive an e-mail confirmation message.".l %>
+    <p><%= "Click the activation link in the e-mail to log in.".l %>
+    <p><%= link_to "Already have an account?".l, "/login" %>
+  </div>
+</div>
+<div id="yui-main">
+  <div class="yui-b">
+    <div class="box">
+      <h3><%= "Sign up!".l %></h3>
+      <%= error_messages_for :user %>
+      <% form_for :user, :url => users_path, :html => {:class => 'MainForm'} do |f| %>
+        <!-- This field makes the new entry a club member. -->
+        <%= f.hidden_field :type, :value => "ClubMember" %>
+        <label for="user_login"> 
+          <em><%= "Required: Your name is what you use to login to this system. Please use your real name with spaces! It will be forced to be unique to this system, so you might have to add a suffix or middle initial or something (but use only letters and numbers, no special characters).".l %>
+          <br>
+          <%= "Please Capitalize! Example: 'John D Doe', 'John Smith III'".l %></em>
+          <br>
+          <%= "Your Real Name (First Last)".l %>
+        </label>
+        <%= f.text_field :login %>
+
+        <label for="user_email">
+          <%= "E-mail address".l %>
+          <em><%= "(Required: We will send a confirmation e-mail to the address you enter.)".l %>
+        </label>
+        <%= f.text_field :email %>
+
+        <label for="user_birthdate">
+          <%="Birthday".l %>
+          :
+          <em><%= "(Required: you must be at least 13 years old to sign up.)".l %>
+        <%=  f.text_field :birthday, :value => (Date.today -13.year).strftime("%m/%d/%Y") %>
+
+        <% if AppConfig.require_captcha_on_signup %>
+          <div class="right" style='margin-top:2em;'>
+            <%= recaptcha_tags %>
+          </div>
+        <% end %>
+
+        <label for="user_password">
+          <%= "Type your password:".l %>
+        </label>
+        <%= f.password_field :password %>
+        <label for="user_password_confirmation">
+          <%= "Re-type your password to confirm:".l %>
+        </label>
+        <%= f.password_field :password_confirmation %>
+        <%= hidden_field_tag :inviter_id, params[:inviter_id] %>
+        <%= hidden_field_tag :inviter_code, params[:inviter_code] %>
+        <p><%= submit_tag 'Sign up'.l %>
+      <% end %>
+    </div>
+  </div>
+</div>

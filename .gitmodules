@@ -1,0 +1,15 @@
+[submodule "vendor/plugins/community_engine"]
+	path = vendor/plugins/community_engine
+	url = git@github.com:polar/communityengine.git
+[submodule "vendor/plugins/engines"]
+	path = vendor/plugins/engines
+	url = git://github.com/lazyatom/engines.git
+[submodule "vendor/plugins/acts_as_indexed"]
+	path = vendor/plugins/acts_as_indexed
+	url = git://github.com/dougal/acts_as_indexed.git
+[submodule "vendor/plugins/auto_complete"]
+	path = vendor/plugins/auto_complete
+	url = git://github.com/rails/auto_complete.git
+[submodule "vendor/plugins/will_paginate"]
+	path = vendor/plugins/will_paginate
+	url = git://github.com/mislav/will_paginate.git

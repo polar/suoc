@@ -1,0 +1,18 @@
+#
+# Acct Account Types
+#
+asset:
+  name: Asset
+  description: Asset Account
+
+liability:
+  name: Liability
+  description: Liability Account
+
+incone:
+  name: Income
+  description: Income Account
+
+expense:
+  name: Expense
+  description: Expense Account

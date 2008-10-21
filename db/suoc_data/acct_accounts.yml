@@ -1,0 +1,37 @@
+#
+# AccAccounts for SUOC
+#
+income:
+  name: General Income
+  account_type: income
+  
+expense:
+  name: General Expense
+  account_type: expense
+  
+eroom:
+  name: E-Room
+  account_type: asset
+  actions: membership_collect, wva_collect, wva_reimbursement, wva_cabinexp, to_treas, from_treas
+  
+treasurer:
+  name: Treasurer
+  account_type: asset
+  actions: membership_collect, wva_collect, wva_reimbursement, wva_cabinexp, to_eroom, from_eroom
+  
+treaseroom:
+  name: TreasERoom
+  account_type: asset
+  
+checking:
+  name: Checking
+  account_type: asset
+
+wva_income:
+  name: West Virgina Income
+  account_type: income
+  
+wva_expense:
+  name: West Virgina Expense
+  account_type: expense
+

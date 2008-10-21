@@ -1,0 +1,65 @@
+<% @section = 'my_profile' %>
+
+<%= render :partial => "users/dashboard_nav" %>
+    
+
+<div id="yui-main">
+  <div class="yui-b">
+    <div class="box">
+      <% suoc_profile = SuocProfile.find(:first, :conditions => { :user_id => @user.id }) %>
+      <% if suoc_profile %>
+        <h3><%= "Hi #{suoc_profile.name}!" %></h3>
+      
+        <% if @user.pending_friendships.any? %>
+          <p>
+            <%= link_to "#{image_tag 'icons/user_add.png', :plugin => 'community_engine'} You have pending friendship requests.", 
+                        pending_user_friendships_path(@user) %>
+          </p>
+        <% end %>
+  
+        <% if @network_activity.empty? && @recommended_posts.empty? %>
+          <p>
+            <%= "This is your dashboard.".l %>
+            <br>
+            <%= :dashboard_friends.l :site => AppConfig.community_name %>
+          </p>
+          <p>
+            <%= "To start adding friends, you can".l :to_start_adding_friends %>
+            <%= link_to 'browse all members'.l, users_path %>
+          </p>
+          <p>
+            <%= link_to 'Update your profile and tag yourself'.l(:update_profile_and_tag_yourself),
+                        edit_user_path(current_user) %>
+            <%= "to start getting recommended content on your dashboard.".l 
+                 :to_get_recommended_content_on_your_dashboard %>
+        <% end %>
+  
+        <% unless @network_activity.empty? %>
+          <h2><%= "Activity from your network".l %></h2>
+          <div class="box fresh">
+            <%= render :partial => "activities/activity", 
+                       :collection => @network_activity %>
+            <h6 class="all">
+              <%= link_to "See all activity".l, network_user_activities_path(current_user) %>
+            </h6>
+          </div>
+        <% end %>
+  
+        <% unless @recommended_posts.empty? %>
+          <h3><%= "Recommended Posts".l %></h3>
+          <div id="posts">
+            <ul>
+              <% @recommended_posts.each do |post| %>
+                <li>
+                  <%= link_to( "#{post.tag_for_first_image_in_body} #{truncate(post.display_title, 75)} <span class='post_excerpt'>#{ truncate_words(post.post, 35, '...' )} (by #{post.user.login})</span>",
+                               user_post_path(post.user, post), 
+                               :title => "by #{post.user.login}" ) %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

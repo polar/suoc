@@ -1,0 +1,27 @@
+#
+# SUOC Activities
+#
+caoneing:
+  name: Canoeing
+  description: Going on top of water.
+
+caving:
+  name: Caving
+  description: Going underground.
+
+mount_biking:
+  name: Mountain Biking
+  description: Going on top of ground with wheels.
+
+xc_skiing:
+  name: Cross Country Skiing 
+  description: Going on top of snow.
+
+backpacking:
+  name: Backpacking
+  description: Hiking anywhere.
+
+climbing:
+  name: Climbing
+  description: Going up rock and ice.
+

@@ -1,0 +1,11 @@
+<h1>New acct_account</h1>
+
+<% form_for(@acct_account) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', acct_accounts_path %>
