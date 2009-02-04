@@ -1,25 +1,14 @@
 class ClubMember < User
   has_enumerated :club_member_status
   
-  has_many :officers, :class_name => "ClubOfficer"
-  has_many :chairs,   :class_name => "ClubChair"
-  has_many :leaders,  :class_name => "ClubLeader"
+  has_many :officers, :class_name => "ClubOfficer", :foreign_key => :member_id
+  has_many :chairs,   :class_name => "ClubChair",   :foreign_key => :member_id
+  has_many :leaders,  :class_name => "ClubLeader",  :foreign_key => :member_id
   
-  validates_date :club_start_date
-  validates_date :club_end_date
+  validates_date :club_start_date, :allow_nil => true
+  validates_date :club_end_date, :allow_nil => true
   
-  #
-  # For now the name will be the same as the login
-  #
-  #alias :name :login
-  def name
-    login
-  end
-  
-  #alias :name= :login=
-  def name=(x)
-    login(x)
-  end
+  alias_attribute :name, :login
     
   def current_officers
     officers.select { |x| x.current? }

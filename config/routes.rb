@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :club_members
+
 
   map.resources :acct_accounts
   
@@ -38,9 +40,33 @@ ActionController::Routing::Routes.draw do |map|
 
   # See how all your routes lay out with "rake routes"
 
+  # We need the sign up route earler so that we can use club_members
   map.from_plugin :community_engine
 
+  # We need it after so that the named route "singup-path" is cool.
   # Install the default routes as the lowest priority.
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 end
+
+# Replace the controller for the "users" routes with "club_members".
+# This requires changing the "requirements" and "defaults" hashes
+# for each route. Then, for named routes that manage things
+# like "users_url", we must regenerate the helpers.
+#
+ActionController::Routing::Routes.routes.each do |r|
+  if r.requirements[:controller] == "users"
+    r.requirements[:controller] = "club_members"
+    r.defaults[:controller] = "club_members"
+    # rewrite the generation function.
+    r.write_generation
+  end
+end
+# Regnerate the Helper functions so that the *user_url functions work
+# correctly.
+#
+# The second argument is "regenerate_code", which we must set.to true.
+# The ActionController::Base aand ActionView:Base are the destinations for the
+# created helper methods, and is the default for this function.
+ActionController::Routing::Routes.install_helpers [ActionController::Base, ActionView::Base], true
+

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081020003956) do
+ActiveRecord::Schema.define(:version => 20081022140801) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
@@ -150,8 +150,8 @@ ActiveRecord::Schema.define(:version => 20081020003956) do
   end
 
   create_table "club_chairs", :force => true do |t|
-    t.integer  "club_member_id"
-    t.integer  "club_chairmanship_id"
+    t.integer  "member_id"
+    t.integer  "chairmanship_id"
     t.date     "start_date"
     t.date     "end_date"
     t.datetime "created_at"
@@ -178,6 +178,11 @@ ActiveRecord::Schema.define(:version => 20081020003956) do
   create_table "club_member_statuses", :force => true do |t|
     t.string   "name"
     t.text     "description", :default => ""
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "club_members", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -403,6 +408,7 @@ ActiveRecord::Schema.define(:version => 20081020003956) do
     t.datetime "published_at"
   end
 
+  add_index "posts", ["user_id"], :name => "index_posts_on_user_id"
   add_index "posts", ["published_as"], :name => "index_posts_on_published_as"
   add_index "posts", ["published_at"], :name => "index_posts_on_published_at"
   add_index "posts", ["category_id"], :name => "index_posts_on_category_id"
@@ -421,8 +427,8 @@ ActiveRecord::Schema.define(:version => 20081020003956) do
     t.text     "body_html"
   end
 
-  add_index "sb_posts", ["user_id", "created_at"], :name => "index_posts_on_user_id"
-  add_index "sb_posts", ["forum_id", "created_at"], :name => "index_posts_on_forum_id"
+  add_index "sb_posts", ["user_id", "created_at"], :name => "index_sb_posts_on_user_id"
+  add_index "sb_posts", ["forum_id", "created_at"], :name => "index_sb_posts_on_forum_id"
 
   create_table "sessions", :force => true do |t|
     t.string   "sessid"

@@ -2,8 +2,8 @@ class CreateClubChairs < ActiveRecord::Migration
   def self.up
     create_table :club_chairs do |t|
       
-      t.references   :club_member
-      t.references   :club_chairmanship
+      t.references   :member
+      t.references   :chairmanship
 
       t.date         :start_date
       t.date         :end_date

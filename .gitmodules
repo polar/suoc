@@ -1,6 +1,9 @@
+[submodule "vendor/plugins/seed-fu"]
+	path = vendor/plugins/seed-fu
+	url = git://github.com/mbleigh/seed-fu.git 
 [submodule "vendor/plugins/community_engine"]
 	path = vendor/plugins/community_engine
-	url = git@github.com:polar/communityengine.git
+	url = git://github.com/bborn/communityengine.git
 [submodule "vendor/plugins/engines"]
 	path = vendor/plugins/engines
 	url = git://github.com/lazyatom/engines.git

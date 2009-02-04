@@ -2,17 +2,21 @@
 # Acct Account Types
 #
 asset:
+  id: 1
   name: Asset
   description: Asset Account
 
 liability:
+  id: 2
   name: Liability
   description: Liability Account
 
 incone:
+  id: 3
   name: Income
   description: Income Account
 
 expense:
+  id: 4
   name: Expense
   description: Expense Account

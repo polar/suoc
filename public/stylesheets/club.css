@@ -27,7 +27,7 @@
 /* Avatar Header */
 .badge_medium .vcard h5{
   float: left;
-  width: 66px;
+  width: 100px;
 }
 
 .badge_medium .vcard ul{
@@ -41,15 +41,11 @@
   border: 1px solid #a2a19b;
   padding: 2px;
   background: #fff;
+  width: 80px;
 }
 
 .badge_medium .vcard h5 a:hover img{
   background: #a2a19b;
-}
-
-.badge_medium .vcard ul{
-  margin-left: 66px;
-  font-size: 85%;
 }
 
 /* Each Side list element is padded left 20px 

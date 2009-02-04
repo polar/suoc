@@ -6,7 +6,7 @@
 
 <div class="box">
   <h2>Edit Account</h2>
-  
+  <div class="errors"></div>
   <% form_for(@account, 
         :html => { :class => "MainForm" }) do |f| %>
     <%= f.error_messages %>
