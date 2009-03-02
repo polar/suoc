@@ -1,0 +1,55 @@
+<%
+ # This partial creates a table row for a single officer.
+ # badge and then a vertical table of start and end date.
+ # 
+ #
+ # Local Variables
+ #        officer : ClubOfficer to be displayed.
+ #        link    : Link to use for avatar.
+ #        rowclass : CSS Class for row
+ #
+ %>
+<tr <%= "class='#{rowclass}'" if rowclass %> > 
+  <td><%= render_member_badge(officer.member) %></td>
+  <td><table>
+    <tr>
+      <th>Office</th>
+      <td><%= officer.office.name %></td>
+    </tr>
+    <tr>
+    <th>Start Date</th>
+    <td><%= officer.start_date %></td>
+    </tr>
+    <tr>
+    <th>End Date</th>
+    <td><%= officer.end_date %></td>
+    </tr>
+  </table></td>
+  <td>
+  <ul class="EntryForm">
+    <li>
+    <% if view_retire_officer(officer) %>
+      <%= button_to "Retire Officer",
+                     url_for( :action => :retire_officer,
+                              :id => officer.office,
+                              :officer => officer ),
+                    :confirm => "Are you sure you want to retire #{officer.member.login} from the office of #{officer.office.name}?" %>
+    <% end %>
+    </li><li>
+    <% if view_edit_officer(officer) %>
+      <%= link_to "Edit Officer",
+                   url_for( :action => :edit_officer,
+                            :id => officer.office,
+                            :officer => officer ) %>
+    <% end %>
+    </li><li>
+    <% if view_delete_officer(officer) %>
+      <%= button_to "Delete Officer",
+                    url_for( :action => :delete_officer,
+                             :id => officer.office,
+                             :officer => officer ),
+                    :confirm => "Are you sure you want to DELETE this officer entry, erasing the record forever?"  %>
+    <% end %>
+    </li>
+  </ul>
+</tr>

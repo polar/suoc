@@ -1,0 +1,11 @@
+<%
+# Render a table of already rendered rows.
+# Locals:
+#    tag   The tag
+#    clazz The class for the tag
+#    rows  The rendered rows
+#
+%>
+<%= "<#{tag} #{ "class='#{clazz}'" if clazz } >" if tag %>
+  <%= rows.join %>
+<%= "</#{tag}>" if tag %>

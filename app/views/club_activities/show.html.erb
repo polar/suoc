@@ -1,0 +1,36 @@
+<div class="box">
+  <h2><%= "Club Activity of #{@club_activity.name}" %></h2>
+  <%= @club_activity.tagline %>
+  <h3>Description</h3>
+  <%= @club_activity.description %>
+  <h3><%= "Current Chair(s): " %></h3>
+  <% if !@current_chairs.empty? %>
+    <table>
+    <%= render_chair_list(@current_chairs) %>
+    </table>
+  <% else %>
+      There are no current chairs assigned for this activity.
+  <% end %>
+  <h3>Leaderships</h3>
+  <table>
+    <tr>
+     <th>Leadership</th>
+     <th>Tag Line</th>
+     <th>Current Active Leaders</th>
+    </tr>
+    <%= render_leaderships(@club_activity.leaderships) %>
+  </table>
+  <h3><%= "Past Chair(s): " %></h3>
+  <% if !@past_chairs.empty? %>
+    <%= will_paginate @past_chairs %>
+    <table>
+    <%= render_chair_list(@past_chairs) %>
+    </table>
+    <%= will_paginate @past_chairs %>
+  <% else %>
+      There are no past chairs assigned for this activity.
+  <% end %>
+</div>
+
+<%= link_to 'Club Activities', club_activities_path %> |
+<%= link_to 'Club Activities', club_activities_path %>

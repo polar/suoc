@@ -1,0 +1,17 @@
+<div class="box">
+  <h2>Creating a New Club Chairmanship</h2>
+  <div class="errors"></div>
+  <% form_for(@club_chairmanship, 
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.text_field "name" %>
+    <%= f.text_area "description", 
+         {:size => "86x5", :class => "rich_text_editor"} %>
+    <p>
+      <%= f.submit "Make Chair" %>
+    </p>
+  <% end %>
+
+  <%= link_to 'Club Chairmanships', club_chairmanships_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

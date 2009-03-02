@@ -1,0 +1,15 @@
+<%
+# This renders the Club Member's description.
+#
+#  Locals:
+#     member    The ClubMember
+#     current   If current user.
+%>
+<% if current %>
+  <h3><%= "About #{member.login}" %></h3>
+<% else %>
+  <h3><%= "About Me".l %></h3>
+<% end %>
+<P>
+<%= member.description %>
+</P>

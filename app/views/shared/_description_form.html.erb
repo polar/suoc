@@ -1,0 +1,20 @@
+<%
+# This partial renders the text field for the description for the
+# acct_transaction.
+#   locals:
+#        date      The date of the transaction.
+#        acct_action_id
+#        actions   The actions.
+#        amount    The amount.
+#
+%>
+   <table>
+   <tr>
+     <th>Description</th>
+   </tr>
+   <tr class="description_entry">
+     <td>
+      <%= text_field_tag "acct_transaction[description]", description  %>
+     </td>
+   </tr>
+   </table>

@@ -1,0 +1,43 @@
+<%
+# This partial renders the editor for the basic information
+# Locals:
+#   member  The ClubMember
+#   clazz   The class for the surrounding div, optional.
+#
+%>
+<div id="BasicInfo" <%= "class='#{clazz}'" if clazz %>>
+<% form_remote_tag(:update => "BasicInfo",
+    :url => { :action => :show_club_member_info,
+               :id => member }) do %>
+  <h3>SUOC Information <%= submit_tag "Cancel Edit" %></h3>
+<% end %>
+<div class="errors"></div>
+<% form_remote_for(member, 
+            :update => "BasicInfo", 
+            :url => { :action => :update_club_member_info, 
+                      :id => member}) do |f| %>
+  <%= f.error_messages %>
+  <table>
+  <tr>
+    <th>Aliases:</th><td><%= f.text_field :club_aliases %></td>
+  </tr>
+  <tr>
+    <th>SUID:</th><td><%= f.text_field :club_memberid,
+         :value => (member.club_memberid.insert(5,"-") unless !member.club_memberid) %></td>
+  </tr>
+  <tr>
+    <th>Member Since:</th>
+    <td><%= f.text_field :club_start_date, 
+            :value => (member.club_start_date.strftime("%m/%d/%Y") unless !member.club_start_date) %>
+    </td>
+  </tr>
+  <tr>
+    <th>Member Status:</th>
+    <td><%= f.collection_select :club_member_status_id, 
+                                ClubMemberStatus.find(:all), :id, :name %>
+    </td>
+  </tr>
+  </table>
+  <%= f.submit "Save Changes" %>
+<% end %>
+</div>

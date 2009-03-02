@@ -1,0 +1,12 @@
+<h1>Editing acct_action</h1>
+
+<% form_for(@acct_action) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @acct_action %> |
+<%= link_to 'Back', acct_actions_path %>

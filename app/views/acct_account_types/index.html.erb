@@ -1,0 +1,14 @@
+<div class="box">
+  <h2>Account Types</h2>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+
+    <% for t in @account_types %>
+      <%= render_acct_account_type t %>
+    <% end %>
+  </table>
+</div>

@@ -1,0 +1,16 @@
+<div class="box">
+  <h2><%= "Club Chairmanship of the #{@club_chairmanship.name}" %></h2>
+  <h3>Description</h3>
+  <%= @club_chairmanship.description %>
+  <h3><%= "Current Chair(s): " %></h3>
+  <% if !@current_chairs.empty? %>
+    <table>
+    <%= render_chair_list(@current_chairs) %>
+    </table>
+  <% else %>
+      There are no current chairs assigned for this chairmanship.
+  <% end %>
+</div>
+
+<%= link_to 'Club Chairmanships', club_chairmanships_path %> |
+<%= link_to 'Club Activities', club_activities_path %>

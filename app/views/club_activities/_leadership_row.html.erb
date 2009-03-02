@@ -1,0 +1,18 @@
+<%
+ # This partial creates a table row for a listing of single chair.
+ #
+ # Local Variables
+ #        leadership : ClubLeadership to be displayed.
+ #
+ %>
+<tr class="row">
+  <td class="name">
+    <%= link_to leadership.name, leadership %>
+  </td>
+  <td class="tagline">
+    <%= leadership.tagline %>
+  </td>
+  <td>
+    <%= render_leader_names(leadership.current_active_leaders) %>
+  </td>
+</tr>

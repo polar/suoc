@@ -1,0 +1,15 @@
+<div class="box">
+  <h2>Edit Leader</h2>
+  <h2>Leadership of <%= @club_leadership.name %>
+  <div class="errors"></div>
+    <% form_for(@club_leader, 
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <%= render_leader_entry(@club_leader} %>
+    <% end %>
+
+
+  <%= link_to 'Club Leaderships', club_leaderships_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

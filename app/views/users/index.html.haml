@@ -1,0 +1,19 @@
+- @section = (params[:metro_area_id] ? 'metro_area' : 'users')
+
+.yui-b
+  = render :partial => 'users/search_options'
+
+#yui-main
+  .yui-b
+    .box.user_list
+      %h3=:site_members.l :site => AppConfig.community_name
+
+      .pagination= paginating_links @users, :params => params if @users.page_count > 1
+  
+      %br.clear
+
+      - @users.each do |u|
+        = render :partial => "user_badge", :locals => { :member => u }
+      
+      %br.clear
+      .pagination= paginating_links @users, :params => params if @users.page_count > 1

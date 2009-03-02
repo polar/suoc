@@ -1,0 +1,19 @@
+<div class="box">
+  <h2><%= "Club Office of the #{@club_office.name}" %></h2>
+  <h3>Description</h3>
+  <%= @club_office.description %>
+  <div class="errors"/>
+  <h3><%= "Change Officer Status (Dates)" %></h3>
+  <% form_for @club_officer, :action => :update, 
+           :html => { :class => "MainForm" } do |form| %>
+    <%= form.error_messages %>
+    <table>
+      <%= render_update_officer_entry(:club_officer, @club_officer, nil) %>
+    </table>
+    <p>
+    <%= form.submit "Update" %>
+    </p>
+  <% end %>
+</div>
+<%= link_to 'Club Offices', club_offices_path %> |
+<%= link_to 'Club Activities', club_activities_path %>

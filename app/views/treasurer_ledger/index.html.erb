@@ -1,0 +1,10 @@
+<div class="box">
+<h2>Treasurer Ledger (<%= @current_suoc.name %>)</h2>
+
+<%= render :partial => "shared/transaction_index_form",
+           :locals => {
+              :transactions => @transactions,
+              :transaction  => @transaction,
+              :actions      => @actions,
+              :memeberhip   => @membership } %>
+</div>

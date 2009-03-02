@@ -1,0 +1,10 @@
+<div class="box">
+<h2>E-Room Ledger (<%= @current_user.name %>)</h2>
+
+<%= render :partial => "shared/transaction_index_form",
+           :locals => {
+              :transactions => @transactions,
+              :transaction  => @transaction,
+              :actions      => @actions,
+              :membership   => @membership } %>
+</div>

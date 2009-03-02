@@ -1,0 +1,24 @@
+<div class="box">
+  <h3>Club Member Statuses</h3>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  
+  <% for ms in @club_member_statuses %>
+    <tr>
+      <td><%= link_to_if current_user && current_user.admin?,
+                         ms.name,
+                         edit_club_member_status_path(ms) %></td>
+      <td><%= ms.description %></td>
+    </tr>
+  <% end %>
+  </table>
+  
+  <br />
+  <% if current_user && current_user.admin? %>
+    <%= link_to 'Create new Club Member Status', new_club_member_status_path %>
+  <% end %>
+</div>

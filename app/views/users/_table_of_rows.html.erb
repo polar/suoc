@@ -1,0 +1,10 @@
+<%
+# Render a table of already rendered rows.
+# Locals:
+#    rows  The rendered rows
+#    clazz The class for the table, optional
+#
+%>
+<table <%= "class='#{clazz}'" if clazz %>>
+  <%= rows.join %>
+</table>

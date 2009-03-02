@@ -1,0 +1,29 @@
+<div class="box">
+  <h3>Club Chairmanships</h3>
+
+  <table>
+    <tr>
+      <th>Chairmanship Name</th>
+      <th>Description</th>
+      <th/>
+    </tr>
+  
+  <% for chairmanship in @club_chairmanships %>
+    <tr>
+      <td><%= link_to_if current_user && current_user.admin?,
+                         chairmanship.name,
+                         edit_club_chairmanship_path(chairmanship) %></td>
+      <td><%= chairmanship.description %></td>
+      <% if current_user && current_user.admin? %>
+        <td><%= link_to "Select Chair", 
+                 { :action => :select_new_chair, :id => chairmanship.id } %></td>
+      <% end %>
+    </tr>
+  <% end %>
+  </table>
+  
+  <br />
+  <% if current_user && current_user.admin? %>
+    <%= link_to 'Create new Club Chairmanship', new_club_chairmanship_path %>
+  <% end %>
+</div>

@@ -1,0 +1,44 @@
+<%
+ # This partial creates a table row for a listing of single officer.
+ #
+ # Local Variables
+ #        office : ClubOfficer to be displayed.
+ #
+ %>
+<tr class="row">
+  <td class="name">
+    <%= link_to office.name, office %>
+  </td>
+  <td class="tagline">
+    <%= office.tagline %>
+  </td>
+  <td>
+    <%= render_officer_names(office.current_officers) %>
+  </td>
+  <td class="EntryForm">
+     <% if @view_modify %>
+     <table>
+       <tr>
+         <td>
+           <%= button_to "Select Officer",
+               { :action => :select_new_officer, :id => office.id } %>
+         </td>
+         <td>
+           <%= button_to "Move Up",
+               { :action => :move_up, :id => office.id } %>
+         </td>
+       </tr>
+       <tr>
+         <td>
+            <%= button_to "Edit Office",
+                     edit_club_office_path(office), :method => "get" %>
+         </td>
+         <td>
+           <%= button_to "Move Dn",
+               { :action => :move_down, :id => office.id } %>
+         </td>
+       </tr>
+     </table>
+     <% end %>
+  </td>
+</tr>

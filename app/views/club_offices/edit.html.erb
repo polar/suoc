@@ -1,0 +1,21 @@
+<div class="box">
+  <h2>Editing Club Office</h2>
+  <div class="errors"></div>
+  <% form_for(@club_office, 
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.text_field "name" %>
+    <%= f.label "Tag Line" %>
+    <%= f.text_field :tagline, :size => 72 %>
+    <%= f.label "Content Description" %>
+    <%= f.text_area "description", 
+         {:size => "86x5", :class => "rich_text_editor"} %>
+    <p>
+      <%= f.submit "Update" %>
+    </p>
+  <% end %>
+</div>
+
+
+  <%= link_to 'Club Offices', club_offices_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>

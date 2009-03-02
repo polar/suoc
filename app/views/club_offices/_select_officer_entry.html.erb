@@ -1,0 +1,23 @@
+<%
+ # This partial creates a table row for a single officer.
+ # badge and then a vertical table of start and end date.
+ # 
+ #
+ # Local Variables
+ #        office  : The Club Office for this officer
+ #        member  : ClubMember who is the officer.
+ #        link    : Link to use for avatar.
+ #        rowclass : CSS Class for row
+ #
+ %>
+<tr <%= "class='#{rowclass}'" if rowclass %> >
+  <td class="EntryForm"><% form_for :club_office,
+          :url => { :action => :new_officer },
+          :html => { :class => "button-to", :method => :put } do |form| %>
+       <%= hidden_field_tag "club_office[id]", office.id %>
+       <%= hidden_field_tag "club_member[id]", member.id %>
+       <%= form.submit "Make Officer" %>
+       <% end %>
+  </td>
+  <td><%= render_member_badge(member) %></td>
+</tr>

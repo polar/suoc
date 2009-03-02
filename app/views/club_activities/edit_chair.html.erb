@@ -1,0 +1,23 @@
+<div class="box">
+  <h2>Edit Chair</h2>
+  <h2>Activity of <%= @club_activity.name %>
+  <div class="errors"></div>
+  <h3>Change Chair Dates</h3>
+    <% form_for(@club_chair,
+        :url => { :action => :update_chair, :id => @club_activity, :chair => @club_chair.id },
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <table>
+    <%= render_update_chair_entry(:club_chair, @club_chair) %>
+    </table>
+    <p>
+      <%= f.submit "Update" %>
+    </p>
+    <% end %>
+
+
+
+  <%= link_to 'Club Activities', club_activities_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

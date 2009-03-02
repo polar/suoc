@@ -1,0 +1,30 @@
+<div class="box">
+  <h2>Select New Leader</h2>
+  <h2>Leadership of <%= @club_leadership.name %></h2>
+  <div class="errors"></div>
+  <%
+  # This is for getting the errors from saving the new leader.
+  # Rendering from action "update_leader"
+  %>
+  <% if @new_leader %>
+    <% form_for(@new_leader) do |form| %>
+    <%= form.error_messages %>
+    <% end %>
+  <% end %>
+    <% form_for(@club_leadership,
+                :url => url_for(:action => :new_leader, :id => @club_leadership.id),
+                :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <h3>Select a new <%= @club_leadership.name %> leader</h3>
+    <p>Type name below to select a new leader.</p>
+    <%= text_field_with_auto_complete :club_member, :login %>
+    <p>
+      <%= f.submit "Make Leader" %>
+    </p>
+  <% end %>
+
+
+  <%= link_to 'Club Leaderships', club_leaderships_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

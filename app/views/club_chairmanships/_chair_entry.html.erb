@@ -1,0 +1,28 @@
+<%
+ # This partial creates a table row for a single chair.
+ # badge and then a vertical table of start and end date.
+ # 
+ #
+ # Local Variables
+ #        chair    : ClubChair to be displayed.
+ #        link     : Link to use for avatar.
+ #        rowclass : CSS Class for row
+ #
+ %>
+<tr <%= "class='#{rowclass}'" if rowclass %> > 
+  <td><%= render_member_badge(chair.member) %></td>
+  <td><table>
+    <tr>
+      <th>Office</th>
+      <td><%= chair.chairmanship.name %></td>
+    </tr>
+    <tr>
+    <th>Start Date</th>
+    <td><%= chair.start_date %></td>
+    </tr>
+    <tr>
+    <th>End Date</th>
+    <td><%= chair.end_date %></td>
+    </tr>
+  </table></td>
+</tr>

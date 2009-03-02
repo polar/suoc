@@ -1,0 +1,16 @@
+<div class="box">
+  <h2>Editing Club Member Status</h2>
+  <div class="errors"></div>
+  <% form_for(@club_member_status,
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.label "Name" %>
+    <%= f.text_field "name" %>
+    <%= f.label "Description" %>
+    <%= f.text_area "description", 
+         {:size => "86x5", :class => "rich_text_editor"} %>
+    <p>
+      <%= f.submit "Create" %>
+    </p>
+  <% end %>
+</div>

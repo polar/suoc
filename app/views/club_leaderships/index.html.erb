@@ -1,0 +1,19 @@
+<div class="box">
+  <h3>Club Leaderships</h3>
+
+  <table class="leaderships">
+    <tr>
+      <th>Name</th>
+      <th>Tag Line</th>
+      <th>Curent Active Leaders</th>
+      <th></th>
+    </tr>
+    <%= render :partial => "leadership_row",
+               :collection => @club_leaderships, :as => :leadership %>
+  </table>
+  
+  <br />
+  <% if @view_modify %>
+    <%= link_to 'Create new Club Leadership', new_club_leadership_path %>
+  <% end %>
+</div>

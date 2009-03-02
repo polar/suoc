@@ -1,0 +1,19 @@
+<div class="box">
+  <h3>Club Offices</h3>
+
+  <table class="offices">
+    <tr>
+      <th>Name</th>
+      <th>Tag Line</th>
+      <th>Curent Officers</th>
+      <th></th>
+    </tr>
+    <%= render :partial => "office_row",
+               :collection => @club_offices, :as => :office %>
+  </table>
+  
+  <br />
+  <% if @view_modify %>
+    <%= link_to 'Create new Club Office', new_club_office_path %>
+  <% end %>
+</div>

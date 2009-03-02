@@ -1,0 +1,23 @@
+<div class="box">
+  <h2>Creating a New Club Leadership</h2>
+  <div class="errors"></div>
+  <% form_for(@club_leadership, 
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.label "Name" %>
+    <%= f.text_field "name" %>
+    <%= f.label "Tag Line" %>
+    <%= f.text_field :tagline %>
+    <%= f.label "Activity" %>
+    <%= f.collection_select :activity_id, @club_activities, :id, :name %>
+    <%= f.label "Description" %>
+    <%= f.text_area "description", 
+         {:size => "86x5", :class => "rich_text_editor"} %>
+    <p>
+      <%= f.submit "Create" %>
+    </p>
+  <% end %>
+
+  <%= link_to 'Club Leaderships', club_leaderships_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

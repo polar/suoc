@@ -1,0 +1,19 @@
+<div class="box">
+  <h3>Club Activities</h3>
+
+  <table class="activities">
+    <tr>
+      <th>Name</th>
+      <th>Tag Line</th>
+      <th>Curent Chairs</th>
+      <th></th>
+    </tr>
+    <%= render :partial => "activity_row",
+               :collection => @club_activities, :as => :activity %>
+  </table>
+  
+  <br />
+  <% if @view_modify %>
+    <%= link_to 'Create new Club Activity', new_club_activity_path %>
+  <% end %>
+</div>

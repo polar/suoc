@@ -1,0 +1,11 @@
+<%
+# This partial renders the editor for the basic information
+# Locals:
+#   member  The ClubMember
+#   tag     The HTML tag
+#   clazz   The class for the tag
+#
+%>
+<%= "<#{tag} #{ "class='#{clazz}'" if clazz } >" if tag %>
+  <%= link_to member.login, user_path(member) %>
+<%= "</#{tag}>" if tag %>

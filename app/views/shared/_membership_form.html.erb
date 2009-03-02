@@ -1,0 +1,28 @@
+<%
+# This partial renders the membership entry.
+#  Locals
+#    date
+#    acct_action_id
+#    actions
+#    amount
+#    member   The ClubMembership
+#    membership_types
+%>
+  <table>
+    <tr>
+      <th>Member</th>
+      <th>Type</th>
+      <th>Year</th>
+    </tr>
+    <tr class="member_entry">
+    <td class="date_entry">
+      <%= text_field_with_auto_complete(:club_member, :login, :size => "20") %>
+    </td>
+    <td class="action_entry">
+      <%= select( :club_membership, :member_type, ClubMembershipType.all.collect {|x| [x.name, x.id]}) %>
+    </td>
+    <td class="year_entry">
+      <%= text_field_tag "club_membership[year]", Date.today.year %>
+    </td>
+    </tr>
+  </table>

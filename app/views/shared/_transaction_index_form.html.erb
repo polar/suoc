@@ -1,0 +1,126 @@
+<%
+# This partial shows an index of transactions from a target account.
+# The current controller needs the following actions:
+#    update_transaction       The target of the main form.
+#    update_description_form  The AJAX action that updates the Description
+#                             field based on whether the membership is being
+#                             used. 
+#  Locals:
+#    transactions    A will_paginate collection of AcctTransaction,
+#                    should be organized in an:order => "date DESC, id DESC".
+#    transaction     The new AcctTransaction that is situated at the bottom form.
+#    actions         The AcctActions for the target account.
+#    membership      The new ClubMembership that may be utitilized for the
+#                    "Membership Collect" Action.
+%>
+<table class="transactions">
+  <tr class="pagnation">
+    <td colspan="4">
+        <%= will_paginate transactions, 
+        :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
+        :params => { :action => :index } %></td>
+    </td>
+  </tr>
+  <tr class="header">
+    <th>Date</th>
+    <th>Action</th>
+    <th>Description</th>
+    <th>Amount</th>
+    <th>Rcrd'By</th>
+    <th/>
+  </tr>
+  <% for t in transactions.reverse %>
+  <tr class=<%= (odd = !odd) ? "odd" : "even" %>>
+    <td class="date"><%= t.date.strftime("%D") %></td>
+    <td class="action"><%= t.acct_action.name %></td>
+    <td class="description"><%= t.description %></td>
+    <td class="decimal"><%= t.amount %></td>
+    <td class="full_name"><%= t.recorded_by.name %></td>
+    <td class="form">
+      <% if show_delete(t) %>
+      <%=  button_to "Delete", 
+                    url_for (
+                       :action => :delete_transaction, 
+                       :id => t), 
+                       :confirm => "Are you sure you want to delete this transaction?" %>
+      <% end %>
+    </td>
+  </tr>
+  <% end %>
+  <tr>
+  <td colspan="2"/><td>Balance</td><td class="decimal"><%= @eroom_balance %></td>
+  </tr>
+  <tr>
+  <td colspan="2"/><td>Deposits</td><td class="decimal"><%= @deposit_balance %></td>
+  </tr>
+  <tr>
+  <td colspan="2"/><td>Total</td><td class="decimal"><%= @balance %></td>
+  </tr>
+  <tr>
+  <td colspan="4" class="pagnation"><%= will_paginate transactions,
+    :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
+    :params => { :action => :index } %></td>
+  </tr>
+ </table>
+<% form_for(transaction, 
+           :url => url_for(:action => :update_transaction),
+           :html => { :id => "transact", :class => "" } ) do |form| %>
+<table class="transactions">
+  <tr class="errors">
+    <td colspan="4"><%= error_messages(transaction) %></td>
+  </tr>
+  <tr>
+    <td>
+    <table>
+      <tr><th>Date</th></tr>
+      <tr>
+      <td class="date_entry">
+         <%= form.text_field :date,
+                :value => "#{transaction.date.strftime("%D")}", :size => 10 %>
+      </td>
+      </tr>
+    </table>
+    </td>
+    <td>
+    <table>
+      <tr><th>Action</th></tr>
+      <tr>
+      <td class="action_entry">
+        <%= collection_select :acct_transaction, :acct_action_id, actions, :id, :name,
+           transaction.acct_action == nil ?
+               {:prompt => "Select an Action" } :
+               {:selected => transaction.acct_action.name },
+           {:onchange => 
+               remote_function( :url => { :action => :update_description_form },
+                                :with => "'acct_action_id='+value")} %>
+      </td>
+      </tr>
+    </table>
+    </td>
+    <td id="transaction_entry_body">
+      <% if transaction.acct_action &&
+              transaction.acct_action.name == "Membership Collection" %>
+        <%= render :partial => "shared/membership_form", :locals => {
+                   :membership => membership } %>
+      <% else %>
+        <%= render :partial => "shared/description_form", :locals => {
+                   :description => transaction.description } %>
+      <% end %>
+    </td>
+    <td>
+    <table>
+      <tr><th>Amount</th></tr>
+      <tr>
+      <td class="decimal decimal_entry">
+        <%= form.text_field :amount %>
+      </td>
+      </td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td class="button"><%= form.submit "Record" %></td>
+  </tr>
+</table>
+<% end %>

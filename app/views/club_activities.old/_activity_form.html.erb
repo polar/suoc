@@ -1,0 +1,23 @@
+<%
+  # Requried Global Variables
+  #  @club_activity
+  #
+  # Example use of this partial:
+  #   render :partial => 'activity_form', :locals => {:submit_label => "Update"}
+  #   render :partial => 'activity_form', :locals => {:submit_label => "Create"}
+%>
+<% form_remote_for(@club_activity, 
+    :loading => "$$('div.errors')[0].innerHTML = ''; $('comment_spinner').show();", 
+    :before => "tinyMCE.activeEditor.save();", 
+    :url => update_club_activity_path(@club_activity),
+    500 => "$$('div.errors')[0].update(request.responseText);new Effect.Highlight($$('div.errors')[0]); return false;", 
+    :success => "tinyMCE.activeEditor.setContent(\'\');", 
+    :complete => "$('comment_spinner').hide();if($('dynamic_recaptcha')){Recaptcha.create('#{AppConfig.recaptcha_pub_key}', $('dynamic_recaptcha') )}",
+    :html => {:class => "MainForm"}) do |f| %>
+  <%= f.error_messages %>
+  <%= f.text_field "name" %>
+  <%= f.text_area "description", {:size => "86x5", :class => "rich_text_editor"} %>
+  <p>
+    <%= f.submit submit_label %>
+  </p>
+<% end %>

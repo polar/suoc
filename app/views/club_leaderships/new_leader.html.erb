@@ -1,0 +1,43 @@
+<div class="box">
+  <h2>Select New Leader</h2>
+  <h2>Leadership of the <%= @club_leadership.name %></h2>
+  <div class="errors"></div>
+  <p>
+  Select term dates for the new leader.
+  </p><p>
+  Select new end date for the current leader(s) if they have become
+  no longer current.
+  </p>
+  <h3>Current Leader(s):</h3>
+  <% form_for(@club_leadership, 
+        :url => url_for( :action => :update_leaders, :id => @club_leadership.id),
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <% if @current_leaders.empty? %>
+      <p>
+      There are no current leaders assigned for the leadership of the <%= @club_leadership.name %>.
+      </p>
+    <% else %>
+      <table>
+        <%= render_leader_list(@current_leaders) %>
+      </table>
+    <% end %>
+    <% if !@new_leader %>
+      <p>
+      There is no selected new leader.
+      </p>
+    <% else %>
+      <h3>Selected New Leader</h3>
+      <table>
+      <%= render_new_leader_entry(@new_leader) %>
+      </table>
+    <% end %>
+    <p>
+      <%= f.submit "Confirm Leader" %>
+    </p>
+  <% end %>
+</div>
+
+  <%= link_to 'Club Leaderships', club_leaderships_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>

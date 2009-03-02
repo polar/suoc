@@ -1,0 +1,18 @@
+<div class="box">
+  <h2>Account Actions</h1>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Target Account</th>
+      <th>Category</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+
+    <% for acct_action in @acct_actions %>
+        <%= render_action acct_action %>
+    <% end %>
+  </table>
+
+</div>

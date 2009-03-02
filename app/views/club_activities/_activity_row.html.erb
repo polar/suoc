@@ -1,0 +1,44 @@
+<%
+ # This partial creates a table row for a listing of single chair.
+ #
+ # Local Variables
+ #        activity : ClubChair to be displayed.
+ #
+ %>
+<tr class="row">
+  <td class="name">
+    <%= link_to activity.name, activity %>
+  </td>
+  <td class="tagline">
+    <%= activity.tagline %>
+  </td>
+  <td>
+    <%= render_chair_names(activity.current_chairs) %>
+  </td>
+  <td class="EntryForm">
+     <% if @view_modify %>
+     <table>
+       <tr>
+         <td>
+           <%= button_to "Select Chair",
+               { :action => :select_new_chair, :id => activity.id } %>
+         </td>
+         <td>
+           <%= button_to "Move Up",
+               { :action => :move_up, :id => activity.id } %>
+         </td>
+       </tr>
+       <tr>
+         <td>
+            <%= button_to "Edit Activity",
+                     edit_club_activity_path(activity), :method => "get" %>
+         </td>
+         <td>
+           <%= button_to "Move Dn",
+               { :action => :move_down, :id => activity.id } %>
+         </td>
+       </tr>
+     </table>
+     <% end %>
+  </td>
+</tr>

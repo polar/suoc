@@ -1,0 +1,34 @@
+<%
+# This partial renders the basic information
+# Locals:
+#   member  The ClubMember
+#   showedit Boolean that shows the edit tag.
+#   clazz   The class for the surrounding div, optional.
+#
+%>
+<div id="BasicInfo" <%= "class='#{clazz}'" if clazz %>>
+<% form_remote_tag :update => "BasicInfo",
+    :url => { :action => :edit_club_member_info,
+              :id => member } do %>
+<h3>SUOC Information <%= submit_tag "Edit" if showedit %></h3>
+<% end %>
+<table>
+<tr>
+  <th>Aliases:</th>
+  <td><%= member.club_aliases %></td>
+</tr>
+<tr>
+  <th>SUID:</th>
+  <td><%= member.club_memberid.insert(5,"-") %></td>
+</tr>
+<tr>
+  <th>Member Since:</th>
+  <td><%= member.club_start_date.strftime("%m/%d/%Y") unless !member.club_start_date %></td>
+</tr>
+<tr>
+  <th>Member Status:</th>
+  <td><%= member.club_member_status.name unless !member.club_member_status %></td>
+</tr>
+</table>
+
+</div>

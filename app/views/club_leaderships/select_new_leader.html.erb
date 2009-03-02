@@ -1,0 +1,27 @@
+<div class="box">
+  <h2>Select New Leader</h2>
+  <h2>Leadership of the <%= @club_leadership.name %></h2>
+  <div class="errors"></div>
+    <h3>Current Leader(s):</h3>
+    <% form_for(@club_leadership,
+                :url => url_for(:action => :new_leader, :id => @club_leadership.id),
+                :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <% if !@current_leaders.empty? %>
+      <table>
+        <%= render_leader_list(@current_leaders) %>
+      </table>
+    <% else %>
+      There are no current leaders assigned for the leadership of the <%= @club_leadership.name %>.
+    <% end %>
+    <h3>Select a new leader</h3>
+    <p>Type name below to select a new leader.</p>
+    <%= text_field_with_auto_complete :club_member, :login %>
+    <p><%= f.submit "Select New Leader" %>
+  <% end %>
+
+  <p>
+  <%= link_to 'Club Leaderships', club_leaderships_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

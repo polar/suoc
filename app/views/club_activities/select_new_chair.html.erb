@@ -1,0 +1,27 @@
+<div class="box">
+  <h2>Select New Chair</h2>
+  <h2>Activity of the <%= @club_activity.name %></h2>
+  <div class="errors"></div>
+    <h3>Current Chair(s):</h3>
+    <% form_for(@club_activity,
+                :url => url_for(:action => :new_chair, :id => @club_activity.id),
+                :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <% if !@current_chairs.empty? %>
+      <table>
+        <%= render_chair_list(@current_chairs) %>
+      </table>
+    <% else %>
+      There are no current chairs assigned for the activity of the <%= @club_activity.name %>.
+    <% end %>
+    <h3>Select a new chair</h3>
+    <p>Type name below to select a new chair.</p>
+    <%= text_field_with_auto_complete :club_member, :login %>
+    <p><%= f.submit "Select New Chair" %>
+  <% end %>
+
+  <p>
+  <%= link_to 'Club Activities', club_activities_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

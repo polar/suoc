@@ -1,0 +1,21 @@
+<div class="box">
+  <h2><%= "Club Officers Maintainence" %></h2>
+  <h2><%= "Officer(s): " %></h2>
+  <% if !@club_officers.empty? %>
+    <%= will_paginate @club_officers %>
+    <table>
+    <tr>
+      <th>Officer</th>
+      <th>Officer Dates</th>
+    </tr>
+    <%= render_officer_list(@club_officers) %>
+    </table>
+    <%= will_paginate @club_officers %>
+  <% else %>
+      There are no current officers assigned.
+  <% end %>
+</div>
+
+
+<%= link_to 'Club Offices', club_offices_path %> |
+<%= link_to 'Club Activities', club_activities_path %>

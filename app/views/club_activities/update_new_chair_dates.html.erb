@@ -1,0 +1,15 @@
+<div class="box">
+  <h2>Edit Chair</h2>
+  <h2>Activity of <%= @club_activity.name %>
+  <div class="errors"></div>
+    <% form_for(@club_chair, 
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <%= render_chair_entry(@club_chair} %>
+    <% end %>
+
+
+  <%= link_to 'Club Activities', club_activities_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

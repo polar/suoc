@@ -1,0 +1,27 @@
+<div class="box">
+  <h2><%= "Club Leadership of #{@club_leadership.name}" %></h2>
+  <%= @club_leadership.tagline %>
+  <h3>Description</h3>
+  <%= @club_leadership.description %>
+  <h3><%= "Current Leader(s): " %></h3>
+  <% if !@current_leaders.empty? %>
+    <table>
+    <%= render_leader_list(@current_leaders) %>
+    </table>
+  <% else %>
+      There are no current leaders assigned for this leadership.
+  <% end %>
+  <h3><%= "Past Leader(s): " %></h3>
+  <% if !@past_leaders.empty? %>
+    <%= will_paginate @past_leaders %>
+    <table>
+    <%= render_leader_list(@past_leaders) %>
+    </table>
+    <%= will_paginate @past_leaders %>
+  <% else %>
+      There are no past leaders assigned for this leadership.
+  <% end %>
+</div>
+
+<%= link_to 'Club Leaderships', club_leaderships_path %> |
+<%= link_to 'Club Activities', club_activities_path %>

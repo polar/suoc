@@ -1,0 +1,23 @@
+<div class="box">
+  <h2>Edit Leader</h2>
+  <h2>Leadership of <%= @club_leadership.name %>
+  <div class="errors"></div>
+  <h3>Change Leader Dates</h3>
+    <% form_for(@club_leader,
+        :url => { :action => :update_leader, :id => @club_leadership, :leader => @club_leader.id },
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <table>
+    <%= render_update_leader_entry(:club_leader, @club_leader) %>
+    </table>
+    <p>
+      <%= f.submit "Update" %>
+    </p>
+    <% end %>
+
+
+
+  <%= link_to 'Club Leaderships', club_leaderships_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

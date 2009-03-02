@@ -1,0 +1,19 @@
+<div class="box">
+  <h2>Select New Chair</h2>
+  <h2>Chairmanship of the <%= @suoc_chairmanship.name %></h2>
+  <div class="errors"></div>
+    <h3>Current Chair(s):</h3>
+    <% if !@current_chairs.empty? %>
+      <table>
+        <%= render_chair_list(@current_chairs) %>
+      </table>
+    <% else %>
+      There are no current chairs assigned for the chairmanship of the <%= @suoc_chairmanship.name %>.
+    <% end %>
+    <h3>Choose New Chair</h3>
+    <table>
+    <%= render_select(@suoc_chairmanship, @selected_chairs) %>
+    </table>
+  <%= link_to 'Club Chairmanships', club_chairmanships_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

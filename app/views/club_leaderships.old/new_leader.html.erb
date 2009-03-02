@@ -1,0 +1,30 @@
+<div class="box">
+  <h2>Select New Leader</h2>
+  <h2>Leadership of the <%= @club_leadership.name %></h2>
+  <div class="errors"></div>
+  <p>
+  Select term dates for the new leader.
+  </p>
+  <% form_for(@club_leadership, 
+        :url => url_for( :action => :update_leaders, :id => @club_leadership.id),
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <% if !@new_leader %>
+      <p>
+      There is no selected new leader.
+      </p>
+    <% else %>
+      <h3>Selected New Leader</h3>
+      <table>
+      <%= render_new_leader_entry(@new_leader) %>
+      </table>
+    <% end %>
+    <p>
+      <%= f.submit "Confirm Leader" %>
+    </p>
+  <% end %>
+</div>
+
+  <%= link_to 'Club Leaderships', club_leaderships_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>

@@ -1,0 +1,18 @@
+<div class="box">
+  <h2>Creating a New SUOC Leadership</h2>
+  <div class="errors"></div>
+  <% form_for(@suoc_leadership, 
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.text_field "name" %>
+    <%= f.text_area "description", 
+         {:size => "86x5", :class => "rich_text_editor"} %>
+    <p>
+      <%= f.submit "Create" %>
+    </p>
+  <% end %>
+
+  <%= link_to 'SUOC Leaderships', suoc_leaderships_path %> |
+  <%= link_to 'SUOC Trip Types', suoc_trip_types_path %> |
+  <%= link_to 'SUOC Activities', suoc_activities_path %>
+</div>

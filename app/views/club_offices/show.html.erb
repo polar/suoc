@@ -1,0 +1,27 @@
+<div class="box">
+  <h2><%= "Club Office of #{@club_office.name}" %></h2>
+  <%= @club_office.tagline %>
+  <h3>Description</h3>
+  <%= @club_office.description %>
+  <h3><%= "Current Officer(s): " %></h3>
+  <% if !@current_officers.empty? %>
+    <table>
+    <%= render_officer_list(@current_officers) %>
+    </table>
+  <% else %>
+      There are no current officers assigned for this office.
+  <% end %>
+  <h3><%= "Past Officer(s): " %></h3>
+  <% if !@past_officers.empty? %>
+    <%= will_paginate @past_officers %>
+    <table>
+    <%= render_officer_list(@past_officers) %>
+    </table>
+    <%= will_paginate @past_officers %>
+  <% else %>
+      There are no past officers assigned for this office.
+  <% end %>
+</div>
+
+<%= link_to 'Club Offices', club_offices_path %> |
+<%= link_to 'Club Activities', club_activities_path %>

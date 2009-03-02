@@ -1,0 +1,28 @@
+<%
+ # This partial renders a Club membership as a row in a table.
+ # locals =>
+ #  membership  => The ClubMembership
+ #  usename => boolean to print name
+ %>
+<tr class="membership_row">
+  <% if usename %>
+    <td class="full_name">
+      <%= membership.member.name %>
+    </td>
+  <% end %>
+  <td class="date">
+    <%= membership.acct_transaction.date.strftime("%m/%d/%Y") %>
+  </td>
+  <td class="member_type">
+    <%= membership.member_type.name %>
+  </td>
+  <td class="year">
+    <%= membership.year %>
+  </td>
+  <td class="decimal">
+    <%= membership.acct_transaction.amount %>
+  </td>
+  <td class="full_name">
+    <%= membership.acct_transaction.recorded_by.name %>
+  </td>
+</tr>

@@ -1,0 +1,27 @@
+<div class="box">
+  <h2>Select New Officer</h2>
+  <h2>Office of the <%= @club_office.name %></h2>
+  <div class="errors"></div>
+    <h3>Current Officer(s):</h3>
+    <% form_for(@club_office,
+                :url => url_for(:action => :new_officer, :id => @club_office.id),
+                :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <% if !@current_officers.empty? %>
+      <table>
+        <%= render_officer_list(@current_officers) %>
+      </table>
+    <% else %>
+      There are no current officers assigned for the office of the <%= @club_office.name %>.
+    <% end %>
+    <h3>Select a new officer</h3>
+    <p>Type name below to select a new officer.</p>
+    <%= text_field_with_auto_complete :club_member, :login %>
+    <p><%= f.submit "Select New Officer" %>
+  <% end %>
+
+  <p>
+  <%= link_to 'Club Offices', club_offices_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

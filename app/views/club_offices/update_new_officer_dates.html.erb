@@ -1,0 +1,15 @@
+<div class="box">
+  <h2>Edit Officer</h2>
+  <h2>Office of <%= @club_office.name %>
+  <div class="errors"></div>
+    <% form_for(@club_officer, 
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <%= render_officer_entry(@club_officer} %>
+    <% end %>
+
+
+  <%= link_to 'Club Offices', club_offices_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>
+</div>

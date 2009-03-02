@@ -1,0 +1,44 @@
+<%
+ # This partial creates a table row for a listing of single leader.
+ #
+ # Local Variables
+ #        leadership : ClubLeader to be displayed.
+ #
+ %>
+<tr class="row">
+  <td class="name">
+    <%= link_to leadership.name, leadership %>
+  </td>
+  <td class="tagline">
+    <%= leadership.tagline %>
+  </td>
+  <td>
+    <%= render_leader_names(leadership.current_active_leaders) %>
+  </td>
+  <td class="EntryForm">
+     <% if @view_modify %>
+     <table>
+       <tr>
+         <td>
+           <%= button_to "Select Leader",
+               { :action => :select_new_leader, :id => leadership.id } %>
+         </td>
+         <td>
+           <%= button_to "Move Up",
+               { :action => :move_up, :id => leadership.id } %>
+         </td>
+       </tr>
+       <tr>
+         <td>
+            <%= button_to "Edit Leadership",
+                     edit_club_leadership_path(leadership), :method => "get" %>
+         </td>
+         <td>
+           <%= button_to "Move Dn",
+               { :action => :move_down, :id => leadership.id } %>
+         </td>
+       </tr>
+     </table>
+     <% end %>
+  </td>
+</tr>

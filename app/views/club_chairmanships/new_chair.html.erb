@@ -1,0 +1,43 @@
+<div class="box">
+  <h2>Select New Chair</h2>
+  <h2>Chairmanship of the <%= @club_chairmanship.name %></h2>
+  <div class="errors"></div>
+  <p>
+  Select term dates for the new chair.
+  </p><p>
+  Select new end date for the current chair(s) if they have become
+  no longer current.
+  </p>
+  <h3>Current Chair(s):</h3>
+  <% form_for(@suoc_chairmanship, 
+        :url => url_for( :action => :update_chairs, :id => @suoc_chairmanship.id),
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :id %>
+    <% if @current_chairs.empty? %>
+      <p>
+      There are no current chairs assigned for the chairmanship of the <%= @suoc_chairmanship.name %>.
+      </p>
+    <% else %>
+      <table>
+        <%= render_update_chair_list("chairs", @current_chairs) %>
+      </table>
+    <% end %>
+    <% if !@new_chair %>
+      <p>
+      There is no selected new chair.
+      </p>
+    <% else %>
+      <h3>Selected New Chair</h3>
+      <table>
+      <%= render_new_chair_entry(@new_chair) %>
+      </table>
+    <% end %>
+    <p>
+      <%= f.submit "Update" %>
+    </p>
+  <% end %>
+</div>
+
+  <%= link_to 'Club Chairmanships', club_chairmanships_path %> |
+  <%= link_to 'Club Activities', club_activities_path %>

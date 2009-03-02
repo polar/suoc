@@ -1,0 +1,34 @@
+<%
+ # This partial creates form fields for a single leader in a table row.
+ # It has a form fields to select the start date and end date. 
+ #
+ # Local Variables
+ #        field_name The name used to assign the fields.
+ #                   If used in a list, this is most likely
+ #                     "leaders[3]".
+ #        leader    The ClubLeader to be displayed.
+ #        rowclass   The CSS class for the table row.
+ #
+ %>
+ <tr <%= "class='#{rowclass}'" if rowclass %> >
+  <% fields_for field_name, leader do |leader_form| %>
+    <td>
+      <%= leader_form.hidden_field :id %>
+      <%= render_member_badge(leader.member) %>
+    </td>
+    <td><table>
+      <tr>
+        <th>Leadership</th>
+        <td><%= leader.leadership.name %></td>
+      </tr>
+      <tr>
+        <th>Start Date</th>
+        <td><%= leader_form.date_select :start_date %></td>
+      </tr>
+      <tr>
+        <th>End Date</th>
+        <td><%= leader_form.date_select :end_date %></td>
+      </tr>
+    </table></td>
+  <% end %>
+</tr>

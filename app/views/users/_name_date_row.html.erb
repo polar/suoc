@@ -1,0 +1,13 @@
+<%
+#
+# Render a name and start date in a row.
+# Locals:
+#    name  The name
+#    date  The date
+#    clazz The class for the row, optional
+#
+%>
+<tr <%= "class='#{clazz}'" if clazz %>>
+  <td><%= name %></td>
+  <td><%= date.strftime("%m/%d/%Y") %></td>
+</tr>

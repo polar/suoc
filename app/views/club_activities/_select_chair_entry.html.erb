@@ -1,0 +1,23 @@
+<%
+ # This partial creates a table row for a single chair.
+ # badge and then a vertical table of start and end date.
+ # 
+ #
+ # Local Variables
+ #        activity  : The Club Activity for this chair
+ #        member  : ClubMember who is the chair.
+ #        link    : Link to use for avatar.
+ #        rowclass : CSS Class for row
+ #
+ %>
+<tr <%= "class='#{rowclass}'" if rowclass %> >
+  <td class="EntryForm"><% form_for :club_activity,
+          :url => { :action => :new_chair },
+          :html => { :class => "button-to", :method => :put } do |form| %>
+       <%= hidden_field_tag "club_activity[id]", activity.id %>
+       <%= hidden_field_tag "club_member[id]", member.id %>
+       <%= form.submit "Make Chair" %>
+       <% end %>
+  </td>
+  <td><%= render_member_badge(member) %></td>
+</tr>

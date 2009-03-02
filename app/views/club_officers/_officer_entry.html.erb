@@ -1,0 +1,34 @@
+<%
+ # This partial creates a table row for a single officer.
+ # badge and then a vertical table of the office name,
+ # start and end date.
+ # 
+ #
+ # Local Variables
+ #        officer : SuocOfficer to be displayed.
+ #        link    : Link to use for avatar.
+ #        rowclass : CSS Class for row
+ #
+ %>
+<tr <%= "class='#{rowclass}'" if rowclass %> > 
+  <td><%= render_member_badge(officer.member, link) %></td>
+  <td><table>
+    <tr>
+    <th>Office</th>
+    <td><%= officer.office.name %></td>
+    </tr>
+    <th>Start Date</th>
+    <td><%= officer.start_date %></td>
+    </tr>
+    <tr>
+    <th>End Date</th>
+    <td><%= officer.end_date %></td>
+    </tr>
+    <% if current_user.admin? %>
+      <tr>
+      <th><%= link_to 'Delete Entry', officer, :confirm => 'Are you sure?', :method => :delete %></th>
+      <td></td>
+      </tr>
+    <% end %>
+  </table></td>
+</tr>
