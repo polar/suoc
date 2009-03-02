@@ -1,8 +1,8 @@
 class ClubMembership < ActiveRecord::Base
   belongs_to  :member,      :class_name => "ClubMember"
-  belongs_to  :transaction, :class_name => "AcctTransaction"
-  belogns_to  :member_type, :class_name => "ClubMemberType"
+  belongs_to  :acct_transaction, :class_name => "AcctTransaction"
+  belongs_to  :member_type, :class_name => "ClubMembershipType"
   
-  validates_presence_of :member, :transaction, :member_type, :year
+  #validates_presence_of :member, :acct_transaction, :member_type, :year
   
 end

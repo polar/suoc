@@ -3,6 +3,7 @@ class CreateAcctTransactions < ActiveRecord::Migration
     create_table :acct_transactions do |t|
             t.references :recorded_by         # user
             t.references :target_account
+            # Gotcha: can't call a field action
             t.references :acct_action
             t.string     :description
             t.date       :date

@@ -1,6 +1,6 @@
 class ClubChair < ActiveRecord::Base
   belongs_to :member,       :class_name => "ClubMember"
-  belongs_to :chairmanship, :class_name => "ClubChairmanship"
+  belongs_to :activity,     :class_name => "ClubActivity"
 
   validates_date :start_date
   validates_date :end_date

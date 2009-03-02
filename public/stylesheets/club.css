@@ -12,6 +12,51 @@
   text-align: right;
 }
 
+/*
+ * Entry and Current_Entry
+ *  This is used to wrap member badges and list info in a table
+ *  row with borders and such.
+ *
+ *  The current entry differs in the background color to make
+ *  member entries stand out.
+ */
+.entry {
+    margin-bottom: 1em;
+}
+
+.entry h2{
+    margin-bottom: .5em;
+    font-weight:   bold;
+    font-size:     153.9%;
+}
+
+.entry h3{
+    font-size: 123.1%;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1px solid #ffd735;
+    margin:1.5em 0 1em 0;
+}
+
+.current_entry {
+    border: 1px solid #94beff;
+    background: #e1ecff;
+    padding: 1em;
+}
+
+.current_entry h2{
+    margin-bottom: .5em;
+    font-weight: bold;
+    font-size: 153.9%;
+}
+
+.current_entry h3{
+    border: none;
+    margin: 0 0 .5em 0;
+    padding: .5em;
+    background: #94beff;
+    color: #38465b;
+}
 
 /*
  * This is for a medium badge, with pic on the left and list
@@ -74,3 +119,162 @@
   background-image: url(/plugin_assets/community_engine/images/icons/date.png)
 }
 */
+
+/*
+ * The EntryForm is used to give the same look and feel
+ * within entries for club officer, leaders, etc.
+ */
+.EntryForm {
+}
+
+.EntryForm .button-to {
+  border: 1px solid #ccc;
+  text-align: center;
+  background: #777;
+  color: #777;
+  background: #f8f8f8;
+  width: 8em;
+}
+
+.EntryForm .button-to input{
+  border: 0px solid #ccc;
+  padding: 1px;
+  padding-left: 1em;          
+  padding-right: 1em;
+  margin: 1px 0;
+  color: #777;
+  background: #f8f8f8;
+  width: 8em;
+}
+.EntryForm .button-to input:focus{
+  color: #777;
+  border-color: #777;
+  background: #f8f8f8;
+}
+.EntryForm .button-to input:hover{
+  background:#cccccc;
+}
+
+.EntryForm select{
+  border:1px solid #ccc;
+}
+
+/*
+ * Users
+ */
+.name_list .full_name{
+  font-weight: bold;
+  padding:0 0 3px 0;
+}
+
+/*
+ * List of Offices
+ */
+.offices {
+}
+
+.offices .row{
+    border: 1px solid #b4dfff;
+    background: #f2fdff;
+    padding: 1em;
+}
+
+.offices .name{
+  text-align: top;
+  font-weight: bold;
+}
+
+.offices .description{
+  padding:10px 10px 10px 10px;
+}
+
+.offices .name_list .full_name{
+  font-weight: bold;
+  padding:0 0 3px 0;
+}
+
+/*
+ * Transactions
+ */
+.transactions {
+}
+
+.transactions tr.odd {
+  background: #f2fdff;
+}
+
+.transactions .date_entry input{
+  width: 5em;
+  background:#F8F8F8 none repeat scroll 0 0;
+  border:1px solid #CCCCCC;
+  color:#777777;
+  font-weight:bold;
+  padding:6px;
+}
+
+.transactions .description {
+  width: 250px;
+}
+
+.transactions .description_entry input{
+  background:#F8F8F8 none repeat scroll 0 0;
+  border:1px solid #CCCCCC;
+  color:#777777;
+  font-weight:bold;
+  padding:6px;
+}
+.transactions .member_entry, .transactions .description_entry{
+  width: 350px;
+}
+.transactions .year_entry input{
+  width: 4em;
+  background:#F8F8F8 none repeat scroll 0 0;
+  border:1px solid #CCCCCC;
+  color:#777777;
+  font-weight:bold;
+  padding:6px;
+}
+
+.transactions .action_entry select{
+  background:#F8F8F8 none repeat scroll 0 0;
+  border:1px solid #CCCCCC;
+  color:#777777;
+  font-weight:bold;
+  padding:5px;
+}
+
+.transactions .decimal_entry input{
+  width: 4em;
+  background:#F8F8F8 none repeat scroll 0 0;
+  border:1px solid #CCCCCC;
+  color:#777777;
+  font-weight:bold;
+  text-align:right;
+  padding:6px;
+}
+
+.transactions .button {
+  text-align: center;
+  padding: 6px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.transactions .button input{
+padding-left: 1em;
+padding-right: 1em;
+  background: #008000;
+  font-size: 123%;
+  border: 4px solid #004500;
+  color: #fff;
+  width: auto;
+  cursor: pointer;
+}
+.transactions .button input:focus{
+  color: #777;
+  border-color: #777;
+  background: #f8f8f8;
+}
+.transactions .button input:hover{
+  background:#cccccc;
+}

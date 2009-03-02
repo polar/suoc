@@ -3,7 +3,7 @@ class CreateClubChairs < ActiveRecord::Migration
     create_table :club_chairs do |t|
       
       t.references   :member
-      t.references   :chairmanship
+      t.references   :activity
 
       t.date         :start_date
       t.date         :end_date

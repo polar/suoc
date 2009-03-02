@@ -1,7 +1,9 @@
 class CreateAcctEntries < ActiveRecord::Migration
   def self.up
     create_table :acct_entries do |t|
-      t.references  :transaction # AcctTransaction
+      # Gotcha: Calling a field "transaction" is a bad idea.
+      #t.references  :transaction # AcctTransaction
+      t.references  :acct_transaction # AcctTransaction
       t.references  :account     # AccAccount
       t.references  :category    # AcctCategory
       t.decimal     :debit,  :default => 0

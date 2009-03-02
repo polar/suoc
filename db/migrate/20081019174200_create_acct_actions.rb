@@ -4,8 +4,9 @@ class CreateAcctActions < ActiveRecord::Migration
       t.string     :name
       t.text       :description, :default => ""
 
-      t.references :account  # AcctAccount
-      t.references :category # AcctCategory
+      t.references :account     # AcctAccount
+      t.references :category    # AcctCategory
+      t.references :action_type # AcctActionType
 
       t.timestamps
     end

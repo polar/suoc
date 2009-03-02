@@ -3,7 +3,9 @@ class CreateClubLeaderships < ActiveRecord::Migration
     create_table :club_leaderships do |t|
       t.string      :name
       t.text        :description, :default => ""
-      
+      t.text        :tagline, :default => ""
+      t.integer     :position
+ 
       t.references  :activity  # ClubActivity
 
       t.timestamps

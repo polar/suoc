@@ -1,6 +1,6 @@
 <div class="box">
-<h2>Account <%= @acct_account.name %></h2>
-<p>Balance: <%= @acct_account.balance %>
+<h2>Account <%= @account.name %></h2>
+<p>Balance: <%= @account.balance %>
 <p>
 <%= will_paginate @entries, 
     :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
@@ -18,13 +18,13 @@
   <% for t in @entries.reverse %>
   <tr>
     <td><%= t.date.strftime("%D") %></td>
-    <td><%= t.acct_category.name %></td>
+    <td><%= t.category.name %></td>
     <td><%= t.description %></td>
     <td class="decimal"><%= t.debit %></td>
     <td class="decimal"><%= t.credit %></td>
     <td><%= t.recorded_by.name %></td>
     <td class="decimal">
-      <%= link_to t.acct_transaction.id, 
+      <%= link_to t.acct_transaction.id,
                   :controller => :acct_transactions,
                   :id => t.acct_transaction %></td>
   </tr>

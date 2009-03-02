@@ -20,7 +20,7 @@
   <% for account in @accounts %>
     <tr>
       <td><%= link_to account.name, :action => :show, :id => account %></td>
-      <td><%= account.type_name %></td>
+      <td><%= account.account_type.name %></td>
       <td class="decimal"><%= sprintf("%0.2f",account.balance) %></td>
     </tr>
   <% end %>

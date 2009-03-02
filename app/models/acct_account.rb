@@ -8,7 +8,7 @@ class AcctAccount < ActiveRecord::Base
   # it would mess up any transactions if they were done by themselves
   #
   has_many :entries,      :class_name => "AcctEntry", 
-                          :foreign_key => "acct_account_id"
+                          :foreign_key => "account_id"
                           
   has_many :transactions, :class_name => "AcctTransaction", 
                           :foreign_key => "target_account_id"

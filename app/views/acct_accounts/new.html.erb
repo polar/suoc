@@ -4,6 +4,8 @@
   <%= f.error_messages %>
 
   <p>
+    <%= f.text_field :name %>
+    <%= f.collection_select :account_type_id, AcctAccountType.find(:all), :id, :name %>
     <%= f.submit "Create" %>
   </p>
 <% end %>

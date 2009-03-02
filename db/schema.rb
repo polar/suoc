@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081022140801) do
+ActiveRecord::Schema.define(:version => 20090227161445) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
@@ -31,13 +31,21 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
     t.integer "acct_action_id"
   end
 
-  create_table "acct_actions", :force => true do |t|
+  create_table "acct_action_types", :force => true do |t|
     t.string   "name"
     t.text     "description", :default => ""
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "acct_actions", :force => true do |t|
+    t.string   "name"
+    t.text     "description",    :default => ""
     t.integer  "account_id"
     t.integer  "category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "action_type_id"
   end
 
   create_table "acct_categories", :force => true do |t|
@@ -48,11 +56,11 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
   end
 
   create_table "acct_entries", :force => true do |t|
-    t.integer  "transaction_id"
+    t.integer  "acct_transaction_id"
     t.integer  "account_id"
     t.integer  "category_id"
-    t.decimal  "debit",          :default => 0.0
-    t.decimal  "credit",         :default => 0.0
+    t.decimal  "debit",               :default => 0.0
+    t.decimal  "credit",              :default => 0.0
     t.string   "description"
     t.integer  "recorded_by_id"
     t.date     "date"
@@ -79,8 +87,8 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
     t.datetime "created_at"
   end
 
-  add_index "activities", ["user_id"], :name => "index_activities_on_user_id"
   add_index "activities", ["created_at"], :name => "index_activities_on_created_at"
+  add_index "activities", ["user_id"], :name => "index_activities_on_user_id"
 
   create_table "ads", :force => true do |t|
     t.string   "name"
@@ -140,6 +148,8 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
     t.text     "description", :default => ""
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "tagline"
+    t.integer  "position"
   end
 
   create_table "club_chairmanships", :force => true do |t|
@@ -156,6 +166,7 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
     t.date     "end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "activity_id"
   end
 
   create_table "club_leaders", :force => true do |t|
@@ -173,6 +184,8 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
     t.integer  "activity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "tagline"
+    t.integer  "position"
   end
 
   create_table "club_member_statuses", :force => true do |t|
@@ -196,8 +209,8 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
 
   create_table "club_memberships", :force => true do |t|
     t.integer  "member_id"
-    t.integer  "member_type",    :default => 0
-    t.integer  "transaction_id"
+    t.integer  "member_type_id",      :default => 0
+    t.integer  "acct_transaction_id"
     t.integer  "year"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -217,6 +230,8 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
     t.text     "description", :default => ""
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "position"
+    t.text     "tagline"
   end
 
   create_table "comments", :force => true do |t|
@@ -389,8 +404,8 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
     t.integer  "votes_count", :default => 0
   end
 
-  add_index "polls", ["post_id"], :name => "index_polls_on_post_id"
   add_index "polls", ["created_at"], :name => "index_polls_on_created_at"
+  add_index "polls", ["post_id"], :name => "index_polls_on_post_id"
 
   create_table "posts", :force => true do |t|
     t.datetime "created_at"
@@ -408,10 +423,10 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
     t.datetime "published_at"
   end
 
-  add_index "posts", ["user_id"], :name => "index_posts_on_user_id"
+  add_index "posts", ["category_id"], :name => "index_posts_on_category_id"
   add_index "posts", ["published_as"], :name => "index_posts_on_published_as"
   add_index "posts", ["published_at"], :name => "index_posts_on_published_at"
-  add_index "posts", ["category_id"], :name => "index_posts_on_category_id"
+  add_index "posts", ["user_id"], :name => "index_posts_on_user_id"
 
   create_table "roles", :force => true do |t|
     t.string "name"
@@ -427,8 +442,8 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
     t.text     "body_html"
   end
 
-  add_index "sb_posts", ["user_id", "created_at"], :name => "index_sb_posts_on_user_id"
   add_index "sb_posts", ["forum_id", "created_at"], :name => "index_sb_posts_on_forum_id"
+  add_index "sb_posts", ["user_id", "created_at"], :name => "index_sb_posts_on_user_id"
 
   create_table "sessions", :force => true do |t|
     t.string   "sessid"
@@ -453,10 +468,10 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
     t.string  "taggable_type"
   end
 
+  add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
   add_index "taggings", ["taggable_id", "taggable_type"], :name => "index_taggings_on_taggable_id_and_taggable_type"
   add_index "taggings", ["taggable_id"], :name => "index_taggings_on_taggable_id"
   add_index "taggings", ["taggable_type"], :name => "index_taggings_on_taggable_type"
-  add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
 
   create_table "tags", :force => true do |t|
     t.string "name"
@@ -524,12 +539,12 @@ ActiveRecord::Schema.define(:version => 20081022140801) do
     t.integer  "club_member_status_id"
   end
 
+  add_index "users", ["activated_at"], :name => "index_users_on_activated_at"
+  add_index "users", ["avatar_id"], :name => "index_users_on_avatar_id"
   add_index "users", ["created_at"], :name => "index_users_on_created_at"
+  add_index "users", ["featured_writer"], :name => "index_users_on_featured_writer"
   add_index "users", ["login_slug"], :name => "index_users_on_login_slug"
   add_index "users", ["vendor"], :name => "index_users_on_vendor"
-  add_index "users", ["activated_at"], :name => "index_users_on_activated_at"
-  add_index "users", ["featured_writer"], :name => "index_users_on_featured_writer"
-  add_index "users", ["avatar_id"], :name => "index_users_on_avatar_id"
 
   create_table "votes", :force => true do |t|
     t.string   "user_id"
