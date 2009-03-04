@@ -1,4 +1,4 @@
-class EroomLedgersController < BaseController
+class TreasurerLedgersController < BaseController
 
   helper :application
 
@@ -14,8 +14,8 @@ class EroomLedgersController < BaseController
   AC_CLUB_MEMBER_NAME_LIMIT = 15
  
   #
-  TARGET_ACCOUNT_NAME = "E-Room"
-  DEPOSIT_ACCOUNT_NAME = "E-Room Deposits"
+  # TARGET_ACCOUNT_NAME
+  TARGET_ACCOUNT_NAME = "Treasurer"
   TREASEROOM_ACCOUNT_NAME = "TreasERoom"
 
   #
@@ -68,29 +68,23 @@ class EroomLedgersController < BaseController
   def show
     
     targacct = AcctAccount.find(:first, :conditions => { 
-                                          :name => TARGET_ACCOUNT_NAME});
+                                           :name => TARGET_ACCOUNT_NAME});
     depacct  = AcctAccount.find(:first, :conditions => { 
-                                          :name => DEPOSIT_ACCOUNT_NAME});
-    teacct   = AcctAccount.find(:first, :conditions => { 
-                                          :name => TREASEROOM_ACCOUNT_NAME});
+                                           :name => TREASEROOM_ACCOUNT_NAME});
     
-    raise "Cannot find the E-Room Account" if !targacct
+    raise "Cannot find the Treasurer Account" if !targacct
     
     @transactions = get_transactions_list(targacct, params[:page])
                        
-    @actions     = targacct.actions
-    eroom_bal = targacct.balance
-    deposit_bal = depacct.balance
-    te_bal      = teacct.balance
-    @balances   = []
-    @balances[0] = ["Total", eroom_bal]
-    @balances[1] = ["In Deposits", deposit_bal]
-    @balances[2] = ["Available Balance", eroom_bal - deposit_bal]
-    if te_bal != 0
-      @balances[3] = ["Treas E-Room", te_bal]
+    @actions           = targacct.actions
+    @balances = []
+    treas_balance = targacct.balance
+    te_balance = depacct.balance
+    @balances[0]  = ["Balance", treas_balance]
+    if te_balance != 0
+      @balances[1]  = ["Treas E-Room", te_balance]
     end
-    @transaction = AcctTransaction.new(:date => Date.today, 
-                                       :target_account => targacct)
+    @transaction = AcctTransaction.new(:date => Date.today, :target_account => targacct)
   end
   
   def delete_transaction
@@ -105,7 +99,7 @@ class EroomLedgersController < BaseController
   end
 
   #
-  # PUT /eroom_ledger/update_transaction
+  # PUT /treasurer_ledger/update_transaction
   #   params[:acct_transaction] = {
   #             :target_account = "4"
   #             :acct_action = "3"
@@ -126,11 +120,12 @@ class EroomLedgersController < BaseController
     #
     # This is the account from which all transactions are recorded.
     #
-    targacct = AcctAccount.find(:first, :conditions => { :name => "E-Room"});
+    targacct = AcctAccount.find(:first, :conditions => { 
+                                              :name => TARGET_ACCOUNT_NAME});
     
     @transaction = AcctTransaction.new(params[:acct_transaction])
     
-    # We always are transfering from the E-Room Account
+    # We always are transfering from the Treasurer Account
     @transaction.target_account = targacct  # just in case
     @transaction.recorded_by = @current_user
 
@@ -200,11 +195,10 @@ class EroomLedgersController < BaseController
     end
     ## Fail Fall Through
     # Set up for show rendering.
-      depacct  = AcctAccount.find(:first, :conditions => { 
-                                             :name => DEPOSIT_ACCOUNT_NAME});
-      @eroom_balance     = targacct.balance
+      depacct  = AcctAccount.find(:first, :conditions => { :name => "TreasERoom"});
+      @treasurer_balance = targacct.balance
       @deposit_balance   = depacct.balance
-      @balance           = @eroom_balance + @deposit_balance
+      @balance           = @treasurer_balance + @deposit_balance
       @transactions = get_transactions_list(targacct, params[:page])
       
       @actions      = targacct.actions
@@ -219,8 +213,7 @@ class EroomLedgersController < BaseController
     if params[:acct_action_id]
       if AcctAction.find(params[:acct_action_id]).name == "Membership Collection"
         render :update do |page|
-          page.replace_html "transaction_entry_body", 
-              :partial => "shared/membership_form",
+          page.replace_html "transaction_entry_body", :partial => "shared/membership_form",
               :locals => {
                    :membership => ClubMembership.new }
         end

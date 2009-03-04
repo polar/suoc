@@ -56,9 +56,9 @@ class AcctTransaction < ActiveRecord::Base
       end
       if (entry2.account.account_type == AcctAccountType[:Income] ||
         entry2.account.account_type == AcctAccountType[:Asset])
-        entry2.debit  = abs(amount)
+        entry2.credit  = abs(amount)
       else
-        entry2.credit = abs(amount)
+        entry2.debit = abs(amount)
       end
     else
       if (entry1.account.account_type == AcctAccountType[:Income] ||
@@ -69,9 +69,9 @@ class AcctTransaction < ActiveRecord::Base
       end
       if (entry2.account.account_type == AcctAccountType[:Income] ||
         entry2.account.account_type == AcctAccountType[:Asset])
-        entry2.credit = abs(amount)
+        entry2.debit = abs(amount)
       else
-        entry2.debit  = abs(amount)
+        entry2.credit  = abs(amount)
       end
     end
     entries.clear

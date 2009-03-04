@@ -211,6 +211,9 @@ def seed_acct
                            "This account records expense from West Virgina.")
   a_eroom_deposit  = acct(9, "E-Room Deposits",  t_liability,
                            "This account holds rental deposits for the E-Room.")
+  a_balance      = acct(10, "Balance Corrections",  t_asset,
+                           "This account holds initial balance and corrections.")
+
 
   
   AcctCategory.enumeration_model_updates_permitted = true
@@ -226,6 +229,7 @@ def seed_acct
   c_cabin           = cat(10,"Cabins",         "Having to do with Cabin expense")
   c_wva             = cat(11,"West Virgina",   "Having to do with Spring Break costs")
   c_deposits        = cat(12,"Deposits",       "Having to do with E-Room Rental Deposits")
+  c_bank            = cat(12,"Bank",           "Having to do with Bank charges, balance corrections, etc.")
 
   k_membership_collect = action(1,"Membership Collection", 
                                 "Collecting general membership fees",
@@ -248,6 +252,9 @@ def seed_acct
   k_tshirt_cost        = action(7,"Cost of T-Shirts",
                                   "Money paid for T-shirts",
                                   c_tshirts, t_debit, a_expense)
+  k_balance            = action(12,"Balance Correction",
+                                  "Fixes a descrepancy in the balance",
+                                  c_bank, t_credit, a_balance)
 # Wrt E-room
   k_to_treas   = action(8,"To Treasurer", 
                         "Money taken by Treasurer from E-room",
@@ -268,7 +275,8 @@ def seed_acct
                 k_deposit_return,
                 k_tshirt_collect,
                 k_to_treas,
-                k_from_treas])
+                k_from_treas,
+                k_balance])
 
 # Wrt Tresurer
   k_to_eroom   = action(13,"To E-Room",
@@ -286,7 +294,8 @@ def seed_acct
                      k_wva_reimbursement,
                      k_wva_cabinexp,
                      k_to_eroom,
-                     k_from_eroom])
+                     k_from_eroom,
+                     k_balance])
 end
 
 ###############################

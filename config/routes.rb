@@ -21,9 +21,10 @@ ActionController::Routing::Routes.draw do |map|
     :update_transaction => :post,
     :update_description_form => :post}
 
-  map.resources :treasurer_ledger, :member => {
-    :update_transaction => :put,
-    :update_description_form => :get}
+  map.resource :treasurer_ledger, :member => {
+    :auto_complete_for_club_member_login => :post,
+    :update_transaction => :post,
+    :update_description_form => :post}
 
 
   

@@ -72,8 +72,8 @@ module UsersHelper
     if !memberships.empty?
       rows = memberships.map { |m| render_membership_row(m, false) }
       s = "<h3>Paid Memberships</h3>\n"
-      header = render_table_header_row(["Date","Type   ddddd","Year", "Amount", "Recorded By"])
-      s << render_table([header] + rows)
+      header = render_table_header_row(["Date","Type","Year", "Amount", "Recorded By"])
+      s << render_table([header] + rows, "memberships")
       return s
     end
   end

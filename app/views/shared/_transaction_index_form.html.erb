@@ -12,6 +12,7 @@
 #    actions         The AcctActions for the target account.
 #    membership      The new ClubMembership that may be utitilized for the
 #                    "Membership Collect" Action.
+#    balances        A [label => value] list
 %>
 <table class="transactions">
   <tr class="pagnation">
@@ -47,15 +48,11 @@
     </td>
   </tr>
   <% end %>
-  <tr>
-  <td colspan="2"/><td>Balance</td><td class="decimal"><%= @eroom_balance %></td>
-  </tr>
-  <tr>
-  <td colspan="2"/><td>Deposits</td><td class="decimal"><%= @deposit_balance %></td>
-  </tr>
-  <tr>
-  <td colspan="2"/><td>Total</td><td class="decimal"><%= @balance %></td>
-  </tr>
+  <% balances.map do |label,value| %>
+    <tr>
+    <td colspan="2"/><td><%= label %></td><td class="decimal"><%= value %></td>
+    </tr>
+  <% end %>
   <tr>
   <td colspan="4" class="pagnation"><%= will_paginate transactions,
     :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",

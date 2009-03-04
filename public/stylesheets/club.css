@@ -199,6 +199,13 @@
 .transactions {
 }
 
+.transactions .header th{
+  padding: 0px 10px 0px 0px;
+}
+
+.transactions tr td{
+}
+
 .transactions tr.odd {
   background: #f2fdff;
 }
@@ -261,8 +268,8 @@
 }
 
 .transactions .button input{
-padding-left: 1em;
-padding-right: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
   background: #008000;
   font-size: 123%;
   border: 4px solid #004500;
@@ -278,3 +285,24 @@ padding-right: 1em;
 .transactions .button input:hover{
   background:#cccccc;
 }
+
+.memberships table{
+  padding: 2em;
+}
+
+.memberships th{
+  padding: 0px 10px 0px 0px;
+}
+.memberships .membership td{
+  padding: 0px 10px 0px 0px;
+}
+
+.memberships .current {
+  color: #008800;
+}
+
+.membership .date td{
+  text-align: left
+}
+
+

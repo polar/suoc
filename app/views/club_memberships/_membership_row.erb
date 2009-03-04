@@ -4,7 +4,7 @@
  #  membership  => The ClubMembership
  #  usename => boolean to print name
  %>
-<tr class="membership_row">
+<%= "<tr class='membership row#{' current' if membership.current?}'>" %>
   <% if usename %>
     <td class="full_name">
       <%= membership.member.name %>
@@ -20,7 +20,7 @@
     <%= membership.year %>
   </td>
   <td class="decimal">
-    <%= membership.acct_transaction.amount %>
+    <%= "%.2f" % membership.acct_transaction.amount  %>
   </td>
   <td class="full_name">
     <%= membership.acct_transaction.recorded_by.name %>
