@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# This script allows Capistrano to "spin" up
+# the application.
+#
+SUOC_PATH=/var/www/suoc
+
+$SUOC_PATH/current/script/process/spawner \
+  mongrel \
+  --environment=production \
+  --instances=1 \
+  --address=127.0.0.1 \
+  --port=8000
