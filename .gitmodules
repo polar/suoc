@@ -16,3 +16,6 @@
 [submodule "vendor/plugins/will_paginate"]
 	path = vendor/plugins/will_paginate
 	url = git://github.com/mislav/will_paginate.git
+[submodule "vendor/plugins/declarative_authorization"]
+	path = vendor/plugins/declarative_authorization
+	url = git://github.com/stffn/declarative_authorization.git
