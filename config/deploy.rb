@@ -12,6 +12,8 @@ set :deploy_to, "/var/www/#{application}"
 # set :scm, :subversion
 set :scm, :git
 
+set :use_sudo, false
+
 set :scm_username, "polar"
 
 set :gateway, "polar@adiron.kicks-ass.net:922"
@@ -25,8 +27,8 @@ set :runner, "suoc"
 # A nice litte find off of some stupid blog.
 #
 set :db_database, "suoc_production"
-set :db_user, "suoc"
-set :db_password, ""
+set :db_user, "root"
+set :db_password, "root"
 
 role :app, "deploy@rails.local"
 role :web, "deploy@rails.local"
