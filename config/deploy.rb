@@ -19,7 +19,15 @@ set :gateway, "polar@adiron.kicks-ass.net:922"
 set :user, "suoc"
 
 # WHAT THE FUCK IS THIS???
+# Why isn't this :app_user, or something logical?
 set :runner, "suoc"
+
+#
+# A nice litte find off of some stupid blog.
+#
+set :db_database, "suoc_production"
+set :db_user, "suoc"
+set :db_password, ""
 
 role :app, "suoc@rails.local"
 role :web, "suoc@rails.local"
