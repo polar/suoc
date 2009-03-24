@@ -17,7 +17,7 @@ production:
   adapter: mysql
   database: suoc_production
   username: suoc
-  password: ""
+  password: suoc
   host: rails.local
   timeout: 5000
 
@@ -26,7 +26,7 @@ staging:
   adapter: mysql
   database: suoc_staging
   username: suoc
-  password: 
+  password: suoc
   host: localhost
   timeout: 5000
 
