@@ -16,7 +16,7 @@ test:
 production:
   adapter: mysql
   database: suoc_production
-  username: root
-  password: root
+  username: suoc
+  password: 
   host: rails.local
   timeout: 5000

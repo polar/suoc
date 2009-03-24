@@ -21,6 +21,6 @@ set :user, "suoc"
 # WHAT THE FUCK IS THIS???
 set :runner, "suoc"
 
-role :app, "suoc@rails.local:8110"
-role :web, "suoc@rails.local:8220"
-role :db,  "rails.local", :primary => true
+role :app, "suoc@rails.local"
+role :web, "suoc@rails.local"
+role :db,  "suoc@rails.local", :primary => true
