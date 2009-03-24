@@ -18,7 +18,7 @@ production:
   database: suoc_production
   username: suoc
   password: suoc
-  host: rails.local
+  socket: /var/run/mysqld/mysqld.sock
   timeout: 5000
 
 
