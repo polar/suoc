@@ -10,14 +10,12 @@ class AcctAccountsController < BaseController
   #before_filter :login_required, :only => [:edit, :new, :update, :destroy]
   #before_filter :admin_required, :only => [:update, :destroy, :new]
   
-  # GET /acct_accounts
   def index
     @accounts = AcctAccount.paginate(:all, 
         :page => params[:page], :per_page => ACCOUNTS_PER_PAGE)
 
   end
 
-  # GET /acct_accounts/1
   def show
     @account = AcctAccount.find(params[:id])
     @balance = @account.balance
@@ -26,12 +24,10 @@ class AcctAccountsController < BaseController
         :page => params[:page], :per_page => ENTRIES_PER_PAGE)
   end
 
-  # GET /acct_accounts/new
   def new
     @account = AcctAccount.new
   end
 
-  # GET /acct_accounts/1/edit
   def edit
     @account = AcctAccount.find(params[:id])
   end

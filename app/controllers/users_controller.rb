@@ -1,4 +1,4 @@
-class UsersController
+class UsersController #< BaseController
   before_filter :becomes_club_member
 
   after_filter :create_club_member, :only => [ :create ]
@@ -28,18 +28,23 @@ class UsersController
 
   def update_club_member_info
     member = ClubMember.find(params[:id])
-    member.update_attributes(params[:club_member])
-    can_edit_info = current_user.admin? || current_user == member
-    if member.save
-      render_club_member_info(member, can_edit_info)
+    if permitted_to? :write, member
+      member.update_attributes(params[:club_member])
+      can_edit_info = current_user.admin? || current_user == member
+      if member.save
+        render_club_member_info(member, can_edit_info)
+      else
+        render_edit_club_member_info(member)
+      end
     else
-      render_edit_club_member_info(member)
+      flash[:error] = "You do not have permission to edit"
+      render_club_member_info(member, false)
     end
   end
   
   def edit_club_member_info
     member = ClubMember.find(params[:id])
-    can_edit_info = current_user.admin? || current_user == member
+    can_edit_info = permitted_to? :write, member
     if can_edit_info
       render_edit_club_member_info(member)
     else
@@ -49,7 +54,7 @@ class UsersController
   
   def show_club_member_info
     member = ClubMember.find(params[:id])
-    can_edit_info = current_user.admin? || current_user == member
+    can_edit_info = permitted_to? :write, member
     render_club_member_info(member, can_edit_info)
   end
 end

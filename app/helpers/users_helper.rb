@@ -148,7 +148,13 @@ module UsersHelper
   def render_club_profile_info( member )
     render :partial => "club_profile_info", :locals => {
       :member => member,
-      :showedit => current_user && current_user.admin? || current_user == member
+      :showedit => permitted_to?(:write, member)
       }
+  end
+
+  def fmt_memberid(member)
+    if member.club_memberid && member.club_memberid.length > 5
+      member.club_memberid.insert(5,"-")
+    end
   end
 end

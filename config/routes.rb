@@ -1,3 +1,4 @@
+puts "APPLICATION LOADING!!!"
 ActionController::Routing::Routes.draw do |map|
   map.resources :club_members
 
@@ -65,7 +66,19 @@ ActionController::Routing::Routes.draw do |map|
 
   # See how all your routes lay out with "rake routes"
 
-  # We need the sign up route earler so that we can use club_members
+  #
+  # This doesn't seem to work automatically or
+  # explicitly. We have to copy the routing rules
+  # from Declarative Authorization here. Grrrrr..
+  #
+  #map.from_plugin :declarative_authorization
+  map.resources :authorization_rules, 
+                :only => :index, 
+                :collection => {:graph => :get}
+  map.resources :authorization_usages, 
+                :only => :index
+
+  # We need the sign up route earlier so that we can use club_members
   map.from_plugin :community_engine
   map.resources :users, :member => {
     :edit_club_member_info_user => :post

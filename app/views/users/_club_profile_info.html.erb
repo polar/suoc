@@ -6,10 +6,6 @@
 #
 %>
 <div class="box">
-  <% member.type = "ClubMember"
-     member.save
-     member = ClubMember.find(member.id)
-  %>
   <%= render_club_member_info(member, showedit) %>
   <%= render_memberships(member) %>
   <%= render_offices(member.current_officers) %>

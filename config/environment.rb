@@ -31,7 +31,9 @@ Rails::Initializer.run do |config|
   # in vendor/plugins are loaded in alphabetical order.
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
-  config.plugins = [ :engines, :community_engine, :white_list, :all ]
+  config.plugins = [ :engines, :community_engine, 
+                     :declarative_authorization, 
+                     :white_list, :all ]
   config.plugin_paths += ["#{RAILS_ROOT}/vendor/plugins/community_engine/engine_plugins"]
 
   # Add additional load paths for your own custom dirs
@@ -75,3 +77,36 @@ end
   # Validates Dates Time plugin.
   #   We need to accept month/day/year. Default is day/month/year.
   ActiveRecord::Validations::DateTime.us_date_format = true
+
+#
+# This horse hockey is because Community Engine keeps all the 
+# the authentication stuff in BaseController and not Application
+# Controller and the Declarative Authorization Plugin requires it
+# to be in ApplicationController.
+# We created a "base_module.rb" with all the methods of BaseController
+# and insert the filters.
+# Note: We had to explicity add the BaseHelper as this gets loaded
+# automatically into the BaseController by Rails.
+#
+AuthorizationRulesController.send :include, AuthenticatedSystem
+AuthorizationRulesController.send :include, LocalizedApplication
+AuthorizationRulesController.send :include, BaseModule
+AuthorizationRulesController.send :around_filter, :set_locale
+AuthorizationRulesController.send :before_filter, :login_from_cookie
+AuthorizationRulesController.send :skip_before_filter, :verify_authenticity_token, :only => :footer_content
+AuthorizationRulesController.send :helper, BaseHelper
+AuthorizationRulesController.send :helper_method, :commentable_url
+AuthorizationRulesController.send :caches_action, :site_index, :footer_content, :if => Proc.new{|c| c.cache_action? }
+
+
+AuthorizationUsagesController.send :include, AuthenticatedSystem
+AuthorizationUsagesController.send :include, LocalizedApplication
+AuthorizationUsagesController.send :include, BaseModule
+AuthorizationUsagesController.send :around_filter, :set_locale
+AuthorizationUsagesController.send :before_filter, :login_from_cookie
+AuthorizationUsagesController.send :skip_before_filter, :verify_authenticity_token, :only => :footer_content
+AuthorizationUsagesController.send :helper, BaseHelper
+AuthorizationUsagesController.send :helper_method, :commentable_url
+AuthorizationUsagesController.send :caches_action, :site_index, :footer_content, :if => Proc.new{|c| c.cache_action? }
+
+

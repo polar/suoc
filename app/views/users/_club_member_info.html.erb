@@ -19,7 +19,14 @@
 </tr>
 <tr>
   <th>SUID:</th>
-  <td><%= member.club_memberid.insert(5,"-") %></td>
+  <td><%= if member.club_memberid
+            if permitted_to? :read_id, member
+              fmt_memberid(member)
+            else
+              "[Hidden]"
+            end
+          end %>
+  </td>
 </tr>
 <tr>
   <th>Member Since:</th>

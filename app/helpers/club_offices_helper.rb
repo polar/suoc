@@ -1,5 +1,7 @@
 module ClubOfficesHelper
    
+  include UsersHelper
+
   #
   # This function renders the member as a badge.
   #   member  The ClubMember

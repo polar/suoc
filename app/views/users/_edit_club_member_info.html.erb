@@ -22,8 +22,16 @@
     <th>Aliases:</th><td><%= f.text_field :club_aliases %></td>
   </tr>
   <tr>
-    <th>SUID:</th><td><%= f.text_field :club_memberid,
-         :value => (member.club_memberid.insert(5,"-") unless !member.club_memberid) %></td>
+    <th>SUID:</th>
+    <td>
+      <%= if permitted_to? :write_id, member
+            val = member.club_memberid.insert(5,"-") unless !member.club_memberid
+            f.text_field :club_memberid, :value => val
+          else
+            "Cannot Edit"
+          end
+       %>
+    </td>
   </tr>
   <tr>
     <th>Member Since:</th>
