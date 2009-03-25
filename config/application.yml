@@ -15,7 +15,7 @@ community_locale: "en"
 #
 # Options for editor
 #
-default_mce_options: []
+default_mce_options: {}
 
 # The label you use for 'staff' writers (featured writer, staff, pro, etc.)
 featured_writer_label: 'Featured Writer'
