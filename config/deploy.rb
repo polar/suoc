@@ -19,19 +19,16 @@ set :scm_username, "polar"
 set :gateway, "polar@adiron.kicks-ass.net:922"
 set :user, "deploy"
 
-set :debug, true
-set :trace, true
-
 # WHAT THE FUCK IS THIS???
 # Why isn't this :app_user, or something logical?
-set :runner, "suoc"
+#set :runner, "suoc"
 
 #
 # A nice litte find off of some stupid blog.
 #
-set :db_database, "suoc_production"
-set :db_user, "root"
-set :db_password, "root"
+#set :db_database, "suoc_production"
+#set :db_user, "root"
+#set :db_password, "root"
 
 role :app, "deploy@rails.local"
 role :web, "deploy@rails.local"

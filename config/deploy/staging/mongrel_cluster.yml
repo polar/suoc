@@ -1,0 +1,13 @@
+#
+# Mongrel Cluster 
+#
+user: deploy
+group: deploy
+cwd: /var/www/qa.suoc/current
+port: "9200"
+environment: staging
+address: 0.0.0.0
+pid_file: "/var/run/mongrel_cluster/qa-suoc.pid"
+log_file: "log/qa-suoc.log"
+servers: 2
+
