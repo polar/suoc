@@ -18,4 +18,4 @@
 	url = git://github.com/mislav/will_paginate.git
 [submodule "vendor/plugins/declarative_authorization"]
 	path = vendor/plugins/declarative_authorization
-	url = git://github.com/stffn/declarative_authorization.git
+	url = git@github.com:polar/declarative_authorization.git
