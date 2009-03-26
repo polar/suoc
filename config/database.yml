@@ -27,7 +27,7 @@ staging:
   database: suoc_staging
   username: suoc
   password: suoc
-  host: localhost
+  socket: /var/run/mysqld/mysqld.sock
   timeout: 5000
 
 
