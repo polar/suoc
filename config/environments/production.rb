@@ -20,4 +20,4 @@ config.action_controller.perform_caching             = true
 # Disable delivery errors, bad email addresses will be ignored
 # config.action_mailer.raise_delivery_errors = false
 #
-APP_URL = "http://greene.case.syr.edu:3000"
+APP_URL = "http://suoc.syr.edu:9100"
