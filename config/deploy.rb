@@ -19,6 +19,9 @@ set :scm_username, "polar"
 set :gateway, "polar@adiron.kicks-ass.net:922"
 set :user, "deploy"
 
+set :debug, true
+set :trace, true
+
 # WHAT THE FUCK IS THIS???
 # Why isn't this :app_user, or something logical?
 set :runner, "suoc"

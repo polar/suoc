@@ -13,14 +13,14 @@ ActiveRecord::Schema.define(:version => 20090305141738) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "acct_accounts", :force => true do |t|
     t.string   "name"
-    t.text     "description",     :default => ""
+    t.text     "description"
     t.integer  "account_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -33,24 +33,24 @@ ActiveRecord::Schema.define(:version => 20090305141738) do
 
   create_table "acct_action_types", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "acct_actions", :force => true do |t|
     t.string   "name"
-    t.text     "description",    :default => ""
+    t.text     "description"
     t.integer  "account_id"
     t.integer  "category_id"
+    t.integer  "action_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "action_type_id"
   end
 
   create_table "acct_categories", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -59,8 +59,8 @@ ActiveRecord::Schema.define(:version => 20090305141738) do
     t.integer  "acct_transaction_id"
     t.integer  "account_id"
     t.integer  "category_id"
-    t.decimal  "debit",               :default => 0.0
-    t.decimal  "credit",              :default => 0.0
+    t.integer  "debit",               :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "credit",              :limit => 10, :precision => 10, :scale => 0, :default => 0
     t.string   "description"
     t.integer  "recorded_by_id"
     t.date     "date"
@@ -74,15 +74,15 @@ ActiveRecord::Schema.define(:version => 20090305141738) do
     t.integer  "acct_action_id"
     t.string   "description"
     t.date     "date"
-    t.decimal  "amount",            :default => 0.0
+    t.integer  "amount",            :limit => 10, :precision => 10, :scale => 0, :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "activities", :force => true do |t|
-    t.integer  "user_id",    :limit => 10
+    t.integer  "user_id"
     t.string   "action",     :limit => 50
-    t.integer  "item_id",    :limit => 10
+    t.integer  "item_id"
     t.string   "item_type"
     t.datetime "created_at"
   end
@@ -145,28 +145,27 @@ ActiveRecord::Schema.define(:version => 20090305141738) do
 
   create_table "club_activities", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.text     "description"
     t.text     "tagline"
     t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "club_chairmanships", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "club_chairs", :force => true do |t|
     t.integer  "member_id"
-    t.integer  "chairmanship_id"
+    t.integer  "activity_id"
     t.date     "start_date"
     t.date     "end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "activity_id"
   end
 
   create_table "club_leaders", :force => true do |t|
@@ -180,17 +179,17 @@ ActiveRecord::Schema.define(:version => 20090305141738) do
 
   create_table "club_leaderships", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
+    t.text     "tagline"
+    t.integer  "position"
     t.integer  "activity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "tagline"
-    t.integer  "position"
   end
 
   create_table "club_member_statuses", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -227,11 +226,11 @@ ActiveRecord::Schema.define(:version => 20090305141738) do
 
   create_table "club_offices", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
+    t.text     "tagline"
+    t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "position"
-    t.text     "tagline"
   end
 
   create_table "club_roles", :force => true do |t|
