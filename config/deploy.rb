@@ -1,8 +1,11 @@
 require 'palmtree/recipes/mongrel_cluster'
 require 'capistrano/ext/multistage'
 
-set :stages, %w(staging production)
+#set :stages, %w(staging production)
 set :default_stage, "staging"
+
+#set :application, "suoc"
+#set :deploy_to, "/var/www/#{application}"
 
 set :gateway, "polar@adiron.kicks-ass.net:922"
 
@@ -19,6 +22,7 @@ set :user, "deploy"
 set :stage_dir, "config/deploy"
 
 set(:mongrel_conf) { "#{current_path}/config/deploy/#{stage}/mongrel_cluster.yml" }
+
 
 # Custom Tasks
 namespace :deploy do
