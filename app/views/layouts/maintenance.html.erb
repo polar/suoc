@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Factory Maintenance</title>
+</head>
+<body>
+<div id="wrapper">	
+<h1>
+  We're currently down for <%= reason ? reason : "maintenance" %>
+  as of <%= Time.now.strftime("%H:%M %Z") %>.
+</h1>
+<p>
+  Sorry for the inconvenience. We'll be back 
+  <%= deadline ? "by #{deadline}" : "shortly" %>.
+</p>
+</div>
+</body>
+</html>
+
