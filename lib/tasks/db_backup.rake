@@ -34,7 +34,7 @@ end
   end
 
   def backup(db = RAILS_ENV)
-    archive = "/tmp/#{archive_name(env,'db')}"
+    archive = "/tmp/#{archive_name(RAILS_ENV,'db')}"
     adapter, database, user, password = retrieve_db_info
     if adapter == "mysql"
       cmd = "mysqldump --opt --skip-add-locks --quote-names --max-allowed-packet=600M -u #{user} "
