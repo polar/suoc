@@ -58,8 +58,7 @@ namespace :deploy do
   desc "Transfer db and assests from production to staging."
   task :after_finalize_update do
     if rails_env == "staging"
-      run "cd #{release_path}; rake RAILS_ENV=staging db:stage"
-      dirsymlink(File.join(_PRODUCTION_PATH,"public"),File.join(release_path,"public")) 
+      run "cd #{release_path}; rake RAILS_ENV=staging PRODUCTION_PATH=#{PRODUCTION_PATH} db:stage"
     end
   end
 
@@ -110,48 +109,4 @@ namespace :deploy do
   end  
 end
 
-
-#
-# This class extends the Dir class to get the
-# full paths for each of its entries.
-#
-class ExtDir < Dir
-  def entry_paths
-    entries.map {|e| File.join(path,e)}
-  end
-end
-
-#
-# This method recursively descends the first directory
-# cloning it in d2 by makeing directories, and symlinks
-# to entries in d1
-#
-def dirsymlink(d1,d2)
-  if !File.directory?(d1)
-    raise "Not a directory: #{d1}"
-  end
-  if !File.directory?(d2)
-    if !File.exists?(d2)
-      Dir.mkdir(d2)
-    else
-      # Just ignore conflicts
-      puts "conflict: Not a directory: #{d2}"
-      return
-    end
-  end
-  dir = ExtDir.open(d1)
-  dir.entry_paths.each do |path|
-   if File.basename(path) != "." && File.basename(path) != ".."
-     if File.directory?(path)
-       dirsymlink(path,File.join(d2,File.basename(path)))
-     else
-       f2 = File.join(d2,File.basename(path))
-       if !File.exists?(f2)
-       	 File.symlink(path,f2)
-       end
-     end
-   end
-  end
-end
-  
 
