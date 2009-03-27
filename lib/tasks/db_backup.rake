@@ -1,29 +1,45 @@
 namespace :db do
   desc "Backs up the database to an archive"
   task :backup do
-     cmd = "mysqldump --opt --skip-add-locks --quote-names" 
-      msg "Backing up Database"
-      archive = "/tmp/#{archive_name('db')}"
+     msg "Backing up #{RAILS_ENV} database"
+     archive = backup
+     msg "Backed up to #{archive}
+  end
+  desc "Make a production back up and make it the staging database.
+  task :stage do
+     msg "Backing up production database"
+     if RAILS_ENV == "staging"
+       archive = backup("production")
+       adapter, database, user, password = retrieve_db_info
+       if adapter == "mysql"
+         cmd = "mysql -u #{user}"
+         cmd += " -p'#{password}' " unless password.nil?
+         cmd += " #{database} < #{archive}"
+         result = system(cmd)
+         raise("database restore failed.  msg: #{$?}") unless result
+       end
+     else
+       msg "Not in staging environment"
+     end
+  end
+end
 
-      msg "retrieving db info"
+  def backup(db)
+      archive = "/tmp/#{archive_name(env,'db')}"
       adapter, database, user, password = retrieve_db_info
-      msg "#{retrieve_db_info}"
-
-      msg "dumping db"
       if adapter == "mysql"
-        cmd = "mysqldump --opt --skip-add-locks --max-allowed-packet=600M -u #{user} "
+        cmd = "mysqldump --opt --skip-add-locks --quote-names --max-allowed-packet=600M -u #{user} "
       elsif adapter == "postgresql"
         cmd = "/usr/local/pgsql/bin/pg_dump -U #{user} "
       else
         raise("database dump failed.  msg: unknown adapter")
       end
-      puts cmd + "... [password filtered]"
       cmd += " -p'#{password}' " unless password.nil?
       cmd += " #{database} > #{archive}"
       result = system(cmd)
       raise("database dump failed.  msg: #{$?}") unless result
+      return archive
   end
-end
 
   def retrieve_db_info
     # read the remote database file....
@@ -39,9 +55,9 @@ end
       ]
  end
                                                 
-  def archive_name(name)
+  def archive_name(env,name)
     @timestamp ||= Time.now.utc.strftime("%Y%m%d%H%M%S")
-    token(name).sub('_', '.') + ".#{RAILS_ENV}.#{@timestamp}"
+    token(name).sub('_', '.') + ".#{env}.#{@timestamp}"
   end
 
   def token(name)
