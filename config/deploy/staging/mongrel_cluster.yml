@@ -4,9 +4,9 @@
 user: deploy
 group: deploy
 cwd: /var/www/suoc_staging/current
-port: "8000"
+port: "9000"
 environment: staging
-address: 0.0.0.0
+address: 127.0.0.1
 pid_file: "/var/run/mongrel_cluster/suoc_staging.pid"
 log_file: "log/suoc_staging.log"
 servers: 2

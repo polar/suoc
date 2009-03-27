@@ -4,9 +4,9 @@
 user: deploy
 group: deploy
 cwd: /var/www/suoc/current
-port: "9300"
+port: "8000"
 environment: production
-address: 0.0.0.0
+address: 127.0.0.1
 pid_file: "/var/run/mongrel_cluster/suoc.pid"
 log_file: "log/mongrel.log"
 servers: 3
