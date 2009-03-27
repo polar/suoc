@@ -4,7 +4,7 @@ namespace :db do
   task :backup do
     msg "Backing up #{RAILS_ENV} database"
     archive = backup
-    msg "Backed up to #{archive}
+    msg "Backed up to #{archive}"
   end
 
   desc "Make a production back up and bring it to staging."
