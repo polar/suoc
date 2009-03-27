@@ -48,7 +48,7 @@ namespace :deploy do
 
   desc "Transfer db and assests from production to staging."
   task :after_finalize_update do
-    if RAILS_ENV == "staging"
+    if rails_env == "staging"
       db:stage
     end
   end
