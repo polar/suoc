@@ -7,7 +7,7 @@ set :default_stage, "staging"
 # We know the production path for getting the
 # assets from production to staging.
 #
-set :PRODUCTION_PATH, "/var/www/suoc/current"
+set :_PRODUCTION_PATH, "/var/www/suoc/current"
 
 set :gateway, "polar@adiron.kicks-ass.net:922"
 
@@ -59,7 +59,7 @@ namespace :deploy do
   task :after_finalize_update do
     if rails_env == "staging"
       run "cd #{release_path}; rake RAILS_ENV=staging db:stage"
-      dirsymlink(File.join(PRODUCTION_PATH,"public"),File.join(release_path,"public")) 
+      dirsymlink(File.join(_PRODUCTION_PATH,"public"),File.join(release_path,"public")) 
     end
   end
 
