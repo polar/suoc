@@ -46,6 +46,13 @@ namespace :deploy do
     cleanup
   end
 
+  desc "Transfer db and assests from production to staging."
+  task :after_finalize_update do
+    if RAILS_ENV == "staging"
+      db:stage
+    end
+  end
+
   desc "Restart the Mongrel processes on the app server by calling restart_mongrel_cluster. "
   task :restart, :roles => :app do 
     restart_mongrel_cluster 
