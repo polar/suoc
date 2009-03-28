@@ -15,7 +15,7 @@ namespace :db do
       restore_db(archive)
       dirsymlink(File.join(RAILS_ROOT,"public"),
                  File.join(ENV["PRODUCTION_PATH"],"public"),
-                 [File.join(RAILS_ROOT","public","plugin_assets")])
+                 [File.join(RAILS_ROOT,"public","plugin_assets")])
     else
       msg "Not in staging environment"
     end
