@@ -30,7 +30,7 @@ set :user, "deploy"
 #
 #set :stage_dir, "config/deploy"
 #   The following gets evaluation delayed.
-#set(:mongrel_conf) { "#{current_path}/config/deploy/#{stage}/mongrel_cluster.yml" }
+set(:mongrel_conf) { "#{current_path}/config/deploy/#{stage}/mongrel_cluster.yml" }
 
 
 # Custom Tasks
