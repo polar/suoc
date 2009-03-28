@@ -91,9 +91,12 @@ end
 # cloning it in d2 by makeing directories, and symlinks
 # to entries in d1
 #
-def dirsymlink(d1,d2)
+def dirsymlink(d1,d2,ignore = []))
   if !File.directory?(d1)
     raise "Not a directory: #{d1}"
+  end
+  if (ignore.include?(d1)
+    return
   end
   if !File.directory?(d2)
     if !File.exists?(d2)
@@ -106,9 +109,10 @@ def dirsymlink(d1,d2)
   end
   dir = ExtDir.open(d1)
   dir.entry_paths.each do |path|
-   if File.basename(path) != "." && File.basename(path) != ".."
+   if File.basename(path) != "." && File.basename(path) != ".." &&
+      !ignore.include?(path)
      if File.directory?(path)
-       dirsymlink(path,File.join(d2,File.basename(path)))
+       dirsymlink(path,File.join(d2,File.basename(path)),ignore)
      else
        f2 = File.join(d2,File.basename(path))
        if !File.exists?(f2)
