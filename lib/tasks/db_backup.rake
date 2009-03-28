@@ -92,11 +92,11 @@ end
 # cloning it in d2 by makeing directories, and symlinks
 # to entries in d1
 #
-def dirsymlink(d1,d2,ignore = []))
+def dirsymlink(d1,d2,ignore = [])
   if !File.directory?(d1)
     raise "Not a directory: #{d1}"
   end
-  if (ignore.include?(d1)
+  if ignore.include?(d1)
     return
   end
   if !File.directory?(d2)
