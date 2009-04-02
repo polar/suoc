@@ -110,3 +110,30 @@ AuthorizationUsagesController.send :helper_method, :commentable_url
 AuthorizationUsagesController.send :caches_action, :site_index, :footer_content, :if => Proc.new{|c| c.cache_action? }
 
 
+Comatose.configure do |config|
+
+  # Includes AuthenticationSystem in the ComatoseAdminController
+  config.admin_includes << :authenticated_system
+
+  # Calls :login_required as a before_filter
+  config.admin_authorization = :login_required
+
+  # Returns different 'root paths'
+  config.admin_get_root_page do
+
+    if current_user.role == 'XXXX' # This depends on your system
+      ComatosePage.find_by_path( 'site/help' )
+
+    elsif current_user.role == 'YYYY'
+      # Returns multiple 'roots'
+      [
+        ComatosePage.find_by_path( 'site/help' ),
+        ComatosePage.find_by_path( 'app/faq' )
+      ]
+
+    else
+      ComatosePage.root
+
+    end
+  end
+end

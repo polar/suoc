@@ -57,6 +57,17 @@ feature:
     thumbnails: {thumb: '45x45!', large: '635x150!'}    
     storage: 'file_system'
     content_type: ['image/jpg', 'image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 'image/x-png']
+    processor: rmagick
+
+page_photo:
+  attachment_fu_options:
+    resize_to: "465>"
+    min_size: 1
+    max_size: 1
+    thumbnails: {thumb: '45x45!', small: '100x100>', medium: '200x200>', large: '630x630>' }
+    storage: 'file_system'
+    content_type: ['image/jpg', 'image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 'image/x-png']
+    processor: rmagick
         
 clipping:
   attachment_fu_options:
@@ -66,6 +77,7 @@ clipping:
     thumbnails: {thumb: "100x100!", medium_square: "200x200!", medium: "200>"}
     storage: 'file_system'
     content_type: ['image/jpg', 'image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 'image/x-png']
+    processor: rmagick
     
 reserved_logins: [
   'about', 

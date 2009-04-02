@@ -10,13 +10,16 @@
         %meta{:name=>key[0], :content=>key[1]}
   
     = render :partial => "shared/scripts_and_styles"
+    - if controller =~ /comatose/
+      = stylesheet_link_tag "comatose.css"
     = stylesheet_link_tag "club.css"
     - if @rss_title && @rss_url
       = auto_discovery_link_tag(:rss, @rss_url, {:title => @rss_title})
     
   %body
-    #doc2{:class => "yui-t#{@sidebar_left ? 3 : 6}"}
-      = render :partial => "shared/header"
+    #doc4{:class => "yui-t#{@sidebar_left ? 3 : 6}"}
+      #hd
+        = render :partial => "shared/header"
             
       #bd
         = render :partial => "shared/messages"
@@ -24,13 +27,6 @@
         = @content_for_layout
                             
       #ft
-        -if show_footer_content?    
-          .yui-gc#footer_content
-            = image_tag 'spinner.gif', :plugin => 'community_engine'
-            =:loading_recent_content.l       
-
-          %script{:type=>"text/javascript"}
-            = remote_function(:update => "footer_content", :url => { :controller => 'base', :action => 'footer_content' })
 
       #CommunityFooter
         %ul

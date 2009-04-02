@@ -1,0 +1,14 @@
+<% @meta = { :description => AppConfig.meta_description, :keywords => AppConfig.meta_keywords, :robots => AppConfig.robots_meta_list_content } %>
+
+<div id="yui-main">
+  <div class="yui-b main_column">
+    <div class="box">
+      <%= render :comatose => "" %>
+    </div>
+  </div>
+</div>
+<div id="doc2" class="yui-t3">
+  <div class="box">
+    <%= link_to "Activities", comatose_root_url(:page => "activities") %>
+  </div>
+</div>

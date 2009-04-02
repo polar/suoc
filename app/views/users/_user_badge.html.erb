@@ -27,9 +27,6 @@
                         end %>
             </li>
           <% end %>
-          <li class="birthday">
-            Birthday: <%= member.birthday.strftime("%m/%d/%Y") %>
-          </li>
           <li class="date">
             Member Since: <%= member.club_start_date.strftime("%Y") if member.club_start_date %>
           </li>

@@ -1,8 +1,10 @@
-puts "APPLICATION LOADING!!!"
 ActionController::Routing::Routes.draw do |map|
+  map.resources :page_photos
+
+  map.comatose_admin 
+  map.comatose_root 'home'
+
   map.resources :club_members
-
-
   map.resources :acct_account_types
   map.resources :acct_accounts
   map.resources :acct_action_types

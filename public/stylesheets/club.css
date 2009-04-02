@@ -7,6 +7,9 @@
  /* For some reason I need this .{} just to get the following 
   * stuff to work
   */
+b, strong {
+  font-weight: bolder;
+}
 
 .decimal {
   text-align: right;
@@ -303,6 +306,26 @@
 
 .membership .date td{
   text-align: left
+}
+#page_photo_form {
+  border: 3px solid gray !important;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  background: #FFF;
+  padding: 15px;
+}
+#page_photo_form FORM {
+  display: inline;
+  margin: 0px;
+  padding: 0px;
+}
+#page_photo_form A {
+  color: maroon !important;
+  border-bottom: 1px solid gray !important;
+}
+#page_photo_form A:hover {
+  color: red !important;
+  border-bottom: 1px solid red !important;
 }
 
 

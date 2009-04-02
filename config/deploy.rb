@@ -9,7 +9,7 @@ set :default_stage, "staging"
 #
 set :_PRODUCTION_PATH, "/var/www/suoc/current"
 
-set :gateway, "polar@adiron.kicks-ass.net:922"
+#set :gateway, "polar@adiron.kicks-ass.net:922"
 
 #
 # Git Configuration
