@@ -1,0 +1,80 @@
+
+/*
+ *This deals with <td> and inputs that are aligned for decimal
+ *numbers.
+ */
+ 
+ /* For some reason I need this .{} just to get the following 
+  * stuff to work
+  */
+
+.decimal {
+  text-align: right;
+}
+
+
+/*
+ * This is for a medium badge, with pic on the left and list
+ * info on the right.
+ */
+
+.badge_medium .vcard{
+  float: left;
+  width: 35em; /*13.8461em; /* about 180px */
+  /**width:  13.5em; /* for IE, but is not valid */
+}
+
+/* Avatar Header */
+.badge_medium .vcard h5{
+  float: left;
+  width: 66px;
+}
+
+.badge_medium .vcard ul{
+  margin-left: 66px;
+  font-size: 85%;
+}
+
+/* Avatar Image and Link */
+.badge_medium .vcard h5 a img{
+  display: block;
+  border: 1px solid #a2a19b;
+  padding: 2px;
+  background: #fff;
+}
+
+.badge_medium .vcard h5 a:hover img{
+  background: #a2a19b;
+}
+
+.badge_medium .vcard ul{
+  margin-left: 66px;
+  font-size: 85%;
+}
+
+/* Each Side list element is padded left 20px 
+ * to leave room for a small icon.
+ */
+.badge_medium .vcard ul li{
+  padding: 3px 0;
+  border-bottom: 1px dotted #a2a19b;
+  padding-left: 20px;
+  background-color: transparent;
+  background-position: left center;
+  background-repeat: no-repeat;
+}
+
+/* The full name, usually the first list element
+ * Will be slightly larger.
+ */
+.badge_medium .vcard ul li.full_name{
+  font-size: 130%;
+  font-weight: bold;
+  padding:0 0 3px 0;
+}
+
+/*
+.badge_medium .vcard ul li.update{
+  background-image: url(/plugin_assets/community_engine/images/icons/date.png)
+}
+*/
