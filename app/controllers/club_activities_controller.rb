@@ -15,6 +15,7 @@
 #      delete_chair --> show
 #
 class ClubActivitiesController < BaseController
+  layout "club_operations"
   
   include Viewable
   #

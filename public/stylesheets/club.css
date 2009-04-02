@@ -307,6 +307,21 @@ b, strong {
 .membership .date td{
   text-align: left
 }
+
+/*
+ * Page Navigation Column
+ * It's a table sitting the left column.
+ * Center the text and expand the table to the
+ * column for proper centering.
+ */
+#page_nav{
+  text-align: center;
+}
+
+#page_nav table{
+  width: 100%;
+}
+
 #page_photo_form {
   border: 3px solid gray !important;
   -webkit-border-radius: 10px;
@@ -329,3 +344,44 @@ b, strong {
 }
 
 
+/* =============================================== */
+/* CLUB FOOTER
+/* =============================================== */
+
+#ClubFooter {
+  margin: 0px 0;
+  font-size: 100%;
+}
+
+#ClubFooter ul, #ClubFooter ul li{
+  float: left;
+}
+
+#ClubFooter li a{
+  padding: 2px 10px;
+  display: block;
+  border-left: 1px solid #ccc;
+}
+
+#ClubFooter li#rss a{
+  color: #fff;
+  background: orange;
+  text-decoration: none;
+}
+
+
+#ClubFooter li:first-child a{
+  border: none;
+  padding-left: 0;
+}
+
+
+#ClubFooter p{
+  float: right;
+  padding: 7px 0 6px 120px;
+  font-size: 150%;
+  font-weight: bold;
+  background: 
+    url(/images/sm-suoc.gif) 
+    no-repeat left center;
+}

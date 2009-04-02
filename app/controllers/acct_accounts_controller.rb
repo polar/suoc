@@ -1,4 +1,5 @@
 class AcctAccountsController < BaseController
+  layout "club_operations"
   
   ACCOUNTS_PER_PAGE = 10
   ENTRIES_PER_PAGE  = 10

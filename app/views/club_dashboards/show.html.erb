@@ -1,35 +1,35 @@
 <div class="box">
-  <h3>Club Dashboard</h3>
-  <table>
-    <tr>
-      <td>
-        <%= link_to "Offices", club_offices_path %>
-      </td>
-    <tr>
-    </tr>
-      <td>
-        <%= link_to "Activities", club_activities_path %>
-      </td>
-    <tr>
-    </tr>
-      <td>
-        <%= link_to "Leaderships", club_leaderships_path %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <%= link_to "Accounts", acct_accounts_path %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <%= link_to "E-Room Ledger", eroom_ledger_path %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <%= link_to "Treasurer Ledger", treasurer_ledger_path %>
-      </td>
-    </tr>
-  </table>
+  <h3>The Club Dashboard</h3>
+  <p>
+  The Club Dashboard will allow you to look at certain operational
+  aspects of the club and perform some operations. The right side
+  will allow you to navigate to each of the items below from any
+  club operation.
+  <h4><%= link_to "Offices", club_offices_path %></h4>
+  <p>
+  This section allows you to look at the offices of the
+  club and see its officers. If you have administrative privileges
+  you can assign current officers.
+  <h4><%= link_to "Activities", club_activities_path %></h4>
+  <p>
+  This section allows you to look at the Official Activities of the club.
+  From there, you can see the current and past chairs of the activity, and
+  get to the leaderships and its that each Activity maintains.
+  <h4><%= link_to "Leaderships", club_leaderships_path %></h4>
+  <p>
+  This section contains the Official Leaderships, of which each leadership
+  belongs to a certain activity. This will allow you to see the active
+  leaders in that leadership and activity.
+  <h4><%= link_to "Accounts", acct_accounts_path %></h4>
+  <p>
+  This section contains the "Chart of Accounts", which keeps track of
+  the financial aspects of the club.
+  <h4><%= link_to "E-Room Ledger", eroom_ledger_path %></h4>
+  <p>
+  This section contains the transaction ledger for the E-room. Its
+  primary use is for the E-room Chair or anybody operating th
+  <h4><%= link_to "Treasurer Ledger", treasurer_ledger_path %></h4>
+  This section contains the transaction ledger for the Treasurer.
+  Its primary use is for the Treasurer or anybody operating in the
+  office of the Treasury.
 </div>

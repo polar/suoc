@@ -45,8 +45,8 @@ namespace :deploy do
     end     
   
     # Move forward uploads and index directories along with new release.
-    # These are photos and homepage_features attachments.
-    %w{photos homepage_features}.each do |share|
+    # These are photos page_photos and homepage_features attachments.
+    %w{photos page_photos homepage_features}.each do |share|
       run "rm -rf #{release_path}/public/#{share}"
       run "rm -rf #{release_path}/#{share}"
       run "mkdir -p #{shared_path}/system/#{share}"

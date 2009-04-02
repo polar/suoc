@@ -6,9 +6,10 @@
     </div>
   </div>
   <div class="yui-b">
-    <table style="padding:20px">
+    <div id="page_nav">
+    <table>
     <% for f in @children do %>
-      <tr style="padding:20px"><td>
+      <tr"><td>
         <%= link_to image_tag(f.page_photo.public_filename(:small)),
              url_for(:controller => "page", :action => :show, :id => f.slug) %>
         <br>
@@ -17,4 +18,5 @@
       </td></tr>
     <% end %>
     </table>
+    </div>
   </div>

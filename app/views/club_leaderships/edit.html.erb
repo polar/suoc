@@ -1,10 +1,10 @@
 <div class="box">
-  <h2>Editing Club Leadership</h2>
+  <h3>Editing Club Leadership</h3>
   <div class="errors"></div>
   <% form_for(@club_leadership, 
         :html => { :class => "MainForm" }) do |f| %>
     <%= f.error_messages %>
-    <%= f.lable "Name" %>
+    <%= f.label "Name" %>
     <%= f.text_field "name" %>
     <%= f.label "Tag Line" %>
     <%= f.text_field :tagline, :size => 72 %>
@@ -19,6 +19,3 @@
   <% end %>
 </div>
 
-
-  <%= link_to 'Club Leaderships', club_leaderships_path %> |
-  <%= link_to 'Club Activities', club_activities_path %>

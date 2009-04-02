@@ -1,5 +1,6 @@
 class EroomLedgersController < BaseController
-
+  layout "club_operations"
+  
   helper :application
 
   before_filter :login_required

@@ -1,6 +1,8 @@
 <div class="box">
-<h2>Account <%= @account.name %></h2>
-<p>Balance: <%= @account.balance %>
+<h3>Account <%= @account.name %></h3>
+<p>
+<%= @account.description %>
+<h1>Balance: <%= @account.balance %></h1>
 <p>
 <%= will_paginate @entries, 
     :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
@@ -34,3 +36,4 @@
     :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
     :params => { :action => :index } %>
 </div>
+<%= link_to "Edit", edit_acct_account_path(@account) %>

@@ -1,11 +1,11 @@
 <div class="box">
-<h2>Treasurer Ledger (<%= @current_user.name %>)</h2>
+  <h3>Treasurer Ledger (<%= @current_user.name %>)</h3>
 
-<%= render :partial => "shared/transaction_index_form",
-           :locals => {
-              :transactions => @transactions,
-              :transaction  => @transaction,
-              :actions      => @actions,
-              :membership   => @membership,
-              :balances     => @balances } %>
+  <%= render :partial => "shared/transaction_index_form",
+             :locals => {
+                :transactions => @transactions,
+                :transaction  => @transaction,
+                :actions      => @actions,
+                :membership   => @membership,
+                :balances     => @balances } %>
 </div>

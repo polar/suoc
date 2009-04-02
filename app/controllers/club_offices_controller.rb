@@ -15,6 +15,7 @@
 #      delete_officer --> show
 #
 class ClubOfficesController < BaseController
+  layout "club_operations"
   
   include Viewable
   #

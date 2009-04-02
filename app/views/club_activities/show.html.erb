@@ -1,5 +1,5 @@
 <div class="box">
-  <h2><%= "Club Activity of #{@club_activity.name}" %></h2>
+  <h3><%= "Club Activity of #{@club_activity.name}" %></h3>
   <%= @club_activity.tagline %>
   <h3>Description</h3>
   <%= @club_activity.description %>
@@ -31,6 +31,4 @@
       There are no past chairs assigned for this activity.
   <% end %>
 </div>
-
-<%= link_to 'Club Activities', club_activities_path %> |
-<%= link_to 'Club Activities', club_activities_path %>
+<%= link_to "Edit Activity", edit_club_activity_path(@club_activity) if @view_modify %>

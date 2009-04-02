@@ -15,6 +15,8 @@
 #      delete_leader --> show
 #
 class ClubLeadershipsController < BaseController
+
+  layout "club_operations"
   
   include Viewable
   #

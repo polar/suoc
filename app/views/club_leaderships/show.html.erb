@@ -1,5 +1,5 @@
 <div class="box">
-  <h2><%= "Club Leadership of #{@club_leadership.name}" %></h2>
+  <h3><%= "Club Leadership of #{@club_leadership.name}" %></h3>
   <%= @club_leadership.tagline %>
   <h3>Description</h3>
   <%= @club_leadership.description %>
@@ -23,5 +23,4 @@
   <% end %>
 </div>
 
-<%= link_to 'Club Leaderships', club_leaderships_path %> |
-<%= link_to 'Club Activities', club_activities_path %>
+<%= link_to "Edit Leadership", edit_club_leadership_path(@club_leadership) if @view_modify %>

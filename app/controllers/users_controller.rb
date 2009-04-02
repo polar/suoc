@@ -9,9 +9,12 @@ class UsersController #< BaseController
   include UsersHelper 
   
   # This function gets called as a before filter to
-  # transform the user to its extension.
+  # transform the current user, if any, to its extension.
   def becomes_club_member
-    if @current_user 
+    # For some reason @current_user == :false 
+    # (ie. not false or not nil) if it isn't assigned!
+    # We check to see if it's still a User.
+    if @current_user && @current_user.class == User
       @current_user = @current_user.becomes(ClubMember)
     end
   end

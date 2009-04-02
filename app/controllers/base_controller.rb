@@ -1,6 +1,6 @@
 class BaseController < ApplicationController
 
   def site_index
-    @sidebar_left = true
+    redirect_to :controller => "page", :action => :show, :id => "about"
   end
 end

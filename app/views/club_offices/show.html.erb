@@ -1,5 +1,5 @@
 <div class="box">
-  <h2><%= "Club Office of #{@club_office.name}" %></h2>
+  <h3><%= "Club Office of #{@club_office.name}" %></h3>
   <%= @club_office.tagline %>
   <h3>Description</h3>
   <%= @club_office.description %>
@@ -22,6 +22,4 @@
       There are no past officers assigned for this office.
   <% end %>
 </div>
-
-<%= link_to 'Club Offices', club_offices_path %> |
-<%= link_to 'Club Activities', club_activities_path %>
+<%= link_to "Edit Office", edit_club_office_path(@club_office) if @view_modify %>

@@ -2,6 +2,8 @@
 # The controller for the SuocOfficers.
 #
 class ClubOfficersController < BaseController
+  layout "club_operations"
+  
   #
   # We do not need a log in for show.
   #
