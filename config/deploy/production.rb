@@ -22,6 +22,6 @@ set :user, "deploy"
 set :rails_env, "production"
 set :monit_group, "suoc"
 
-role :app, "deploy@rails.local"
-role :web, "deploy@rails.local"
-role :db,  "deploy@rails.local", :primary => true
+role :app, "deploy@suoc.syr.edu:922"
+role :web, "deploy@suoc.syr.edu:922"
+role :db,  "deploy@suoc.syr.edu:922", :primary => true

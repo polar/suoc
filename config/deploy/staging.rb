@@ -22,6 +22,6 @@ set :user, "deploy"
 set :rails_env, "staging"
 set :monit_group, "suoc"
 
-role :app, "deploy@suoc.syr.edu:992"
+role :app, "deploy@suoc.syr.edu:922"
 role :web, "deploy@suoc.syr.edu:922"
 role :db,  "deploy@suoc.syr.edu:922", :primary => true
