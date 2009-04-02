@@ -1,0 +1,20 @@
+<% @meta = { :description => AppConfig.meta_description, :keywords => AppConfig.meta_keywords, :robots => AppConfig.robots_meta_list_content } %>
+
+  <div id="yui-main"
+    <div class="yui-b box">
+      <%= render :comatose => !@page.parent ? "" : @page.slug %>
+    </div>
+  </div>
+  <div class="yui-b">
+    <table style="padding:20px">
+    <% for f in @children do %>
+      <tr style="padding:20px"><td>
+        <%= link_to image_tag(f.page_photo.public_filename(:small)),
+             url_for(:controller => "page", :action => :show, :id => f.slug) %>
+        <br>
+        <%= link_to f.title,
+             url_for(:controller => "page", :action => :show, :id => f.slug)%>
+      </td></tr>
+    <% end %>
+    </table>
+  </div>
