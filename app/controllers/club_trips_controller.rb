@@ -1,4 +1,5 @@
 class ClubTripsController < BaseController
+  filter_access_to :all
   layout "club_operations"
   
   def index
@@ -8,6 +9,7 @@ class ClubTripsController < BaseController
     else
       @last_update = "There are no trips listed."
     end
+    @view_modify = permitted_to? :update, :club_trips
   end
 
   def show

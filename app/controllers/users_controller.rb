@@ -2,6 +2,7 @@ class UsersController #< BaseController
   before_filter :becomes_club_member
 
   after_filter :create_club_member, :only => [ :create ]
+  after_filter :activate_club_member, :only => [ :activate ]
   
   # Need to include UsersHelper to get the 
   # rendering functions 
@@ -21,8 +22,15 @@ class UsersController #< BaseController
 
   # TODO: Not sure if this is needed anymore.
   def create_club_member
+    puts "CREATE_CLUB_MEMBER!!!"
     @user.type = "ClubMember"
     @user.save
+  end
+  
+  def activate_club_member
+    if current_user
+      current_user.roles.create( :title => "member")
+    end
   end
 
   #

@@ -18,13 +18,13 @@ class ClubMember < User
   #
   validates_format_of :club_memberid, 
                       :with => /^[0-9]{9}$/, 
-                      :allow_null => true, 
+                      :allow_nil => true,
                       :message => "SUID must be a 9 digit number"
   
   before_validation :normalize_club_memberid
   
   def normalize_club_memberid
-    self.club_memberid = self.club_memberid.delete(' -')
+    club_memberid = club_memberid.delete(' -') if club_memberid
   end
   
   #
