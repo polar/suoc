@@ -1,7 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :page_photos
 
-  map.comatose_admin 
+  map.admin_dashboard   '/admin/dashboard', :controller => 'comatose_admin', :action => 'index'
+  map.comatose_admin
   map.comatose_root 'home'
 
   map.resources :club_members
@@ -17,6 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :club_leaderships
   map.resources :club_leaders
   map.resources :club_member_statuses
+  map.resources :club_trips
 
   map.resource :club_dashboard
   map.resource :eroom_ledger, :member => {
@@ -30,8 +32,7 @@ ActionController::Routing::Routes.draw do |map|
     :update_description_form => :post}
 
 
-  
-  
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
@@ -79,9 +80,9 @@ ActionController::Routing::Routes.draw do |map|
                 :collection => {:graph => :get}
   map.resources :authorization_usages, 
                 :only => :index
-
   # We need the sign up route earlier so that we can use club_members
   map.from_plugin :community_engine
+  
   map.resources :users, :member => {
     :edit_club_member_info_user => :post
   }
@@ -91,25 +92,3 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 end
-
-# Replace the controller for the "users" routes with "club_members".
-# This requires changing the "requirements" and "defaults" hashes
-# for each route. Then, for named routes that manage things
-# like "users_url", we must regenerate the helpers.
-#
-#ActionController::Routing::Routes.routes.each do |r|
-#  if r.requirements[:controller] == "users"
-#    r.requirements[:controller] = "club_members"
-#    r.defaults[:controller] = "club_members"
-#    # rewrite the generation function.
-#    r.write_generation
-#  end
-#end
-# Regnerate the Helper functions so that the *user_url functions work
-# correctly.
-#
-# The second argument is "regenerate_code", which we must set.to true.
-# The ActionController::Base aand ActionView:Base are the destinations for the
-# created helper methods, and is the default for this function.
-#ActionController::Routing::Routes.install_helpers [ActionController::Base, ActionView::Base], true
-

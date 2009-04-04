@@ -27,10 +27,10 @@ authorization do
     # Note: ClubMembers' table names is "users"
     # So to write rules for ClubMembers we must use :users.
     has_permission_on :users, :to => :write do
-	if_attribute :id => is {user.id}
+      if_attribute :id => is {user.id}
     end
     has_permission_on :users, :to => :write_id do
-	if_attribute :id => is {user.id}
+      if_attribute :id => is {user.id}
     end
   end
 

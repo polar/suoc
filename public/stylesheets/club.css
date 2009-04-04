@@ -322,6 +322,13 @@ b, strong {
   width: 100%;
 }
 
+/*
+ * The Club Administration Naviation.
+ */
+#club_dashboard_nav {
+  text-align: left;
+}
+
 #page_photo_form {
   border: 3px solid gray !important;
   -webkit-border-radius: 10px;
@@ -343,7 +350,21 @@ b, strong {
   border-bottom: 1px solid red !important;
 }
 
-
+/*
+ * We get rid of liquid_horiz option in the Comatose
+ * EditForm. We need to adjust it, because Liquid_horiz
+ * dynamically adjusts these widths to the document,
+ * not the cotaining YUI grid.
+ */
+#content .page-form #page_title,
+#content .page-form #page_slug,
+#content .page-form #page_parent,
+#content .page-form #page_keywords {
+  width: 90% !important;
+}
+#content .page-form #page_body {
+  width: 100% !important;
+}
 /* =============================================== */
 /* CLUB FOOTER
 /* =============================================== */
@@ -384,4 +405,24 @@ b, strong {
   background: 
     url(/images/sm-suoc.gif) 
     no-repeat left center;
+}
+
+/* ---------------------------------------------
+ * Trips
+ * --------------------------------------------*/
+TABLE#club_trips{
+  border: 1px solid #ccc;
+  background: #eeeeff;
+  width: 100%;
+  font-size: 125%;
+}
+TABLE#club_trips TR {
+  margin: 10px;
+}
+TABLE#club_trips TR TD,
+TABLE#club_trips TR TH {
+  padding: 5px 2em 0px 0;
+}
+TABLE#club_trips TR TH {
+  font-weight: bold;
 }

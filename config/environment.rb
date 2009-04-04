@@ -116,7 +116,7 @@ Comatose.configure do |config|
   config.admin_includes << :authenticated_system
 
   # Calls :login_required as a before_filter
-  config.admin_authorization = :login_required
+  config.admin_authorization = :admin_required
 
   # Returns different 'root paths'
   config.admin_get_root_page do

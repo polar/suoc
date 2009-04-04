@@ -1,0 +1,11 @@
+<h3>Upload Club Trips</h3>
+<p>
+You may use this Excel file, <%= link_to "TRIPS.XLS", "/club_trips/trip_template/s"%>, and open and save it as a CSV file.
+<p>
+Then upload it in the following: Make sure you have saved it as a CSV file.
+<p>
+  <% form_for(:club_trips, :url => club_trips_path,
+            :html => { :class => "MainForm", :multipart => true  }) do |f| %>
+    <%= f.file_field :uploaded_data, :value => "TRIPS.XLS", :accept => "text/csv" %>
+    <%= f.submit "Upload" %>
+  <%  end %>

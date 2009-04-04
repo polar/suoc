@@ -10,11 +10,19 @@
     = stylesheet_link_tag "club.css"
     = javascript_include_tag "comatose_support"
   %body
-    #doc2{:class => "yui-t#{@sidebar_left ? 3 : 6}"}
-      = render :partial => "shared/header"
-            
+    #doc4{:class => "yui-t#{@sidebar_left ? 3 : 6}"}
+      #hd
+        = render :partial => "shared/header"
+
       #bd
-        = @content_for_layout
+        #yui-main
+          .yui-b
+            .box
+              %h3 Home Page Administration
+              #content
+                ~ @content_for_layout
+        .yui-b
+          = render :partial => "shared/admin_nav"
       #ft
       = render :partial => "shared/footer"
 

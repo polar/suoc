@@ -13,8 +13,5 @@
       %a{:href=>"/page/show/about", :title=>:what_is.l + " #{AppConfig.community_name}?"}
         =:about.l
         
-    - if @rss_title && @rss_url
-      %li#rss= link_to :rss.l, @rss_url, {:title => @rss_title}
- 
   %p
     Rocks!

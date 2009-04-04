@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090331193805) do
+ActiveRecord::Schema.define(:version => 20090403170536) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
@@ -237,6 +237,19 @@ ActiveRecord::Schema.define(:version => 20090331193805) do
   create_table "club_roles", :force => true do |t|
     t.string  "title"
     t.integer "club_member_id"
+  end
+
+  create_table "club_trips", :force => true do |t|
+    t.string   "trip"
+    t.string   "swhen"
+    t.string   "where"
+    t.string   "meet"
+    t.string   "e_room"
+    t.string   "limit"
+    t.string   "leader"
+    t.string   "contact"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "comatose_page_versions", :force => true do |t|

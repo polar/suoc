@@ -14,6 +14,10 @@ class ComatoseAdminController < BaseController
   before_filter :set_content_type
   layout 'comatose_admin'
 
+  before_filter :eatme
+  def eatme
+    puts "Current User = #{current_user.login} admin #{current_user.admin?}"
+  end
   # Shows the page tree
   def index
     @root_pages = [fetch_root_page].flatten
@@ -112,6 +116,8 @@ class ComatoseAdminController < BaseController
       else
         content = page.to_html( {'params'=>params.stringify_keys} )
       end
+      puts "Page #{page.body}"
+      puts "Content #{content}"
     rescue SyntaxError
       content = "<p>There was an error generating the preview.</p><p><pre>#{$!.to_s.gsub(/\</, '&lt;')}</pre></p>"
     rescue

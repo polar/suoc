@@ -1,0 +1,28 @@
+<%
+ # This partial renders a trip table in HTML
+ # Locals:
+ #   club_trips  The trips.
+ %>
+<table id="club_trips">
+  <tr>
+   <th>Trip</th>
+   <th>Where</th>
+   <th>When</th>
+   <th>Meet</th>
+   <th>E-Room</th>
+   <th>Limit</th>
+   <th>Contact</th>
+  </tr>
+
+<% for club_trip in club_trips %>
+  <tr>
+    <td><%= club_trip.trip %></td>
+    <td><%= club_trip.where %></td>
+    <td><%= club_trip.swhen %></td>
+    <td><%= club_trip.meet %></td>
+    <td><%= club_trip.e_room %></td>
+    <td><%= club_trip.limit %></td>
+    <td><%= club_trip.contact %></td>
+  </tr>
+<% end %>
+</table>

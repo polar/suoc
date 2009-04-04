@@ -1,0 +1,35 @@
+<h3>Trips Tables Maintainence</h3>
+
+<p>
+Find and Upload the Trips.csv file in the following form:
+<br>
+Make sure you have saved the trips as a CSV file.
+<p>
+  <% form_for(:club_trips, :url => club_trips_path,
+            :html => { :multipart => true  }) do |f| %>
+    <%= f.file_field :uploaded_data, :value => "trips.xls", :accept => "text/csv" %>
+    <%= f.submit "Upload" %>
+  <%  end %>
+<p>
+<p>
+<%= button_to "Download Empty Trips Template", "/club_trips/trip_template/download"%>
+<p>
+<h2>Current Trips</h2>
+Last Updated at: <%= @last_update %>
+<p>
+<%= render :partial => "club_trips/trip_table", :locals => { :club_trips => @club_trips } %>
+<p>
+<h2>Modify Current Trips Table</h2>
+In order to modify the table, you need to download the current table as
+a CSV file, modify it, and upload it.
+<p>
+<%= button_to "Download Current Trips CSV", "/club_trips/trips_csv/download"%>
+<p>
+<h2>Create New Trips Table</h2>
+The Trips Table gets replaced each time you upload it. All previous
+trips are lost.
+<p>
+You may use this Excel file,
+<%= link_to "trips.xls", "/club_trips/trip_template/download"%>,
+open it, and then save it as a CSV file.
+<p>
