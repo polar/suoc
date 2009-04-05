@@ -37,6 +37,7 @@ class UsersController #< BaseController
     
     # Keep the users profile from immediately going public
     @user.profile_public = false;
+    @user.save
   end
 
   #
