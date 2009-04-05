@@ -5,7 +5,14 @@ class ClubTripsController < BaseController
   def index
     @club_trips = ClubTrip.find(:all)
     if @club_trips
-      @last_update = @club_trips.reduce(Time.now){ |a,b| a < b.updated_at ? b.update_at : a }
+      begin
+        @last_update = @club_trips.reduce(Time.now){ |a,b| a < b.updated_at ? b.update_at : a }
+      rescue
+        # Ruby 1.8.6 doesn't have [].reduce
+        result = Time.now
+        @club_trips.reverse_each { |elem| result = yield(result, elem) }
+        @last_update = result
+      end
     else
       @last_update = "There are no trips listed."
     end
