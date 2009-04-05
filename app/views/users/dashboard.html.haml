@@ -12,7 +12,8 @@
       -if @user.pending_friendships.any?
         %p=link_to "#{image_tag 'icons/user_add.png', :plugin => 'community_engine'} "+:you_have_pending_friendship_requests.l, pending_user_friendships_path(@user)
     
-    
+      This is the HAML
+
       -if @network_activity.empty? && @recommended_posts.empty?
         %p
           =:this_is_your_dashboard.l
