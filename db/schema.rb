@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090403170536) do
+ActiveRecord::Schema.define(:version => 20090404225127) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
@@ -600,6 +600,7 @@ ActiveRecord::Schema.define(:version => 20090403170536) do
     t.date     "club_start_date"
     t.date     "club_end_date"
     t.integer  "club_member_status_id"
+    t.string   "club_contact"
   end
 
   add_index "users", ["activated_at"], :name => "index_users_on_activated_at"

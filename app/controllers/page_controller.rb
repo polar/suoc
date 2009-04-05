@@ -7,13 +7,16 @@ class PageController < BaseController
                 :conditions => { :slug => params[:id] })
     @children = @page.children
 
+    # TODO: Will have to change slug.
+    @home = ComatosePage.find(:first,
+                :include => :page_photo,
+                :conditions => { :slug => "about" })
+
     # If there are no children, then we make the navigation
     # column contain the children of the root. If there are
     # no children of the root, we don't care.
     if @children.empty?
-      p = ComatosePage.find(:first,
-                :include => :page_photo,
-                :conditions => { :slug => "about" })
+      p = @home
       @children = p.children
     end
     # Stupid shit

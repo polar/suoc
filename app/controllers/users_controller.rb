@@ -1,7 +1,19 @@
+#
+# ClubMembers Controller
+#   Engines Plugin to Community Engine's UsersController
+#
 class UsersController #< BaseController
+
+  # Brings the user model upto ClubMember
   before_filter :becomes_club_member
 
+  # Sets the type of the newly created user and some
+  # defaults
   after_filter :create_club_member, :only => [ :create ]
+
+  #
+  # Sets the role for an activated club member.
+  #
   after_filter :activate_club_member, :only => [ :activate ]
   
   # Need to include UsersHelper to get the 
@@ -20,16 +32,20 @@ class UsersController #< BaseController
     end
   end
 
-  # TODO: Not sure if this is needed anymore.
   def create_club_member
-    puts "CREATE_CLUB_MEMBER!!!"
     @user.type = "ClubMember"
-    @user.save
+    
+    # Keep the users profile from immediately going public
+    @user.profile_public = false;
   end
-  
+
+  #
+  # Set the role for a new member to be member.
   def activate_club_member
-    if current_user
-      current_user.roles.create( :title => "member")
+    # if the activation was not successful, current user
+    # will not be assigned.
+    if self.current_user
+      self.current_user.add_role(:member)
     end
   end
 

@@ -2,16 +2,27 @@
 
   <div id="yui-main"
     <div class="yui-b box">
-      <%= render :comatose => !@page.parent ? "" : @page.slug %>
+      <%= render :comatose => !@page.parent ? "" : @page.full_path %>
     </div>
   </div>
   <div class="yui-b">
     <div id="page_nav">
     <table>
+      <tr><td>
+        <%= if @home.page_photo
+              link_to image_tag(@home.page_photo.public_filename(:small), :alt=> @home.title),
+              url_for(:controller => "page", :action => :show, :id => @home.slug)
+            end %>
+        <br>
+        <%= link_to @home.title,
+             url_for(:controller => "page", :action => :show, :id => @home.slug)%>
+      </td></tr>
     <% for f in @children do %>
-      <tr"><td>
-        <%= link_to image_tag(f.page_photo.public_filename(:small)),
-             url_for(:controller => "page", :action => :show, :id => f.slug) %>
+      <tr><td>
+        <%= if f.page_photo
+              link_to image_tag(f.page_photo.public_filename(:small), :alt=> f.title),
+              url_for(:controller => "page", :action => :show, :id => f.slug)
+            end %>
         <br>
         <%= link_to f.title,
              url_for(:controller => "page", :action => :show, :id => f.slug)%>

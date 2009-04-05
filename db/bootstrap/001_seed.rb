@@ -46,7 +46,31 @@ def leadership(name, desc, activity)
   ClubLeadership.create_or_update_by(:name, params)
 end
 
+def office(name, desc)
+  params = { :name => name,
+             :description => desc}
+  ClubOffice.create_or_update_by(:name, params)
+end
+
 def seed_club
+   #
+   # Club Offices
+   #
+   o_president = office( "President", "Office of the President")
+   o_vice_pres = office( "Vice President", "Office of the Vice President");
+   o_treasuer  = office( "Treasurer", "Office of the Treasurer")
+   o_secretary = office( "Secretary", "Office of the Secretary")
+   o_publicity = office( "Publicity", "Member at Large for Publicity")
+   o_leadership = office( "Leadership", "Member at Large for Leadership")
+   o_arrowhead  = office( "Arrow Head", "Member at Large for the Arrow Head Publication")
+   o_budget    = office( "Budget", "Member at Large for the Budget")
+   o_firstaid  = office( "First Aid", "First Aid Chair")
+   o_eroom     = office( "E-Romm", "E-Room Chair")
+   o_historian = office( "Historian", "Member at Large for Club History")
+   o_webmaster = office( "Web Master", "Member at Large for SUOC Web Site")
+   o_orp       = office( "ORP Representative", "Member at Large for ORP")
+   o_advisor   = office( "Advisor",   "Faculty/Staff Advisor")
+   
    #
    # Club Activities
    #

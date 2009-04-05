@@ -19,22 +19,49 @@ class ClubMember < User
   validates_format_of :club_memberid, 
                       :with => /^[0-9]{9}$/, 
                       :allow_nil => true,
+                      :allow_blank => true,
                       :message => "SUID must be a 9 digit number"
   
   before_validation :normalize_club_memberid
   
   def normalize_club_memberid
-    club_memberid = club_memberid.delete(' -') if club_memberid
+    self.club_memberid = self.club_memberid.delete(' -') if self.club_memberid
   end
   
   #
   # We add roles and roles_symbols for the 
   # Declarative Authorization plugin
   #
-  has_many :roles, :class_name => "ClubRole"
+  has_many :roles, :class_name => "ClubRole", :uniq => true
 
-  def role_symbols
+  # This function adds a role to the user.
+  def add_role(role)
+    r = roles.find_or_create_by_title_and_club_member_id(role.to_s,self.id)
+    roles << r if !roles.include? r
+  end
+
+  # This role deletes a hard role from the user.
+  # It will not delete an "implied" role, either implied by
+  # "includes" or whether implied by somebody else.
+  def del_role(role)
+    r = roles.find_by_title_and_club_member_id(role.to_s,self.id)
+    roles.delete(r) if r
+  end
+
+  def hard_roles
     (roles || []).map {|r| r.title.to_sym}
+  end
+
+  # Returns the role symbols for declarative authorization.
+  # We add implied roles based on conditions.
+  def role_symbols
+    rs = hard_roles
+    if rs.include?(:member)
+      rs << :officer if current_officers
+      rs << :leader if current_leaders
+      rs << :chair if current_chairs
+    end
+    rs
   end
 
   #

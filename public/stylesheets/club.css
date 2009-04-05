@@ -200,6 +200,7 @@ b, strong {
  * Transactions
  */
 .transactions {
+  width: 100%;
 }
 
 .transactions .header th{
@@ -226,6 +227,19 @@ b, strong {
   width: 250px;
 }
 
+#transaction_entry_body {
+  width: 55%;
+}
+#transaction_entry_body table {
+  width: 100%;
+}
+#transaction_entry_body table tr td input {
+  width: 100%;
+}
+#transaction_entry_body .year_entry {
+  width: 4em;
+}
+
 .transactions .description_entry input{
   background:#F8F8F8 none repeat scroll 0 0;
   border:1px solid #CCCCCC;
@@ -234,7 +248,7 @@ b, strong {
   padding:6px;
 }
 .transactions .member_entry, .transactions .description_entry{
-  width: 350px;
+  width: 100%;
 }
 .transactions .year_entry input{
   width: 4em;

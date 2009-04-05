@@ -25,3 +25,26 @@ Comatose.define_drop "trips" do
     view.render :partial => "club_trips/trip_table", :locals => { :club_trips => ClubTrip.all }
   end
 end
+
+Comatose.define_drop "offices" do
+
+  def officers
+    offices = ClubOffice.find(:all, :order => "position ASC")
+    view = ActionView::Base.new
+    view.view_paths = RAILS_ROOT+"/app/views"
+    view.render :partial => "club_offices/offices", :locals => { :offices => offices }
+  end
+
+end
+
+
+Comatose.define_drop "activities" do
+
+  def chairs
+    activities = ClubActivity.find(:all, :order => "position ASC")
+    view = ActionView::Base.new
+    view.view_paths = RAILS_ROOT+"/app/views"
+    view.render :partial => "club_activities/activities", :locals => { :activities => activities }
+  end
+
+end

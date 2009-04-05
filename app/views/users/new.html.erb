@@ -33,11 +33,17 @@
         </label>
         <%= f.text_field :email %>
 
+        <label for="user_club_memberid">
+          <%= "Your SUID".l %>:
+          <em><%= "(Required for students.)".l %></em>
+        </label>
+        <%= f.text_field :club_memberid %>
+
         <label for="user_birthdate">
-          <%="Birthday".l %>
-          :
-          <em><%= "(Required: you must be at least 18 years old to sign up.)".l %>
-        <%=  f.text_field :birthday, :value => Date.today.strftime("%m/%d/%Y") %>
+          <%="Birthday".l %>:
+          <em><%= "(Required: MM/DD/YYYY)".l %></em>
+        </label>
+        <%=  f.text_field :birthday, :value => "" %>
 
         <% if AppConfig.require_captcha_on_signup %>
           <div class="right" style='margin-top:2em;'>

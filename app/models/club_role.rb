@@ -1,5 +1,5 @@
 class ClubRole < ActiveRecord::Base
-  validates_presence_of :title  
+  validates_presence_of :title
 
   belongs_to :club_member
 
