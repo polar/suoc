@@ -84,7 +84,9 @@ Click picture to change. This will upload the image. You still have to save the 
                     :action=>'versions', :id=>@page) if @page.versions.length > 0 %>
       </label>
     </div>
+    </p>
   <% end %>
+  <p><%= link_to( "Textile Help", "http://hobix.com/textile/quick.html", :popup => true ) %>
   <p>
   <%= image_tag 'comatose/spinner.gif', :id=>'spinner', :align=>'absmiddle', :style=>'display:none;' %>
     <%= button_to_function('Preview',

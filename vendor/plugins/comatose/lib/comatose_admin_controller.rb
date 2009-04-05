@@ -109,7 +109,7 @@ class ComatoseAdminController < BaseController
   # Returns a preview of the page content...
   def preview
     begin
-      page = ComatosePage.new(params[:page])
+      page = ComatosePage.find  params[:id]
       page.author = fetch_author_name
       if params.has_key? :version
         content = page.to_html( {'params'=>params.stringify_keys, 'version'=>params[:version]} )
@@ -118,6 +118,7 @@ class ComatoseAdminController < BaseController
       end
       puts "Page #{page.body}"
       puts "Content #{content}"
+      content
     rescue SyntaxError
       content = "<p>There was an error generating the preview.</p><p><pre>#{$!.to_s.gsub(/\</, '&lt;')}</pre></p>"
     rescue
