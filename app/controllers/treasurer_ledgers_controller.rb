@@ -137,24 +137,29 @@ class TreasurerLedgersController < BaseController
 
     # If we were doing a Membership Collect Action
     # TODO: String Constant
-    if !error && 
-         @transaction.acct_action.name == "Membership Collection" &&
-         params[:club_membership]
-       name = params[:club_member][:login]
-       # There may be two or more, we grab the youngest.
-       member = ClubMember.find(:first,
-           :order => "birthday DESC",
-           :conditions => { :login => name })
-       if !member
-         @transaction.errors.add(:description, "Member '#{name}' does not exist")
-         error = true
-       end
-       @membership = ClubMembership.new
-       @membership.member = member
-       @membership.year = params[:club_membership][:year]
-       @membership.member_type = ClubMembershipType.find(params[:club_membership][:member_type])
-       
-       @transaction.description = "#{name} #{@membership.member_type.name} #{@membership.year}"
+    if !error
+      if @transaction.acct_action.name == "Membership Collection"
+        if params[:club_membership]
+          name = params[:club_member][:login]
+          # There may be two or more, we grab the youngest.
+          member = ClubMember.find(:first,
+             :order => "birthday DESC",
+             :conditions => { :login => name })
+          if !member
+            @transaction.errors.add(:description, "Member '#{name}' does not exist")
+            error = true
+          end
+          @membership = ClubMembership.new
+          @membership.member = member
+          @membership.year = params[:club_membership][:year]
+          @membership.member_type = ClubMembershipType.find(params[:club_membership][:member_type])
+
+          @transaction.description = "#{name} #{@membership.member_type.name} #{@membership.year}"
+        else
+          @transaction.errors.add(:description, "Didn't get that, due to a bug in the browser. Please reslect Membership Collect by changing it and making sure the description field changes.")
+          error = true
+        end
+      end
     end
     
     # If we entered a positive number, but the action is a debit,
@@ -211,7 +216,7 @@ class TreasurerLedgersController < BaseController
   end
   
   def update_description_form
-    if params[:acct_action_id]
+    if params[:acct_action_id] && !params[:acct_action_id].empty?
       if AcctAction.find(params[:acct_action_id]).name == "Membership Collection"
         render :update do |page|
           page.replace_html "transaction_entry_body", :partial => "shared/membership_form",
@@ -225,6 +230,12 @@ class TreasurerLedgersController < BaseController
                 :locals => { :description => params[:description] }
         end
       end
+    else
+        render :update do |page|
+          page.replace_html "transaction_entry_body",
+                :partial => "shared/description_form",
+                :locals => { :description => params[:description] }
+        end
     end
   end
   
