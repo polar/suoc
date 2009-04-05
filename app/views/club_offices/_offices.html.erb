@@ -1,0 +1,26 @@
+<%
+ # This partial creates a table row for a listing of single officer.
+ #
+ # Local Variables
+ #        offices : ClubOffices to be displayed.
+ #
+ %>
+<table>
+  <tr>
+   <th>Office</th>
+   <th>Officer(s)</th>
+   <th>Contact</th>
+  </tr>
+  <% for office in offices do %>
+  <% first = true %>
+  <tr class="row">
+    <td class="name">
+      <%= if first then first = false; office.name; end%>:
+    </td>
+    <% for officer in office.current_officers do %>
+      <td><%= officer.member.name %></td>
+      <td><%= officer.member.club_contact%></td>
+    <% end %>
+  </tr>
+  <% end %>
+</table>

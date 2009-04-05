@@ -1,0 +1,26 @@
+<%
+ # This partial creates a table row for a listing of single officer.
+ #
+ # Local Variables
+ #        activities : ClubActivites to be displayed.
+ #
+ %>
+<table>
+  <tr>
+   <th>Activity</th>
+   <th>Chair(s)</th>
+   <th>Contact</th>
+  </tr>
+  <% for activity in activities do %>
+  <tr class="row">
+    <% first = true %>
+    <% for chair in activity.current_chairs do %>
+      <td class="name">
+        <%= if first then first = false; activity.name; end %>:
+      </td>
+      <td><%= chair.member.name %></td>
+      <td><%= chair.member.club_contact%></td>
+    <% end %>
+  </tr>
+  <% end %>
+</table>
