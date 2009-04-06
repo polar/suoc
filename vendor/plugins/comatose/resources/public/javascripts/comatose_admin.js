@@ -107,7 +107,7 @@ var ComatoseEditForm = {
   // Initialize the page...
   init : function(mode) {
     this.mode = mode;
-    this.default_data = Form.serialize(document.forms[0]);
+    this.default_data = Form.serialize(document.forms['pageForm']);
     if(mode == 'new') {
       this.last_title_slug = $('page_title').value.toSlug();
       Event.observe('page_title', 'blur', ComatoseEditForm.title_updated_aggressive);
@@ -173,7 +173,7 @@ var ComatoseEditForm = {
   // Uses server to create preview of content...
   preview_content : function(preview_url) {
     $('preview-area').show();
-    var params = Form.serialize(document.forms[0]);
+    var params = Form.serialize(document.forms['pageForm']);
     if( params != this.last_preview ) {
       $('preview-panel').innerHTML = "<span style='color:blue;'>Loading Preview...</span>";
       new Ajax.Updater(
@@ -185,7 +185,7 @@ var ComatoseEditForm = {
     this.last_preview = params;
   },
   cancel : function(url) {
-    var current_data = Form.serialize(document.forms[0]);
+    var current_data = Form.serialize(document.forms['pageForm']);
     var data_changed = (this.default_data != current_data) 
     if(data_changed) {
       if( confirm('Changes detected. You will lose all the updates you have made if you proceed...') ) {

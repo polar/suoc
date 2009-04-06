@@ -1,4 +1,13 @@
 en:
- blogs: Blogs
- no_comments_yet: No Comments Yet
- Pages: Pages
+  no_comments_yet: No Comments Yet
+  Pages: Pages
+  # In Outing Club Language We change blogs to trip stores.
+  blogs: Stories
+  blog_posts: Trip Stories
+  posts_saved_with_draft_status_wont_appear_in_your_blog_until_you_publish_them: "Posts saved with 'draft' status won't appear in your trip stories until you publish them."
+  recent_blog_posts: Recent Trip Stories
+  tags_are_one_word_descriptors_users_assign_to_blog_posts_pictures_and_clippings_on: Tags are one-word descriptors user assign to trip storied, pictures and clippings on
+  this_forum_is_still_getting_started: "This forum is still getting started ... here are some trip stories to get you thinking ..."
+  users_blog: "{{user}}'s Trip Stories"
+  view_my_blog: View trip stories
+  write_a_blog_post: Write a Trip Story!

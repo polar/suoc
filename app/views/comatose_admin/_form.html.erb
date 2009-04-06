@@ -1,6 +1,6 @@
 <%= error_messages_for :page %>
 <p>
-Click picture to change. This will upload the image. You still have to save the changes.
+Click this picture to change the picture for this page. Fill in the appearing form to upload the image imediately by selecting the local file, then clicking the "Upload" button. This will upload the image immediately. However, you still must click the "Save Changes" button below for it to take effect for the page.
 <div id='page_photo'>
   <%= render :partial => "page_photos/page_photo", :object => @page.page_photo %>
 </div>
@@ -8,7 +8,7 @@ Click picture to change. This will upload the image. You still have to save the 
 <br/>
 <div id="page_photo_form" style="display: none;">
   <% form_for(:page_photo, :url => formatted_page_photos_path(:format => 'js'),
-            :html => { :multipart => true, :target => 'upload_frame' }) do |f| %>
+            :html => { :multipart => true, :target => 'upload_frame'}) do |f| %>
     <%= f.file_field :uploaded_data %>
     <%= submit_tag "Upload and Change", :onclick => "$('page_photo_form').hide(); return true;" %>
     <a href="#" onclick="$('page_photo_form').hide(); return false;">Cancel</a>
@@ -21,84 +21,87 @@ Click picture to change. This will upload the image. You still have to save the 
 
 <br/>
 <br/>
-<% form_for :page, @page, :html => { :class => "page-form" } do |f| %>
-  <div id="page_photo_input"></div>
-  <p>
-  <label for="page_title">Title</label>
-  <%= f.text_field :title, :tabindex=>1, :maxlength=>255  %>
-  <p>
-  <label for="page_slug">Slug</label>
-  <%= f.text_field :slug,
-                       :tabindex=>6,
-                       :maxlength=>255,
-                       :disabled=>@root_pages.include?(@page) %>
+<div id="page_photo_input"></div>
+
+<% form_for :page, @page, :html => { :id => "comatose-page-form" } do |f| %>
+<table class="page-form" cellpadding="0" cellspacing="0">
+
+  <tr>
+    <td class="label"><label for="page_title">Title</label></td>
+    <td class="field"><%= f.text_field :title, :tabindex=>1, :maxlength=>255, :size=>50 %> <%= link_to_function "More...", "ComatoseEditForm.toggle_extra_fields(this)", :id=>'more-options' %></td>
+  </tr>
+
+  <tr id="slug_row" class="meta-info">
+    <td class="label"><label for="page_slug">Slug</label></td>
+    <td class="field"><%= f.text_field :slug, :tabindex=>6, :maxlength=>255, :size=>50, :disabled=>@root_pages.include?(@page) %></td>
+  </tr>
+
 <% if show_field? 'keywords' %>
-  <p>
-  <label for="page_keywords">Keywords</label>
-  <%= f.text_field :keywords, :tabindex=>7, :maxlength=>1000 %>
+  <tr id="keywords_row" class="meta-info">
+    <td class="label"><label for="page_keywords">Keywords</label></td>
+    <td class="field"><%= f.text_field :keywords, :tabindex=>7, :maxlength=>1000, :size=>50 %></td>
+  </tr>
 <% end %>
 
 <% if show_field? 'parent' %>
-  <p>
-  <label for="page_parent">Parent</label>
-  <% if mode != :new and @root_pages.include? @page %>
-        <select id="page_parent" disabled="true">
-          <option><%= @page.title %> is a root page</option>
-        </select>
+  <tr id="parent_row" class="meta-info">
+    <td class="label"><label for="page_parent">Parent</label></td>
+    <td class="field">
+      <% if mode != :new and @root_pages.include? @page %>
+      <select id="page_parent" disabled="true"><option><%= @page.title %> is a root page</option></select>
       <% else %>
-        <select id="page_parent" name="page[parent_id]" tabindex="8">
-          <%= tree_select_box @root_pages, @page.parent_id, @page.id %>
-        </select>
+      <select id="page_parent" name="page[parent_id]" tabindex="8"><%= tree_select_box @root_pages, @page.parent_id, @page.id %></select>
        <% end %>
+    </td>
+  </tr>
 <% end %>
 
-<p>
-<label for="page_body">Body</label>
-<%= f.text_area :body, :rows=>20, :tabindex=>2  %>
+  <tr>
+    <td class="label body"><label for="page_body">Body</label></td>
+    <td class="field"><%= f.text_area :body, :rows=>20, :tabindex=>2 %></td>
+  </tr>
 
 <% if show_field? 'filter' %>
-  <p>
-  <label for="page_filter_type">Filter</label>
-  <%= select_tag 'page[filter_type]',
-                      options_for_select(TextFilters.all_titles.sort,
-                             @page.filter_type || Comatose.config.default_filter),
-                      :tabindex=>3,
-                      :id=>'page_filter_type' %>
+  <tr id="filter_row" class="meta-info">
+    <td class="label"><label for="page_filter_type">Filter</label></td>
+    <td class="field">
+      <%= select_tag 'page[filter_type]', options_for_select(TextFilters.all_titles.sort, @page.filter_type || Comatose.config.default_filter), :tabindex=>3, :id=>'page_filter_type' %>
       <span class="field-help">Converts plain text into html</span>
+    </td>
+  </tr>
 <% end %>
 
 <% if show_field? 'created_on' %>
-  <P>
-  <label for="page_created_on">Created</label>
-  <%= f.datetime_select :created_on %>
+  <tr id="created_row" class="meta-info">
+    <td class="label"><label for="page_created_on">Created</label></td>
+    <td class="field">
+      <%= f.datetime_select :created_on %>
+    </td>
+  </tr>
 <% end %>
 
+</table>
+
 <div id="button-group">
-  <% unless @page.updated_on.nil? %>
-    <p>
-    <div class="last-update">
-      <label>
-        Updated <%= time_ago_in_words @page.updated_on, true %> ago by
-        <%= @page.author %>.
-        <%= link_to(pluralize(@page.versions.length, 'revision', 'revisions'),
-                    :action=>'versions', :id=>@page) if @page.versions.length > 0 %>
-      </label>
-    </div>
-    </p>
+<% unless @page.updated_on.nil? %>
+  <div class="last-update">
+    <label>
+      Updated <%= time_ago_in_words @page.updated_on, true %> ago by
+      <%= @page.author %>.
+      <%= link_to(pluralize(@page.versions.length, 'revision', 'revisions'), :action=>'versions', :id=>@page) if @page.versions.length > 0 %>
+    </label>
+  </div>
+<% end %>
+<div class="comatose-page-buttons">
+<%= image_tag 'comatose/spinner.gif', :id=>'spinner', :align=>'absmiddle', :style=>'display:none;' %>
+  <%= button_to_function('Preview', "ComatoseEditForm.preview_content('#{url_for :controller=>controller.controller_name, :action=>'preview', :id=>@page}')", :tabindex=>3, :id=>'preview-btn' ) if show_field? 'preview' %> &nbsp;
+  <%= submit_tag ((mode == :edit) ? 'Save Changes' : 'Create Page'), :tabindex=>4 %>
+  <% if @page.versions.length > 0 %>
+  &nbsp; <%= link_to "Revert", :action=>'versions', :id=>@page %>
   <% end %>
-  <p><%= link_to( "Textile Help", "http://hobix.com/textile/quick.html", :popup => true ) %>
-  <p>
-  <%= image_tag 'comatose/spinner.gif', :id=>'spinner', :align=>'absmiddle', :style=>'display:none;' %>
-    <%= button_to_function('Preview',
-        "ComatoseEditForm.preview_content('#{url_for :controller=>controller.controller_name,:action=>'preview', :id=>@page}')",
-        :tabindex=>3,
-        :id=>'preview-btn' ) if show_field? 'preview' %> &nbsp;
-    <%= submit_tag ((mode == :edit) ? 'Save Changes' : 'Create Page'), :tabindex=>4 %>
-    <% if @page.versions.length > 0 %>
-      &nbsp; <%= link_to "Revert", :action=>'versions', :id=>@page %>
-    <% end %>
-    or
-    <a href="<%= url_for :controller=>controller.controller_name, :action=>'index' %>" onlick="ComatoseEditForm.cancel(this.href); return false;" tabindex="5">Cancel</a>
+  or
+  <a href="<%= url_for :controller=>controller.controller_name, :action=>'index' %>" onlick="ComatoseEditForm.cancel(this.href); return false;" tabindex="5">Cancel</a>
+</div>
 </div>
 <% end %>
 
@@ -115,4 +118,4 @@ Click picture to change. This will upload the image. You still have to save the 
   </div>
 </div>
 
-<%= javascript_tag "ComatoseEditForm.liquid_horiz=false;ComatoseEditForm.init('#{mode.to_s}');" %>
+<%= javascript_tag "ComatoseEditForm.init('#{mode.to_s}');" %>

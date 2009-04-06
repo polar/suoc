@@ -2,7 +2,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :page_photos
 
   map.admin_dashboard   '/admin/dashboard', :controller => 'comatose_admin', :action => 'index'
+
   map.comatose_admin
+  
   map.comatose_root 'home'
 
   map.resources :club_members

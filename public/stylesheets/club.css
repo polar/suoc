@@ -364,21 +364,6 @@ b, strong {
   border-bottom: 1px solid red !important;
 }
 
-/*
- * We get rid of liquid_horiz option in the Comatose
- * EditForm. We need to adjust it, because Liquid_horiz
- * dynamically adjusts these widths to the document,
- * not the cotaining YUI grid.
- */
-#content .page-form #page_title,
-#content .page-form #page_slug,
-#content .page-form #page_parent,
-#content .page-form #page_keywords {
-  width: 90% !important;
-}
-#content .page-form #page_body {
-  width: 100% !important;
-}
 /* =============================================== */
 /* CLUB FOOTER
 /* =============================================== */
@@ -438,5 +423,13 @@ TABLE#club_trips TR TH {
   padding: 5px 2em 0px 0;
 }
 TABLE#club_trips TR TH {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+strong {
   font-weight: bold;
 }

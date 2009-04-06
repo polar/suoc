@@ -245,6 +245,7 @@ BODY {
   text-align: left;
   background-color: #EAEAEA;
   margin-top: 10px;
+  margin-left: 50px;
 }
 #content .page-form LABEL {
   margin-top: 1em;
@@ -254,6 +255,9 @@ BODY {
   color: gray;
   padding-top: 4px;
   font-weight: bold;
+}
+#content #button-group .comatose-page-buttons {
+  text-align: right;
 }
 #content #button-group .last-update LABEL {
   font-weight: normal;

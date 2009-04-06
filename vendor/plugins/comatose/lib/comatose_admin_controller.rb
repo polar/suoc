@@ -109,7 +109,7 @@ class ComatoseAdminController < BaseController
   # Returns a preview of the page content...
   def preview
     begin
-      page = ComatosePage.find  params[:id]
+      page = ComatosePage.new params[:page]
       page.author = fetch_author_name
       if params.has_key? :version
         content = page.to_html( {'params'=>params.stringify_keys, 'version'=>params[:version]} )

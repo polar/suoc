@@ -12,9 +12,9 @@
       </h3>
       <% form_tag sessions_path, :class => 'MainForm' do %>
         <label for="username">Your Name, email, or SUID</label>
-        <%= text_field_tag :login, nil, :size => 35 %>
+        <%= text_field_tag :login, nil, :size => 35, :tabindex => 1 %>
         <label for="password"><%= :password.l %></label>
-        <%= password_field_tag "password", nil, :size => 35 %>
+        <%= password_field_tag "password", nil, :size => 35, :tabindex => 2 %>
         <fieldset>
            <label for="remember_me">
              <%= :remember_me.l %>

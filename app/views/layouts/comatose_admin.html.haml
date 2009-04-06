@@ -6,9 +6,9 @@
 
     %title= "Comatose Admin for SUOC"
     = render :partial => "shared/scripts_and_styles"
-    = stylesheet_link_tag "comatose.css"
     = stylesheet_link_tag "club.css"
-    = javascript_include_tag "comatose_support"
+    = stylesheet_link_tag "comatose.css"
+    = javascript_include_tag "comatose_support.js"
   %body
     #doc4{:class => "yui-t#{@sidebar_left ? 3 : 6}"}
       #hd

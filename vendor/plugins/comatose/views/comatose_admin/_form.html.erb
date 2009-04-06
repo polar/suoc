@@ -1,24 +1,7 @@
 <%= error_messages_for :page %>
-<div id='page_photo'>
-  <% if @page.page_photo %>
-    <%= link_to image_tag(@page.page_photo.public_filename(:thumb)), '#', :id => 'page_photo_link', :onclick => "$('page_photo_form').setStyle({display: 'inline'}); return false;" %>
-  <% end %>
-</div>
-<p><p>
-<div id="page_photo_form" style="display: none;">
-  <% form_for(:page_photo, :url => formatted_page_photos_path(:format => 'js'),
-            :html => { :multipart => true, :target => 'upload_frame' }) do |f| %>
-    <%= f.file_field :uploaded_data %>
-    <%= submit_tag "Upload" %>
-    <a href="#" onclick="$('page_photo_form').hide(); return false;">Cancel</a>
-  <%  end %>
-</div>
 
-<iframe id='upload_frame' name="upload_frame" style="width:1px;height:1px;border:0px" src="about:blank"></iframe>
-<p><p>
 <% form_for :page, @page do |f| %>
 <table class="page-form" cellpadding="0" cellspacing="0">
-  <div id="page_photo_input"/>
 
   <tr>
     <td class="label"><label for="page_title">Title</label></td>
@@ -49,6 +32,7 @@
     </td>
   </tr>
 <% end %>
+
   <tr>
     <td class="label body"><label for="page_body">Body</label></td>
     <td class="field"><%= f.text_area :body, :rows=>20, :tabindex=>2 %></td>
