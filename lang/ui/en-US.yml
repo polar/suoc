@@ -19,3 +19,34 @@ en:
   edit_account: Edit Account
   manage_posts: Manage Trip Diary
   settings: Settings
+  
+  # We are changing "friends" to Connections.
+  accepted_friendships: Accepted Connections
+  add_some_friends_to_get_started: Connect with some people to get started!
+  dashboard_friends: "Once you start connecting with people, you'll be able to track their activity on {{site}} here"
+  denied_friendships: Denied Connections
+  friend: Connection
+  friends: Connections
+  friendship_could_not_be_created: Connection could not be made
+  friendship_request_detail: Connection request detail
+  friendship_requested: "Requested Connection with {{friend}}."
+  my_friends: My Connections
+  notify_of_friend_requests: Notify of Connection requests
+  pending_friendships: Pending Connections
+  people_who_sign_up_using_your_invitation_will_automatically_be_added_as_your_friends: People who sign up using your invitation will automatically be added as one of your Connections.
+  people_who_sign_up_using_your_invitation_will_automatically_be_added_as_your_friends_on: People who sign up using your invitation will automatically be added as one of your Connections on
+  remove_this_friend: Remove this Connection
+  request_friendship: Request a Connection
+  requested_friendship_with: Requested a Connection with
+  requesting_friendship: Requesting a Connection
+  sorry_there_was_an_error_requesting_friendship: "Sorry, there was an error requesting a Connection."
+  the_friendship_was_accepted: The Connection was accepted.
+  the_friendship_was_denied: The Connection was denied.
+  this_friendship_is_pending: This Connection is pending.
+  to_start_adding_friends: "To start adding Connections, you can"
+  view_all_my_friend_requests: View all my Connection requests
+  you_have_pending_friendship_requests: You have pending Connection requests.
+
+  # Bio Stories Stuff
+
+  user_bio_help: "<p>Your bio is one of the things people see on your profile. Some ideas:<ul><li> Describe your ephatical devotion to the outdoors</li><li> Explain what you love about caving.</li><li> What woud you do with Harry's Mom?</li></ul></p>"

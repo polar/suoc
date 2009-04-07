@@ -10,7 +10,7 @@
       
         <% if @user.pending_friendships.any? %>
           <p>
-            <%= link_to "#{image_tag 'icons/user_add.png', :plugin => 'community_engine'} You have pending friendship requests.", 
+            <%= link_to "#{image_tag 'icons/user_add.png', :plugin => 'community_engine'} #{:you_have_pending_friendship_requests.l}",
                         pending_user_friendships_path(@user) %>
           </p>
         <% end %>
