@@ -50,30 +50,6 @@ class UsersController #< BaseController
     end
   end
 
-  ## TODO: Fix the the s3-specific problem
-  ## This is here to replace the one in UsersController
-  ## because it was s3 specific.
-  ##
-  def crop_profile_photo
-    unless @photo = @user.avatar
-      flash[:notice] = :no_profile_photo.l
-      redirect_to upload_profile_photo_user_path(@user) and return
-    end
-    return unless request.put?
-
-    if @photo
-      if params[:x1]
-        #img = Magick::Image::read(@photo.s3_url).first.crop(params[:x1].to_i,
-        img = Magick::Image::read(@photo.full_filename).first.crop(params[:x1].to_i, params[:y1].to_i,params[:width].to_i, params[:height].to_i, true)
-        img.format = @photo.content_type.split('/').last
-        crop = {'tempfile' => StringIO.new(img.to_blob), 'content_type' => @photo.content_type, 'filename' => "custom_#{@photo.filename}"}
-        @photo.uploaded_data = crop
-        @photo.save!
-      end
-    end
-
-    redirect_to user_path(@user)
-  end
   #
   # AJAX Requests
   #
