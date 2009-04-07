@@ -6,7 +6,7 @@
         = image_tag 'icons/accept.png', :plugin => 'community_engine'            
         =:view_my.l
         %ul
-          %li=link_to "Club Dashboard", url_for(:club_dashboard)
+          %li=link_to :club_dashboard.l, url_for(:club_dashboard)
           %li=link_to :profile.l, user_path(@user)  
           %li=link_to :blog.l, user_posts_path(@user)
           %li=link_to :photos.l, user_photos_path(@user)
