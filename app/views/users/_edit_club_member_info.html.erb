@@ -47,7 +47,7 @@
   <tr>
     <th>Member Since:</th>
     <td><%= f.text_field :club_start_date, 
-            :value => (member.club_start_date.strftime("%m/%d/%Y") unless !member.club_start_date) %>
+            :value => fmt_date(member.club_start_date) %>
     </td>
   </tr>
   <tr>

@@ -23,5 +23,12 @@ module ApplicationHelper
     end
   end
 
-
+  #
+  # Format the date.
+  # TODO: Configure for European Dates.
+  def fmt_date(date)
+    if (date)
+      date.strftime("%m-%d-%Y")
+    end
+  end
 end

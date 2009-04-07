@@ -1,5 +1,5 @@
 <div class="box">
-  <h2>Select New Leader</h2>
+  <h3>Select New Leader</h3>
   <h2>Leadership of the <%= @club_leadership.name %></h2>
   <div class="errors"></div>
     <h3>Current Leader(s):</h3>
@@ -20,8 +20,4 @@
     <%= text_field_with_auto_complete :club_member, :login %>
     <p><%= f.submit "Select New Leader" %>
   <% end %>
-
-  <p>
-  <%= link_to 'Club Leaderships', club_leaderships_path %> |
-  <%= link_to 'Club Activities', club_activities_path %>
 </div>
