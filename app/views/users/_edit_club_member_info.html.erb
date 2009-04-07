@@ -6,7 +6,6 @@
 #
 %>
 <div id="BasicInfo" <%= "class='#{clazz}'" if clazz %>>
-<%= club_member_post_url(member,Post.first) %>
 <% form_remote_tag(:update => "BasicInfo",
     :url => { :action => :show_club_member_info,
                :id => member }) do %>
