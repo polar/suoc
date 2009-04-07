@@ -1,5 +1,5 @@
 <div class="box">
-  <h2>Select New Officer</h2>
+  <h3>Select New Officer</h32>
   <h2>Office of the <%= @club_office.name %></h2>
   <div class="errors"></div>
     <h3>Current Officer(s):</h3>
@@ -8,12 +8,10 @@
         <%= render_officer_list(@current_officers) %>
       </table>
     <% else %>
-      There are no current officers assigned for the office of the <%= @suoc_office.name %>.
+      There are no current officers assigned for the office of the <%= @club_office.name %>.
     <% end %>
     <h3>Choose New Officer</h3>
     <table>
     <%= render_select(@club_office, @selected_officers) %>
     </table>
-  <%= link_to 'Club Offices', club_offices_path %> |
-  <%= link_to 'Club Activities', club_activities_path %>
 </div>

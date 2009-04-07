@@ -1,5 +1,5 @@
 <div class="box">
-  <h2><%= "Club Office of the #{@club_office.name}" %></h2>
+  <h3><%= "Club Office of the #{@club_office.name}" %></h3>
   <h3>Description</h3>
   <%= @club_office.description %>
   <div class="errors"/>
@@ -15,5 +15,3 @@
     </p>
   <% end %>
 </div>
-<%= link_to 'Club Offices', club_offices_path %> |
-<%= link_to 'Club Activities', club_activities_path %>

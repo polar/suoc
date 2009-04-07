@@ -22,7 +22,7 @@ class ClubLeadership < ActiveRecord::Base
   def current_leaders(page = nil, per_page = 4)
     conditions = 
       "leadership_id = '#{id}' AND start_date <= '#{Date.parse(Time.now.to_s)}' AND '#{
-Date.parse(Time.now.to_s)}' < end_date"
+Date.parse(Time.now.to_s)}' <= end_date"
     if page
       ClubLeader.paginate(:page => page, :per_page => per_page, 
         :order => "start_date DESC", :conditions => conditions)
@@ -44,7 +44,7 @@ Date.parse(Time.now.to_s)}' < end_date"
       :order => "start_date DESC", 
       :joins => "club_leaders, users u",
       :conditions => 
-      "leadership_id = '#{id}' AND start_date <= '#{Date.parse(Time.now.to_s)}' AND '#{Date.parse(Time.now.to_s)}' < end_date AND member_id = u.id AND (u.club_member_status_id = '#{active_id}' OR u.club_member_status_id = '#{life_id}')")
+      "leadership_id = '#{id}' AND start_date <= '#{Date.parse(Time.now.to_s)}' AND '#{Date.parse(Time.now.to_s)}' <= end_date AND member_id = u.id AND (u.club_member_status_id = '#{active_id}' OR u.club_member_status_id = '#{life_id}')")
   end
 
   def past_leaders(page, per_page = 4)

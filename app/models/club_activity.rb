@@ -17,11 +17,11 @@ class ClubActivity < ActiveRecord::Base
       :per_page => per_page,
       :order => 'end_date DESC',
       :conditions => 
-        "activity_id = '#{id}' AND '#{Date.parse(Time.now.to_s)}' > end_date")
+        "activity_id = '#{id}' AND end_date < '#{Date.parse(Time.now.to_s)}'")
   end
   
   def current_chairs
     ClubChair.find(:all, :conditions => 
-      "activity_id = '#{id}' AND start_date <= '#{Date.parse(Time.now.to_s)}' AND '#{Date.parse(Time.now.to_s)}' < end_date")
+      "activity_id = '#{id}' AND start_date <= '#{Date.parse(Time.now.to_s)}' AND '#{Date.parse(Time.now.to_s)}' <= end_date")
   end
 end

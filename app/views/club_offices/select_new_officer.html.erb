@@ -1,5 +1,5 @@
 <div class="box">
-  <h2>Select New Officer</h2>
+  <h3>Select New Officer</h3>
   <h2>Office of the <%= @club_office.name %></h2>
   <div class="errors"></div>
     <h3>Current Officer(s):</h3>
@@ -20,8 +20,4 @@
     <%= text_field_with_auto_complete :club_member, :login %>
     <p><%= f.submit "Select New Officer" %>
   <% end %>
-
-  <p>
-  <%= link_to 'Club Offices', club_offices_path %> |
-  <%= link_to 'Club Activities', club_activities_path %>
 </div>
