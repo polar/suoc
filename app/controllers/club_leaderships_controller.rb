@@ -185,7 +185,7 @@ class ClubLeadershipsController < BaseController
       @new_leader = ClubLeader.new( :leadership => @club_leadership,
                                       :member => member,
                                       :start_date => Time.now,
-                                      :end_date => Time.now + 1.year)
+                                      :end_date => Time.now + 50.year)
       render
     end
     
@@ -221,7 +221,7 @@ class ClubLeadershipsController < BaseController
         @new_leader = ClubLeader.new( :leadership => @club_leadership,
                                         :member => @selected_leaders[0],
                                         :start_date => Time.now,
-                                        :end_date => Time.now + 1.year)
+                                        :end_date => Time.now + 50.year)
       end
     end
     #

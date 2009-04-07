@@ -3,11 +3,12 @@
   = link_to current_user.login, dashboard_user_path(current_user), :id => 'user-menu'
 #user-menu-tip
   %ul
+    %li Managment
     -if current_user.admin?
       %li=link_to :admin_dashboard.l, admin_dashboard_path
-    %li= link_to :edit_profile.l, edit_user_path(current_user) 
-    %li= link_to :edit_account.l, edit_account_user_path(current_user)
-    %li= link_to :manage_posts.l, manage_user_posts_path(current_user)
+    %li= link_to :profile.l, edit_user_path(current_user)
+    %li= link_to :settings.l, edit_account_user_path(current_user)
+    %li= link_to :blog.l, manage_user_posts_path(current_user)
 
   %hr
   %ul
