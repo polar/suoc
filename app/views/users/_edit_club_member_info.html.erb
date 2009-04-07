@@ -25,8 +25,8 @@
     <th>SUID:</th>
     <td>
       <%= if permitted_to? :write_id, member
-            val = member.club_memberid.insert(5,"-") unless !member.club_memberid
-            f.text_field :club_memberid, :value => val
+            fmt_memberid(member)
+            f.text_field :club_memberid
           else
             "Cannot Edit"
           end
