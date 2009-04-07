@@ -27,6 +27,11 @@
                         end %>
             </li>
           <% end %>
+          <% if member.club_affiliation %>
+            <li class="affiliation">
+              Affiliation: <%= member.club_affiliation.name %>
+            </li>
+          <% end %>
           <li class="date">
             Member Since: <%= member.club_start_date.strftime("%Y") if member.club_start_date %>
           </li>

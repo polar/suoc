@@ -1,0 +1,15 @@
+<div class="box">
+  <h3>Club Affiliations</h2>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+
+    <%= render :partial => @club_affiliations %>
+  </table>
+  <br>
+  <br>
+  <%= link_to "New Club Affiliation", new_club_affiliation_path %>
+</div>

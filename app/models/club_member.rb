@@ -1,6 +1,7 @@
 class ClubMember < User
   has_enumerated :club_member_status
-  
+  has_enumerated :club_affiliation
+
   has_many :officers, :class_name => "ClubOfficer", :foreign_key => :member_id
   has_many :chairs,   :class_name => "ClubChair",   :foreign_key => :member_id
   has_many :leaders,  :class_name => "ClubLeader",  :foreign_key => :member_id

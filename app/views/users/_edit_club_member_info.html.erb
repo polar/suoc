@@ -37,6 +37,13 @@
     <th>Contact:</th>
     <td><%= f.text_field :club_contact %>
     </td>
+  </tr>
+  <tr>
+    <th>Affiliation:</th>
+    <td><%= f.collection_select :club_affiliation_id,
+                                ClubAffiliation.find(:all), :id, :name %>
+    </td>
+  </tr>
   <tr>
     <th>Member Since:</th>
     <td><%= f.text_field :club_start_date, 

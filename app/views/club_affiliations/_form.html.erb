@@ -1,0 +1,19 @@
+<%
+# This is the common form for new and edit for club_affiliation
+#  Locals
+#     label   The label to use for the submit button.
+#
+%>
+<div class="errors"></div>
+<% form_for(@club_affiliation,
+      :html => { :class => "MainForm" }) do |f| %>
+  <%= f.error_messages %>
+  <%= f.label "Name" %>
+  <%= f.text_field "name" %>
+  <%= f.label "Description" %>
+  <%= f.text_area "description",
+       {:size => "86x5", :class => "rich_text_editor"} %>
+  <p>
+    <%= f.submit label %>
+  </p>
+<% end %>

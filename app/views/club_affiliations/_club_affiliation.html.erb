@@ -1,0 +1,11 @@
+<%
+# This partial renders the editor for the club_affliation
+# Locals:
+#   club_affiliation The club affiliation
+#
+%>
+<tr class="row">
+  <td><p><%= club_affiliation.name %></td>
+  <td><%= club_affiliation.description %></td>
+  <td><%= button_to "Edit", edit_club_affiliation_path(club_affiliation), :method => :get if @view_modify %>
+<tr>

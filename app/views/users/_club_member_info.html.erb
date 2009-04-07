@@ -32,6 +32,12 @@
   <th>Contact:</th>
   <td><%= member.club_contact %>
   </td>
+</tr>
+<tr>
+  <th>Affiliation:</th>
+  <td><%= member.club_affiliation.name if member.club_affiliation %>
+  </td>
+</tr>
 <tr>
   <th>Member Since:</th>
   <td><%= member.club_start_date.strftime("%m/%d/%Y") unless !member.club_start_date %></td>
