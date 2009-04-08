@@ -1,5 +1,7 @@
 class ClubTripsController < BaseController
   filter_access_to :all
+  filter_access_to [:trip_table, :trips_csv, :trip_template], :require => :read
+
   layout "club_operations"
   
   def index
