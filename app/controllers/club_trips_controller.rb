@@ -10,7 +10,7 @@ class ClubTripsController < BaseController
       rescue
         # Ruby 1.8.6 doesn't have [].reduce
         result = Time.now
-        @club_trips.reverse_each { |elem| result = yield(result, elem) }
+        @club_trips.reverse_each { |elem| result = result < elem.updated_at ? elem.updated_at : result }
         @last_update = result
       end
     else
