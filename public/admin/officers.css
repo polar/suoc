@@ -1,0 +1,57 @@
+@import url("/include/suoc.css");
+h1 {
+	margin-bottom: -0.5em;
+}
+h2 {
+	margin-bottom: -0.00em;
+}
+div {
+	border-top-style: groove;
+}
+ul {
+	list-style: none;
+	list-style-type: none;
+	position: relative;
+	min-width: 500px;
+}
+ul li {
+	margin-left: -2em;
+	text-decoration: none;
+	font-weight: bold;
+	font-variant: small-caps;
+	text-align: center;
+}
+ul ul li {
+	font-size: small-caps;
+	font-variant: small-caps;
+	text-decoration: none;
+	text-align: left;
+}ul ul ul {
+	top: -1.3em;
+	font-variant: normal;
+	text-align: center;
+	text-decoration: none;
+}	
+ul ul ul li {
+	font-variant: normal;
+	text-align: center;
+	text-decoration: none;
+}
+ul ul ul ul {
+	top: -1.3em;
+	text-decoration: none;
+	text-align: right;
+	font-variant: normal;
+}
+ul ul ul ul li {
+	text-decoration: none;
+	text-align: right;
+	font-variant: normal;
+}
+li + li {
+	margin-top: -2em;
+}
+ul ul ul li + li {
+	margin-top: -1.15em;
+}
+

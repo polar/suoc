@@ -1,0 +1,11 @@
+AuthUserFile /dev/null
+AuthGroupFile /dev/null
+AuthName PaulCoddington
+AuthType Basic
+
+<Limit GET>
+order deny,allow
+deny from all
+allow from .syr.edu
+</Limit>
+
