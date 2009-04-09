@@ -90,6 +90,7 @@ authorization do
   #
   role :guest do
     has_permission_on :club_trips, :to => [:read]
+    has_permission_on :club_documents, :to => [:read]
   end
 
 end

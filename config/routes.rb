@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :club_documents
   map.resources :club_affiliations
 
   map.resources :page_photos
