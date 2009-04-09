@@ -44,6 +44,14 @@ authorization do
   end
 
   #
+  # The :trip_admin is allowed to manage Trips Going Out
+  # table through the :club_trips controller.
+  #
+  role :announcement_admin do
+    has_permission_on :club_announcements, :to => [:manage]
+  end
+
+  #
   # The :pages_admin is allowed to manage the Comatose
   # Home Pages.
   # TODO: Role:PagesAdmin Not yet implemented.
@@ -59,13 +67,13 @@ authorization do
   # you have the TripAdmin role.
   #
   role :officer do
-    includes :trip_admin
+    includes :trip_admin,:announcement_admin
   end
   role :chair do
-    includes :trip_admin
+    includes :trip_admin,:announcement_admin
   end
   role :leader do
-    includes :trip_admin
+    includes :trip_admin,:announcement_admin
   end
 
   #
@@ -89,6 +97,7 @@ authorization do
   #   Can read the trip list.
   #
   role :guest do
+    has_permission_on :club_announcements, :to => [:read]
     has_permission_on :club_trips, :to => [:read]
     has_permission_on :club_documents, :to => [:read]
   end

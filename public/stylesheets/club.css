@@ -426,6 +426,26 @@ TABLE#club_trips TR TH {
   font-weight: bold;
 }
 
+/* ---------------------------------------------
+ * Announcements
+ * --------------------------------------------*/
+TABLE#club_announcements{
+  border: 1px solid #ccc;
+  background: #eeffee;
+  width: 100%;
+  font-size: 100%;
+}
+TABLE#club_announcements TR {
+  margin: 10px;
+}
+TABLE#club_announcements TR TD,
+TABLE#club_announcements TR TH {
+  padding: 5px 2em 0px 0;
+}
+TABLE#club_announcements TR TH {
+  font-weight: bold;
+}
+
 em {
   font-style: italic;
 }

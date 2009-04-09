@@ -16,9 +16,19 @@ class ClubTrip < ActiveRecord::Base
       t.save
     end
   end
+
   def self.to_csv
-    FasterCSV::Table.new(ClubTrip.all.collect { |x| x.to_csv})
+    ts = ClubTrip.all
+    if (ts.empty?)
+      FasterCSV::Table.new(
+                     [FasterCSV::Row.new(["Trip","When","Where","Meet",
+                                      "E-Room","Limit","Leader","Contact"],
+                       ["","","","","","","",""])])
+    else
+      FasterCSV::Table.new(ts.collect { |x| x.to_csv})
+    end
   end
+  
   def self.trip_table
     render :partial => "club_trips/trip_table", :locals => { :club_trips => ClubTrip.all }
   end

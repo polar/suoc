@@ -1,0 +1,14 @@
+<h3>Documents</h3>
+<p>
+This section is crude and contains a list of legacy documents. The SUOC Constitution
+is "const.html" below.
+<table>
+  <tr>
+    <th>Document List</th>
+  <tr>
+  <% for f in @files %>
+    <tr>
+      <td><%= link_to f[:name], f[:url] %></td>
+    </tr>
+  <% end %>
+</table>

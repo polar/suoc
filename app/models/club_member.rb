@@ -58,9 +58,9 @@ class ClubMember < User
   def role_symbols
     rs = hard_roles
     if rs.include?(:member)
-      rs << :officer if current_officers
-      rs << :leader if current_leaders
-      rs << :chair if current_chairs
+      rs << :officer if !current_officers.empty?
+      rs << :leader if !current_leaders.empty?
+      rs << :chair if !current_chairs.empty?
     end
     rs
   end

@@ -1,0 +1,11 @@
+<h3>Upload Club Annoucements</h3>
+<p>
+You may use this Excel file, <%= link_to "Annoucements.XLS", "/club_annoucements/annoucement_template/s"%>, and open and save it as a CSV file.
+<p>
+Then upload it in the following: Make sure you have saved it as a CSV file.
+<p>
+  <% form_for(:club_annoucements, :url => club_annoucements_path,
+            :html => { :class => "MainForm", :multipart => true  }) do |f| %>
+    <%= f.file_field :uploaded_data, :value => "Annoucements.XLS", :accept => "text/csv" %>
+    <%= f.submit "Upload" %>
+  <%  end %>

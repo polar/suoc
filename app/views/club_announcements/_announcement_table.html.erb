@@ -1,0 +1,21 @@
+<%
+ # This partial renders a trip table in HTML
+ # Locals:
+ #   club_announcements  The announcements.
+ #
+ %>
+<table id="club_announcements">
+  <tr>
+   <th>Dates</th>
+   <th>What</th>
+   <th>Contact</th>
+  </tr>
+
+<% for c in club_announcements %>
+  <tr>
+    <td><%= c.dates %></td>
+    <td><%= c.what %></td>
+    <td><%= c.contact %></td>
+  </tr>
+<% end %>
+</table>

@@ -1,0 +1,41 @@
+<h3>Announcement Table Maintainence</h3>
+<% if @view_modify %>
+  <p>
+  Find and Upload the Announcements.csv file in the following form:
+  <br>
+  Make sure you have saved the announcement as a CSV file.
+  <p>
+    <% form_for(:club_announcements, :url => club_announcements_path,
+              :html => { :multipart => true  }) do |f| %>
+      <%= f.file_field :uploaded_data, :value => "announcements.xls", :accept => "text/csv" %>
+      <%= f.submit "Upload" %>
+    <%  end %>
+  <p>
+  <p>
+  <%= button_to "Download Empty Announcements Template", "/club_announcements/announcement_template/download"%>
+  <p>
+<% else %>
+  <p>
+  You do not have permission to alter the announcements list.
+<% end %>
+<h2>Current Announcements</h2>
+Last Updated at: <%= @last_update %>
+<p>
+<%= render :partial => "club_announcements/announcement_table", :locals => { :club_announcements => @club_announcements } %>
+<p>
+<% if @view_modify %>
+  <h2>Modify Current Announcements Table</h2>
+  In order to modify the table, you need to download the current table as
+  a CSV file, modify it, and upload it.
+  <p>
+  <%= button_to "Download Current Announcement CSV", "/club_announcements/announcements_csv/download"%>
+  <p>
+  <h2>Create New Announcement Table</h2>
+  The Announcements Table gets replaced each time you upload it. All previous
+  announcements are lost.
+  <p>
+  You may use this Excel file,
+  <%= link_to "announcements.xls", "/club_announcements/announcement_template/download"%>,
+  open it, and then save it as a CSV file.
+  <p>
+<% end %>
