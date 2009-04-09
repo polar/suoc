@@ -50,16 +50,46 @@ class UsersController #< BaseController
     end
   end
 
+  ##
+  ## Override
+  ##
+  def create
+    #@user       = User.new(params[:user])
+    @user       = ClubMember.new(params[:user])
+    @user.role  = Role[:member]
+
+    if (!AppConfig.require_captcha_on_signup || verify_recaptcha(@user)) && @user.save
+      create_friendship_with_inviter(@user, params)
+      flash[:notice] = :email_signup_thanks.l_with_args(:email => @user.email)
+      redirect_to signup_completed_user_path(@user)
+    else
+      render :action => 'new'
+    end
+  end
+
   #
   # AJAX Requests
   #
+  def validate_club_member_info(member)
+    if !member.club_affiliation
+      member.errors.add("You need to supply an affiliation")
+      return false
+    else
+      if member.club_affiliation.requires_memberid &&
+         member.club_memberid.empty?
+         member.errors.add_to_base("Your affiliation requires an SUID")
+         return false
+      end
+    end
+    return true
+  end
 
   def update_club_member_info
     member = ClubMember.find(params[:id])
     if permitted_to? :write, member
       member.update_attributes(params[:club_member])
       can_edit_info = current_user.admin? || current_user == member
-      if member.save
+      if validate_club_member_info(member) && member.save
         render_club_member_info(member, can_edit_info)
       else
         render_edit_club_member_info(member)

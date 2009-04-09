@@ -446,6 +446,15 @@ TABLE#club_announcements TR TH {
   font-weight: bold;
 }
 
+.MainForm select{
+border:1px solid #ccc;
+font-weight: bold;
+font-size: 123.1%;
+color: #777;
+width: 261px;
+padding: 5px;
+background: #f8f8f8;
+}
 em {
   font-style: italic;
 }
