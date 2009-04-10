@@ -31,25 +31,26 @@
           <%= "E-mail address".l %>
           <em><%= "(Required: We will send a confirmation e-mail to the address you enter.)".l %>
         </label>
-        <%= f.text_field :email %>
+        <%= f.text_field :email, :tabindex => 2 %>
 
         <label for="user_club_memberid">
           <%= "Your SUID".l %>:
           <em><%= "(Required for students.)".l %></em>
         </label>
-        <%= f.text_field :club_memberid %>
+        <%= f.text_field :club_memberid, :tabindex => 3 %>
 
         <label for="user_club_affiliation">
           <%= "Your Affiliation".l %>
         </label>
         <%= f.collection_select :club_affiliation_id,
-                                ClubAffiliation.find(:all), :id, :name %>
+                                ClubAffiliation.find(:all), :id, :name,
+                                {}, {:tabindex => 4} %>
 
         <label for="user_birthdate">
           <%="Birthday".l %>:
           <em><%= "(Required: MM/DD/YYYY)".l %></em>
         </label>
-        <%=  f.text_field :birthday, :value => "" %>
+        <%=  f.text_field :birthday, :tabindex => 5 %>
 
         <% if AppConfig.require_captcha_on_signup %>
           <div class="right" style='margin-top:2em;'>
@@ -60,11 +61,11 @@
         <label for="user_password">
           <%= "Type your password:".l %>
         </label>
-        <%= f.password_field :password %>
+        <%= f.password_field :password, :tabindex => 6 %>
         <label for="user_password_confirmation">
           <%= "Re-type your password to confirm:".l %>
         </label>
-        <%= f.password_field :password_confirmation %>
+        <%= f.password_field :password_confirmation, :tabindex => 7 %>
         <%= hidden_field_tag :inviter_id, params[:inviter_id] %>
         <%= hidden_field_tag :inviter_code, params[:inviter_code] %>
         <p><%= submit_tag 'Sign up'.l %>

@@ -90,7 +90,7 @@ class TreasurerLedgersController < BaseController
   
   def delete_transaction
     t = AcctTransaction.find(params[:id])
-    if t.recorded_by == current_user
+    if current_user.admin? || t.recorded_by == current_user
       t.destroy
       redirect_to :action => :show
     else
