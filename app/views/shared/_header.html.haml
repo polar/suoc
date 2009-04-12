@@ -7,19 +7,20 @@
   - else
     %h2
       =:welcome_message.l(:login_link => (link_to :log_in.l, login_path), :signup_link => (link_to :sign_up.l, signup_path))
-    
+
   #NavBar
     %ul
+      = topnav_tab :trips.l, { :url => "/page/show/trips", :section => 'trips' }
       - Category.find(:all).each do |c|
         = topnav_tab c.name, {:url => category_path(c), :section => c.name}
       = topnav_tab :forums.l, { :url => forums_path, :section => 'forums' }
       = topnav_tab :blogs.l, { :url => popular_path, :section => 'popular' }
       = topnav_tab :events.l, { :url => events_path, :section => 'events' }
       = topnav_tab :people.l, { :url => users_path, :section => 'users' }
-      - if current_user 
-        = topnav_tab :my_profile.l, { :url => user_path(current_user), :section => 'my_profile'}   
-      
-    / SiteSearch Google 
+      - if current_user
+        = topnav_tab :my_profile.l, { :url => user_path(current_user), :section => 'my_profile'}
+
+    / SiteSearch Google
     %form{:method=>"get", :action=>"http://www.google.com/custom", :target=>"_top"}
       %input{ :type=>"hidden", :name=>"domains", :value=>"#{APP_URL}"}
       %label{ :for=>"search",  :style=>"display: none"}
@@ -33,6 +34,6 @@
       %input{ :type=>"hidden", :name=>"oe", :value=>"ISO-8859-1"}
       %input{ :type=>"hidden", :name=>"cof", :value=>"GALT:#008000;GL:1;DIV:#FFFFFF;VLC:663399;AH:center;BGC:FFFFFF;LBGC:FFFFFF;ALC:0066CC;LC:0066CC;T:000000;GFNT:0000FF;GIMP:0000FF;LH:50;LW:90;S:http://#{APP_URL};FORID:1"}
       %input{ :type=>"hidden", :name=>"hl", :value=>"en"}
-      
-  / NavBar 
+
+  / NavBar
 / header

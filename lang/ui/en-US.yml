@@ -5,6 +5,7 @@ en:
   blogs: Stories
   blog: Trip Diary
   blog_posts: Trip Stories
+  trips: Trips
   club_dashboard: SUOC Office
   club_office: SUOC Office
   posts_saved_with_draft_status_wont_appear_in_your_blog_until_you_publish_them: "Posts saved with 'draft' status won't appear in your Trip Diary until you publish them."
@@ -19,7 +20,7 @@ en:
   edit_account: Edit Account
   manage_posts: Manage Trip Diary
   settings: Settings
-  
+
   # We are changing "friends" to Connections.
   accepted_friendships: Accepted Connections
   add_some_friends_to_get_started: Connect with some people to get started!

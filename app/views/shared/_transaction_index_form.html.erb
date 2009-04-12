@@ -4,7 +4,7 @@
 #    update_transaction       The target of the main form.
 #    update_description_form  The AJAX action that updates the Description
 #                             field based on whether the membership is being
-#                             used. 
+#                             used.
 #  Locals:
 #    transactions    A will_paginate collection of AcctTransaction,
 #                    should be organized in an:order => "date DESC, id DESC".
@@ -17,7 +17,7 @@
 <table class="transactions">
   <tr class="pagnation">
     <td colspan="4">
-        <%= will_paginate transactions, 
+        <%= will_paginate transactions,
         :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
         :params => { :action => :index } %></td>
     </td>
@@ -39,10 +39,10 @@
     <td class="full_name"><%= t.recorded_by.name %></td>
     <td class="form">
       <% if show_delete(t) %>
-      <%=  button_to "Delete", 
+      <%=  button_to "Delete",
                     url_for(
-                       :action => :delete_transaction, 
-                       :id => t), 
+                       :action => :delete_transaction,
+                       :id => t),
                        :confirm => "Are you sure you want to delete this transaction?" %>
       <% end %>
     </td>
@@ -66,7 +66,7 @@
     :params => { :action => :index } %></td>
   </tr>
  </table>
-<% form_for(transaction, 
+<% form_for(transaction,
            :url => url_for(:action => :update_transaction),
            :html => { :id => "transact", :class => "" } ) do |form| %>
 <table class="transactions">
@@ -94,7 +94,7 @@
            transaction.acct_action == nil ?
                {:prompt => "Select an Action" } :
                {:prompt => "Select an Action", :selected => transaction.acct_action.name },
-           {:onchange => 
+           {:onchange =>
                remote_function( :url => { :action => :update_description_form },
                                 :with => "'acct_action_id='+value")} %>
       </td>
