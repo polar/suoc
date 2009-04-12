@@ -50,18 +50,18 @@ class ClubMember < User
   has_many :leaders,  :class_name => "ClubLeader",  :foreign_key => :member_id
 
   has_many :memberships, :class_name => "ClubMembership",  :foreign_key => :member_id
-  
+
   validates_date :club_start_date, :allow_nil => true
   validates_date :club_end_date, :allow_nil => true
 
   #
-  # The club member id (At least for SUOC) 
-  # is stored as an integer and is 
+  # The club member id (At least for SUOC)
+  # is stored as an integer and is
   # a 9 digit number that gets displayed
   # with a dash (-) in the 5th position. i.e. 12345-6789
   #
-  validates_format_of :club_memberid, 
-                      :with => /^[0-9]{9}$/, 
+  validates_format_of :club_memberid,
+                      :with => /^[0-9]{9}$/,
                       :allow_nil => true,
                       :allow_blank => true,
                       :message => "SUID must be a 9 digit number"
@@ -75,7 +75,7 @@ class ClubMember < User
                       :with => /^[A-Z][A-Za-z]+(((\s[A-Z])(\s*[A-Z][A-Za-z]+)(\s*[A-Z0-9][A-Za-z0-9]+)*)|((\s*[A-Z][A-Za-z]+)(\s*[A-Z0-9][A-Za-z0-9]+)*))$/,
                       :message => "must contain at least your first name AND last name and starting with letters. Each word must start with a capital letter <p>Ex. Thurston Brower Howell 3rd",
                       :on => :create
-  
+
 
   #
   # TODO:These validations will be changed to :save as soon as it is true for all users.
@@ -98,7 +98,7 @@ class ClubMember < User
     self.club_memberid = self.club_memberid.delete(' -') if self.club_memberid
   end
   #
-  # We add roles and roles_symbols for the 
+  # We add roles and roles_symbols for the
   # Declarative Authorization plugin
   #
   has_many :roles, :class_name => "ClubRole", :uniq => true
@@ -138,15 +138,15 @@ class ClubMember < User
   # :login. Backwards capability
   #
   alias_attribute :name, :login
-  
+
   def current_officers
     officers.select { |x| x.current? }
   end
-  
+
   def current_leaders
     leaders.select { |x| x.current? }
   end
-  
+
   def current_chairs
     chairs.select { |x| x.current? }
   end
