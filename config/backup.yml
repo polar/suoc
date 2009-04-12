@@ -1,6 +1,6 @@
 ## example crontab entry:
 ###
-###3 * * * * cd /var/suoc/current && nice rake backup RAILS_ENV=production >> /var/suoc/current/log/production_backup_system.log
+### 0 3 * * * cd /var/www/suoc/current && nice rake backup RAILS_ENV=production >> /var/www/suoc/current/log/production_backup_system.log
 ###
 ### config file - goes in config/backup.yml
 ##
@@ -40,4 +40,4 @@ development:
   dirs:
     - public/photos
     - public/page_photos
-    
+

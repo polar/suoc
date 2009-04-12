@@ -1,6 +1,6 @@
 ## example crontab entry:
 ##
-##3 * * * * cd /var/suoc/current && nice rake backup RAILS_ENV=production >> /var/suoc/current/log/production_backup_system.log
+## 0 3 * * * cd /var/www/suoc/current && nice rake backup RAILS_ENV=production >> /var/www/suoc/current/log/production_backup_system.log
 ##
 ## config file - goes in config/backup.yml
 #
@@ -135,7 +135,8 @@ namespace :backup do
       FileUtils.chdir(RAILS_APPDIR)
       FileUtils.mkdir_p(archivedir)
       archivefile = File.join(archivedir,archive_filename)
-      cmd = "tar cfz #{archivefile} --ignore-failed-read #{sqldumpfile} #{dirs.join(" ")}"
+      # We need "h" because /current/public/* has symbolic links to /releases/public/*
+      cmd = "tar chfz #{archivefile} --ignore-failed-read #{sqldumpfile} #{dirs.join(" ")}"
       msg "Executing: #{cmd}"
       result = system(cmd)
       if result
