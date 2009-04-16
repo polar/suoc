@@ -19,3 +19,4 @@
 [submodule "vendor/plugins/comatose_engine"]
 	path = vendor/plugins/comatose_engine
 	url = git://github.com/polar/comatose-engine.git
+
