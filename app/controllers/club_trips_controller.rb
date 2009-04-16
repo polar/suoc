@@ -3,7 +3,7 @@ class ClubTripsController < BaseController
   filter_access_to [:trip_table, :trips_csv, :trip_template], :require => :read
 
   layout "club_operations"
-  
+
   def index
     @club_trips = ClubTrip.find(:all)
     if @club_trips
@@ -55,13 +55,13 @@ class ClubTripsController < BaseController
   end
 
   def trips_csv
-    send_data(ClubTrip.to_csv, :type => "text/csv", :filename => "trips.csv")
+    send_data(ClubTrip.to_csv, :type => "text/csv", :filename => "trips.csv", :stream => false)
   end
 
   def trip_template
     send_file(RAILS_ROOT+"/public/assets/Trips.xls", :filename => "TRIPS.XLS", :type => "application/xls")
   end
-  
+
   def destroy
     @club_trip = ClubTrip.find(params[:id])
     @club_trip.destroy

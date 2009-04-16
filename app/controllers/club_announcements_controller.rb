@@ -3,7 +3,7 @@ class ClubAnnouncementsController < BaseController
   filter_access_to [:announcement_table, :announcements_csv, :announcement_template], :require => :read
 
   layout "club_operations"
-  
+
   def index
     @club_announcements = ClubAnnouncement.find(:all)
     if @club_announcements
@@ -55,13 +55,13 @@ class ClubAnnouncementsController < BaseController
   end
 
   def announcements_csv
-    send_data(ClubAnnouncement.to_csv, :type => "text/csv", :filename => "announcements.csv")
+    send_data(ClubAnnouncement.to_csv, :type => "text/csv", :filename => "announcements.csv", :stream => false)
   end
 
   def announcement_template
     send_file(RAILS_ROOT+"/public/assets/Announcements.xls", :filename => "ANNOUNCEMENT.XLS", :type => "application/xls")
   end
-  
+
   def destroy
     @club_announcement = ClubAnnouncement.find(params[:id])
     @club_announcement.destroy
