@@ -1,0 +1,16 @@
+This directory contains symbolic links made by
+
+% ln -s -f ../plugins/*_engine/engine_plugins/* .
+
+Rails config will load two plugins with the same name if they are
+found in two different "plugin_paths".
+
+However, some plugins do not play nice when loaded twice. 
+  paginating_find is a prime example. 
+If loaded twice it ends up recursive chaining find methods.
+
+We create this directory and use the symbolic links to
+mitigate the duplicates, and we just modify the Rails
+configuration plugin path to:
+
+    config.plugin_paths += ["#{RAILS_ROOT}/vendor/engine_plugins"]

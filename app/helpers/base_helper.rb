@@ -1,6 +1,6 @@
 module BaseHelper
   #
-  # These are affectively aliass because the polymorphic_url function
+  # These are affectively aliases because the polymorphic_url function
   # derives "club_member" from a user with the ClubMember extension.
   #
   def club_member_post_url(a,b,args={});user_post_url(a,b,args);end

@@ -21,20 +21,33 @@ Rails::Initializer.run do |config|
   # you must remove the Active Record framework.
   # config.frameworks -= [ :active_record, :active_resource, :action_mailer ]
 
-  # Specify gems that this application depends on. 
+  # Specify gems that this application depends on.
   # They can then be installed with "rake gems:install" on new installations.
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
 
-  # Only load the plugins named here, in the order given. By default, all plugins 
+  # Only load the plugins named here, in the order given. By default, all plugins
   # in vendor/plugins are loaded in alphabetical order.
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
-  config.plugins = [ :engines, :community_engine, 
-                     :declarative_authorization, 
-                     :white_list, :all ]
-  config.plugin_paths += ["#{RAILS_ROOT}/vendor/plugins/community_engine/engine_plugins"]
+
+  #
+  # Engines must go first here.
+  #
+  config.plugins = [ :engines,
+                     :community_engine,
+                     :comatose_engine,
+                     :declarative_authorization,
+                     :white_list,
+                     :all ]
+
+  # Not all plugins play nice when loaded twice (PaginatingFind). We create
+  # a directory "engine_plugins" in which it contains symbolic links to
+  # all plugins in each engine_plugins directory, thereby only having it
+  # listed once.
+  #  cd vendor/engine_plugins; ln -sf ../plugins/*_engine/engine_plugins/* .
+  config.plugin_paths += ["#{RAILS_ROOT}/vendor/engine_plugins"]
 
   # Add additional load paths for your own custom dirs
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
@@ -46,11 +59,11 @@ Rails::Initializer.run do |config|
   # Make Time.zone default to the specified zone, and make Active Record store time values
   # in the database in UTC, and return them converted to the specified local zone.
   # Run "rake -D time" for a list of tasks for finding time zone names. Uncomment to use default local time.
-  config.time_zone = 'UTC'
+  config.time_zone = 'Eastern Time (US & Canada)'
 
   # Your secret key for verifying cookie session data integrity.
   # If you change this key, all old sessions will become invalid!
-  # Make sure the secret is at least 30 characters and all random, 
+  # Make sure the secret is at least 30 characters and all random,
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
     :session_key => '_suoc_session',
@@ -71,15 +84,16 @@ Rails::Initializer.run do |config|
   # config.active_record.observers = :cacher, :garbage_collector
 end
 
-  require "#{RAILS_ROOT}/vendor/plugins/community_engine/engine_config/boot.rb"
-
-  #
-  # Validates Dates Time plugin.
-  #   We need to accept month/day/year. Default is day/month/year.
-  ActiveRecord::Validations::DateTime.us_date_format = true
+require "#{RAILS_ROOT}/vendor/plugins/comatose_engine/engine_config/boot.rb"
+require "#{RAILS_ROOT}/vendor/plugins/community_engine/engine_config/boot.rb"
 
 #
-# This horse hockey is because Community Engine keeps all the 
+# Validates Dates Time plugin.
+#   We need to accept month/day/year. Default is day/month/year.
+ActiveRecord::Validations::DateTime.us_date_format = true
+
+#
+# This horse hockey is because Community Engine keeps all the
 # the authentication stuff in BaseController and not Application
 # Controller and the Declarative Authorization Plugin requires it
 # to be in ApplicationController.
@@ -111,29 +125,32 @@ AuthorizationUsagesController.send :caches_action, :site_index, :footer_content,
 
 
 Comatose.configure do |config|
-
-  # Includes AuthenticationSystem in the ComatoseAdminController
-  config.admin_includes << :authenticated_system
-
-  # Calls :login_required as a before_filter
-  config.admin_authorization = :admin_required
-
-  # Returns different 'root paths'
-  config.admin_get_root_page do
-
-    if current_user.role == 'XXXX' # This depends on your system
-      ComatosePage.find_by_path( 'site/help' )
-
-    elsif current_user.role == 'YYYY'
-      # Returns multiple 'roots'
-      [
-        ComatosePage.find_by_path( 'site/help' ),
-        ComatosePage.find_by_path( 'app/faq' )
-      ]
-
-    else
-      ComatosePage.root
-
-    end
-  end
+ # We handle authorization now using the Engines Plugin architecture
+ # allowing us to add filters and override methods in the
+ # ComatoseAdminController.
+#
+#   # Includes AuthenticationSystem in the ComatoseAdminController
+#   config.admin_includes << :authenticated_system
+#
+#   # Calls :login_required as a before_filter
+#   config.admin_authorization = :admin_required
+#
+#   # Returns different 'root paths'
+#   config.admin_get_root_page do
+#
+#     if current_user.role == 'XXXX' # This depends on your system
+#       ComatosePage.find_by_path( 'site/help' )
+#
+#     elsif current_user.role == 'YYYY'
+#       # Returns multiple 'roots'
+#       [
+#         ComatosePage.find_by_path( 'site/help' ),
+#         ComatosePage.find_by_path( 'app/faq' )
+#       ]
+#
+#     else
+#       ComatosePage.root
+#
+#     end
+#   end
 end
