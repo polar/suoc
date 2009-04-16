@@ -19,6 +19,6 @@
 [submodule "vendor/plugins/declarative_authorization"]
 	path = vendor/plugins/declarative_authorization
 	url = git://github.com/polar/declarative_authorization.git
-[submodule "vendor/plugins/comatose"]
-	path = vendor/plugins/comatose
-	url = git://github.com/darthapo/comatose.git
+[submodule "vendor/plugins/comatose_engine"]
+	path = vendor/plugins/comatose_engine
+	url = git://github.com/polar/comatose-engine.git

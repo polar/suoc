@@ -1,11 +1,11 @@
 class PageController < BaseController
 
   def show
-  @sidebar_left = true
+    @sidebar_left = true
     @page = ComatosePage.find( :first,
                 :include => :page_photo,
                 :conditions => { :slug => params[:id] })
-    @children = @page.children
+    @children = @page.children if @page
 
     # TODO: Will have to change slug.
     @home = ComatosePage.find(:first,
