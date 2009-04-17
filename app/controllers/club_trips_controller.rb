@@ -55,7 +55,11 @@ class ClubTripsController < BaseController
   end
 
   def trips_csv
-    send_data(ClubTrip.to_csv, :type => "text/csv", :filename => "trips.csv", :stream => false)
+    # Explicitly convert to a string, it's automatic on some systems.
+    # Some it screws up on the size as its the number of rows instead
+    # of characters.
+    data = ClubTrip.to_csv.to_s
+    send_data(data, :type => "text/csv", :filename => "trips.csv")
   end
 
   def trip_template

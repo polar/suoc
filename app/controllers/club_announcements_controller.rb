@@ -55,7 +55,11 @@ class ClubAnnouncementsController < BaseController
   end
 
   def announcements_csv
-    send_data(ClubAnnouncement.to_csv, :type => "text/csv", :filename => "announcements.csv", :stream => false)
+    # Convert CSV to a string, it seems to be automatic in some systems.
+    # Some it screws up on the size as its the number of rows instead
+    # of characters.
+    data = ClubAnnouncement.to_csv.to_s
+    send_data(data, :type => "text/csv", :filename => "announcements.csv")
   end
 
   def announcement_template
