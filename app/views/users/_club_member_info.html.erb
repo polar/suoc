@@ -21,7 +21,7 @@
   <th>SUID:</th>
   <td><%= if member.club_memberid
             if permitted_to? :read_id, member
-              fmt_memberid(member)
+              "[Click Edit to See]"
             else
               "[Hidden]"
             end
