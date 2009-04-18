@@ -1,0 +1,21 @@
+<%
+# This partial renders the editor button for adding
+# an officer
+%>
+<% form_for(officer,
+            :url => { :action => :add_club_officer },
+            :html => { :class => "MainForm" }) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :member_id %>
+  <%= f.label "I was/am an Officer" %>
+  <%= f.collection_select :office_id,
+      ClubOffice.all, :id, :name, :prompt => true %>
+  <%= f.label "from" %>
+  <%= f.text_field :start_date,
+          :value => (officer.start_date.strftime("%m-%d-%Y") if officer.start_date) %>
+  <%= f.label "to" %>
+  <%= f.text_field :end_date,
+          :value => (officer.end_date.strftime("%m-%d-%Y") if officer.end_date) %>
+  <p>
+  <%= f.submit "Add Officer" %>
+<% end %>

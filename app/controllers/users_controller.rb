@@ -15,16 +15,16 @@ class UsersController #< BaseController
   # Sets the role for an activated club member.
   #
   after_filter :activate_club_member, :only => [ :activate ]
-  
-  # Need to include UsersHelper to get the 
-  # rendering functions 
+
+  # Need to include UsersHelper to get the
+  # rendering functions
   # for Ajax calls
-  include UsersHelper 
-  
+  include UsersHelper
+
   # This function gets called as a before filter to
   # transform the current user, if any, to its extension.
   def becomes_club_member
-    # For some reason @current_user == :false 
+    # For some reason @current_user == :false
     # (ie. not false or not nil) if it isn't assigned!
     # We check to see if it's still a User.
     if @current_user && @current_user.class == User
@@ -34,7 +34,7 @@ class UsersController #< BaseController
 
   def create_club_member
     @user.type = "ClubMember"
-    
+
     # Keep the users profile from immediately going public
     @user.profile_public = false;
     @user.save
@@ -99,7 +99,7 @@ class UsersController #< BaseController
       render_club_member_info(member, false)
     end
   end
-  
+
   def edit_club_member_info
     member = ClubMember.find(params[:id])
     can_edit_info = permitted_to? :write, member
@@ -109,10 +109,73 @@ class UsersController #< BaseController
       render_club_member_info(member, can_edit_info)
     end
   end
-  
+
   def show_club_member_info
     member = ClubMember.find(params[:id])
     can_edit_info = permitted_to? :write, member
     render_club_member_info(member, can_edit_info)
   end
+
+  protected
+
+  #
+  # This returns a ClubOfficer or nil
+  #
+  def new_officer(member, params)
+    if params['club_office']
+      if permitted_to? :write, member
+        if !params['office_id'].empty?
+          params['member'] = member
+          x = ClubOfficer.new(params)
+          if !x.save
+            member.errors.add_to_base x.errors.to_s
+            return false
+          end
+        end
+      end
+    end
+    return true
+  end
+
+  #
+  # This returns a ClubChair or nil
+  #
+  def new_chair(member, params)
+    if params['club_chair']
+      params = params['club_chair']
+      if permitted_to? :write, member
+        if !params['activity_id'].empty?
+          params['member'] = member
+          x = ClubChair.new(params)
+          if !x.save
+            member.errors.add_to_base x.errors.to_s
+            return false
+          end
+        end
+      end
+    end
+    return true
+  end
+
+  #
+  # This returns a ClubLeader or nil
+  #
+  def new_leader(member, params)
+    if params['club_leader']
+      params = params['club_leader']
+      if permitted_to? :write, member
+        if !params['leadership_id'].empty?
+          params['member'] = member
+          x = ClubLeader.new(params)
+          if !x.save
+            member.errors.add_to_base x.errors.to_s
+            return false
+          end
+        end
+      end
+    end
+    return true
+  end
+
 end
+

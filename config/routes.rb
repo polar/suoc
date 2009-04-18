@@ -9,7 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.admin_dashboard   '/admin/dashboard', :controller => 'comatose_admin', :action => 'index'
 
   map.comatose_admin
-  
+
   map.comatose_root 'home'
 
   map.resources :club_members
@@ -58,7 +58,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Sample resource route with sub-resources:
   #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
-  
+
   # Sample resource route with more complex sub-resources
   #   map.resources :products do |products|
   #     products.resources :comments
@@ -82,14 +82,14 @@ ActionController::Routing::Routes.draw do |map|
   # from Declarative Authorization here. Grrrrr..
   #
   #map.from_plugin :declarative_authorization
-  map.resources :authorization_rules, 
-                :only => :index, 
+  map.resources :authorization_rules,
+                :only => :index,
                 :collection => {:graph => :get}
-  map.resources :authorization_usages, 
+  map.resources :authorization_usages,
                 :only => :index
   # We need the sign up route earlier so that we can use club_members
   map.from_plugin :community_engine
-  
+
   map.resources :users, :member => {
     :edit_club_member_info_user => :post
   }

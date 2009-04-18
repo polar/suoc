@@ -72,7 +72,7 @@ class ClubMember < User
   # seems to work.
   #
   validates_format_of :login,
-                      :with => /^[A-Z][A-Za-z]+(((\s[A-Z])(\s*[A-Z][A-Za-z]+)(\s*[A-Z0-9][A-Za-z0-9]+)*)|((\s*[A-Z][A-Za-z]+)(\s*[A-Z0-9][A-Za-z0-9]+)*))$/,
+                      :with => /^[A-Z][A-Za-z\']+(((\s[A-Z\'])(\s*[A-Z][A-Za-z\']+)(\s*[A-Z0-9][A-Za-z0-9\']+)*)|((\s*[A-Z\'][A-Za-z\']+)(\s*[A-Z0-9][A-Za-z0-9\']+)*))$/,
                       :message => "must contain at least your first name AND last name and starting with letters. Each word must start with a capital letter <p>Ex. Thurston Brower Howell 3rd",
                       :on => :create
 
@@ -89,11 +89,11 @@ class ClubMember < User
   before_validation :normalize_club_memberid
 
   #
-  # TODO: Get rid of this hack.
+  # TODO: Get rid of this hack. DONE. I changed the User model in Community Engine.
   # This has to go last. Any subsequent validations are
   # not recorded by the class.
   #
-  remove_validation "validates_length_of", :login
+  #remove_validation "validates_length_of", :login
   def normalize_club_memberid
     self.club_memberid = self.club_memberid.delete(' -') if self.club_memberid
   end
@@ -143,12 +143,24 @@ class ClubMember < User
     officers.select { |x| x.current? }
   end
 
+  def past_officers
+    officers.select { |x| !x.current? }
+  end
+
   def current_leaders
     leaders.select { |x| x.current? }
   end
 
+  def past_leaders
+    leaders.select { |x| !x.current? }
+  end
+
   def current_chairs
     chairs.select { |x| x.current? }
+  end
+
+  def past_chairs
+    chairs.select { |x| !x.current? }
   end
 
 end

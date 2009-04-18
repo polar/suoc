@@ -3,8 +3,8 @@
  *This deals with <td> and inputs that are aligned for decimal
  *numbers.
  */
- 
- /* For some reason I need this .{} just to get the following 
+
+ /* For some reason I need this .{} just to get the following
   * stuff to work
   */
 b, strong {
@@ -13,6 +13,29 @@ b, strong {
 
 .decimal {
   text-align: right;
+}
+
+/*
+ * Tables holding listings of things
+ */
+
+.listing {
+  padding: 2em;
+}
+.listing  tr th{
+  padding: 0px 20px 2px 0px;
+  font-weight: bold;
+}
+.listing  tr td{
+  padding: 0px 20px 2px 0px;
+}
+
+/*
+ * Some links we like to stand out
+ */
+.links {
+  font-weight: bold;
+  font-size: 110%;
 }
 
 /*
@@ -96,7 +119,7 @@ b, strong {
   background: #a2a19b;
 }
 
-/* Each Side list element is padded left 20px 
+/* Each Side list element is padded left 20px
  * to leave room for a small icon.
  */
 .badge_medium .vcard ul li{
@@ -142,12 +165,12 @@ b, strong {
 .EntryForm .button-to input{
   border: 0px solid #ccc;
   padding: 1px;
-  padding-left: 1em;          
+  padding-left: 1em;
   padding-right: 1em;
   margin: 1px 0;
   color: #777;
   background: #f8f8f8;
-  width: 8em;
+  width: 6em;
 }
 .EntryForm .button-to input:focus{
   color: #777;
@@ -401,8 +424,8 @@ b, strong {
   padding: 7px 0 6px 120px;
   font-size: 150%;
   font-weight: bold;
-  background: 
-    url(/images/sm-suoc.gif) 
+  background:
+    url(/images/sm-suoc.gif)
     no-repeat left center;
 }
 

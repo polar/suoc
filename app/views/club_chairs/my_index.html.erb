@@ -1,0 +1,24 @@
+<h3>My Activity Chairmanships</h3>
+  <%= render :partial => "edit_club_chair", :locals => { :chair => @club_chair } %>
+<h3>My Current Chairmanships</h3>
+  <% if @current_chairs.nil? || @current_chairs.empty? %>
+    You have no current chairships.
+  <% else %>
+  <div class="EntryForm">
+    <table class="listing">
+      <th>Activity</th><th>Start Date</th><th>End Date</th>
+      <%= render :partial => "chair", :collection => @current_chairs %>
+    </table>
+  </div>
+  <% end %>
+<h3>My Past Chairmanships</h3>
+  <% if @past_chairs.nil? || @past_chairs.empty? %>
+    You have no past chairships.
+  <% else %>
+  <div class="EntryForm">
+    <table class="listing">
+      <th>Activity</th><th>Start Date</th><th>End Date</th>
+      <%= render :partial => "chair", :collection => @past_chairs %>
+    <table>
+  </div>
+  <% end %>

@@ -46,5 +46,22 @@
         <%= link_to "Documents", club_documents_path %>
       </td>
     </tr>
+    <tr>
+      <td>
+        <%= link_to "My Officerships",
+             url_for( :controller => :club_officers, :action => "my_index", :id => "me") %>
+      </td>
+    <tr>
+      <td>
+        <%= link_to "My Activity Chairships",
+             url_for( :controller => :club_chairs, :action => "my_index", :id => "me") %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= link_to "My Leaderships",
+             url_for( :controller => :club_leaders, :action => "my_index", :id => "me") %>
+      </td>
+    </tr>
   </table>
 </div>

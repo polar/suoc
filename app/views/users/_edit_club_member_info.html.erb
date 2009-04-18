@@ -2,19 +2,19 @@
 # This partial renders the editor for the basic information
 # Locals:
 #   member  The ClubMember
-#   clazz   The class for the surrounding div, optional.
 #
 %>
-<div id="BasicInfo" <%= "class='#{clazz}'" if clazz %>>
+<div id="BasicInfo" >
 <% form_remote_tag(:update => "BasicInfo",
     :url => { :action => :show_club_member_info,
                :id => member }) do %>
   <h3>SUOC Information <%= submit_tag "Cancel Edit" %></h3>
 <% end %>
 <div class="errors"></div>
-<% form_remote_for(member, 
-            :update => "BasicInfo", 
-            :url => { :action => :update_club_member_info, 
+<div class="MainForm">
+<% form_remote_for(member,
+            :update => "BasicInfo",
+            :url => { :action => :update_club_member_info,
                       :id => member}) do |f| %>
   <%= f.error_messages %>
   <table>
@@ -45,18 +45,31 @@
     </td>
   </tr>
   <tr>
-    <th>Member Since:</th>
-    <td><%= f.text_field :club_start_date, 
+    <th>Since (MM-DD-YYY):</th>
+    <td><%= f.text_field :club_start_date,
             :value => fmt_date(member.club_start_date) %>
     </td>
   </tr>
   <tr>
     <th>Member Status:</th>
-    <td><%= f.collection_select :club_member_status_id, 
+    <td><%= f.collection_select :club_member_status_id,
                                 ClubMemberStatus.find(:all), :id, :name %>
     </td>
   </tr>
+
   </table>
+  <p>
   <%= f.submit "Save Changes" %>
 <% end %>
+</div>
+<div class="links">
+<%= link_to "Make me an Officer",
+    url_for(:controller => "club_officers", :action => "my_index", :id => "me") %>
+|
+<%= link_to "Make me an Activity Chair",
+    url_for(:controller => "club_chairs", :action => "my_index", :id => "me") %>
+|
+<%= link_to "Make me a Leader",
+    url_for(:controller => "club_leaders", :action => "my_index", :id => "me") %>
+</div>
 </div>
