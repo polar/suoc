@@ -21,7 +21,7 @@ authorization do
     includes :pages_admin
 
     #
-    # Declarative Authorization, available in 
+    # Declarative Authorization, available in
     #  developement mode.
     #
     has_permission_on :authorization_rules, :to => :read
@@ -30,7 +30,7 @@ authorization do
     #
     # An Admin may read the ClubMember.club_memberid
     #
-    has_permission_on :users, :to => :write_id 
+    has_permission_on :users, :to => :write_id
     has_permission_on :users, :to => :write
     has_permission_on :club_trips, :to => :create
   end
@@ -67,13 +67,13 @@ authorization do
   # you have the TripAdmin role.
   #
   role :officer do
-    includes :trip_admin,:announcement_admin
+    includes :trip_admin,:announcement_admin,:pages_admin
   end
   role :chair do
-    includes :trip_admin,:announcement_admin
+    includes :trip_admin,:announcement_admin,:pages_admin
   end
   role :leader do
-    includes :trip_admin,:announcement_admin
+    includes :trip_admin,:announcement_admin,:pages_admin
   end
 
   #

@@ -1,0 +1,12 @@
+<%
+# This partial lists the years and name of the officers
+# locals :
+#     offices  Collection of ClubOffice
+%>
+<table>
+<tr>
+  <th>Year</th>
+  <th>Name</th>
+</tr>
+<%= render :partial => "club_offices/officer", :collection => officers %>
+</table>

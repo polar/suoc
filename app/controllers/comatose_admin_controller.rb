@@ -15,5 +15,11 @@ class ComatoseAdminController < ApplicationController
   # In the base system we include authenticated system. We just require
   # admin privileges for all methods
   #
-#  before_filter :admin_required
+  before_filter :login_required
+  filter_access_to :all
+  filter_access_to [:reorder, :versions, :set_version,
+                    :preview, :expire_page_cache,
+                    :generate_page_cache,
+                    :export,
+                    :import], :require => :update
 end

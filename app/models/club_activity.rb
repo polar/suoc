@@ -4,6 +4,7 @@
 #
 class ClubActivity < ActiveRecord::Base
   has_many :leaderships, :class_name => "ClubLeadership", :foreign_key => "activity_id"
+  has_many :chairs, :class_name => "ClubChair", :foreign_key => "activity_id"
 
   acts_as_list
   

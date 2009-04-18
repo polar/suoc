@@ -1,0 +1,10 @@
+<%
+# This partial lists the years and name of a chair
+# It gets rendered by "_chairr_list.html.erb"
+# locals :
+#     chair  The ClubChair
+%>
+<tr>
+  <td><%= "#{chair.start_date.strftime("%Y")}-#{chair.end_date.strftime("%Y")}" %></td>
+  <td><%= chair.member.name %></td>
+</tr>

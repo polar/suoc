@@ -1,0 +1,11 @@
+<%
+# This partial lists the years and name of an leader
+# It gets rendered by "_leader_list.html.erb"
+# locals :
+#     leader  The ClubLeader
+%>
+<tr>
+  <td><%= "#{leader.start_date.strftime("%Y")}-#{leader.end_date.strftime("%Y")}" %></td>
+  <% puts leader.inspect %>
+  <td><%= leader.member.name %></td>
+</tr>

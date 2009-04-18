@@ -1,0 +1,11 @@
+<%
+# This partial lists the years and name of an officer
+# It gets rendered by "_officer_list.html.erb"
+# locals :
+#     officer  The ClubOfficer
+%>
+<tr>
+  <td><%= "#{officer.start_date.strftime("%Y")}-#{officer.end_date.strftime("%Y")}" %></td>
+  <% puts officer.inspect %>
+  <td><%= officer.member.name %></td>
+</tr>

@@ -1,0 +1,21 @@
+<%
+# This partial renders the editor button for adding
+# an leader
+%>
+<% form_for(leader,
+            :url => { :action => :add_club_leader },
+            :html => { :class => "MainForm" }) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :member_id %>
+  <%= f.label "I was/am a leader in %>
+  <%= f.collection_select :leadership_id,
+      ClubOLeadership.all, :id, :name, :prompt => true %>
+  <%= f.label "from" %>
+  <%= f.text_field :start_date,
+          :value => (leader.start_date.strftime("%m-%d-%Y") if leader.start_date) %>
+  <%= f.label "to" %>
+  <%= f.text_field :end_date,
+          :value => (leader.end_date.strftime("%m-%d-%Y") if leader.end_date) %>
+  <p>
+  <%= f.submit "Add Leader" %>
+<% end %>

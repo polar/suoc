@@ -3,6 +3,7 @@
 #
 class ClubLeadership < ActiveRecord::Base
   belongs_to :activity, :class_name => "ClubActivity"
+  has_many :leaders, :class_name => "ClubLeader", :foreign_key => :leadership_id
   
   acts_as_list 
 

@@ -1,0 +1,12 @@
+<%
+# This partial lists the years and name of the chairs
+# locals :
+#     chairs  Collection of ClubChair
+%>
+<table>
+<tr>
+  <th>Year</th>
+  <th>Name</th>
+</tr>
+<%= render :partial => "club_activities/chair", :collection => chairs %>
+</table>

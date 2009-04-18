@@ -56,23 +56,144 @@ end
 
 Comatose.define_drop "offices" do
 
-  def officers
+  def current_officers
     offices = ClubOffice.find(:all, :order => "position ASC")
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_offices/offices", :locals => { :offices => offices }
   end
 
-end
+  #
+  # This definition dynamically extends the class
+  # with functions for each of the offices, that 
+  # renders a table of the officers from the specific
+  # office. The function name is a downcased version of
+  # the office name, with any non letter characters changed
+  # to an underbar (_).
+  #
+  # offices.get_offices_for.vice_president
+  # offices.get_offices_for.e_room
+  #
+  # We must extend the class here (delayed) because as
+  # an initializer it wants ActionView and ApplicationController
+  # which are not yet loaded.
+  #
+  def get_officers_for
+    self
+  end
 
+  #
+  # This creates the office functions.
+  #
+  class_eval do
+    offices = ClubOffice.all
+    for office in offices do 
+      name = office.name.downcase.gsub(/[^a-z]+/i,'_').to_sym 
+      puts "$$$$OFFICE #{office.id} #{name}"
+      eval "def #{name}; render_officers(#{office.id});end"
+    end
+  end
+
+  def render_officers(id)
+    puts "RENDER OFFICE #{id}"
+    office = ClubOffice.find id
+    officers = office.officers.sort {|x,y| x.end_date <=> y.end_date}
+    view = ActionView::Base.new
+    view.view_paths = RAILS_ROOT+"/app/views"
+    view.render :partial => "club_offices/officer_list",
+                :locals => {:office => office, :officers => officers}
+  end
+end
 
 Comatose.define_drop "activities" do
 
-  def chairs
+  def current_chairs
     activities = ClubActivity.find(:all, :order => "position ASC")
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_activities/activities", :locals => { :activities => activities }
   end
 
+  #
+  # This definition dynamically extends the class
+  # with functions for each of the offices, that 
+  # renders a table of the officers from the specific
+  # office. The function name is a downcased version of
+  # the office name, with any non letter characters changed
+  # to an underbar (_).
+  #
+  # offices.get_offices_for.vice_president
+  # offices.get_offices_for.e_room
+  #
+  # We must extend the class here (delayed) because as
+  # an initializer it wants ActionView and ApplicationController
+  # which are not yet loaded.
+  #
+  def get_chairs_for
+    self
+  end
+
+  class_eval do
+    activities = ClubActivity.all
+    for activity in activities do 
+      name = activity.name.downcase.gsub(/[^a-z]+/i,'_').to_sym 
+      eval "def #{name}; render_chairs(#{activity.id}); end"
+    end
+  end
+
+  def render_chairs(id)
+    activity = ClubActivity.find id
+    chairs = activity.chairs.sort {|x,y| x.end_date <=> y.end_date}
+    view = ActionView::Base.new
+    view.view_paths = RAILS_ROOT+"/app/views"
+    view.render :partial => "club_activities/chair_list",
+                :locals => {:chairs => chairs}
+  end
 end
+
+Comatose.define_drop "leaderships" do
+
+  def current_leaders
+    leaderships = ClubLeadership.find(:all, :order => "position ASC")
+    view = ActionView::Base.new
+    view.view_paths = RAILS_ROOT+"/app/views"
+    view.render :partial => "club_leaderships/leaderships", :locals => { :leaderships => leaderships }
+  end
+
+  #
+  # This definition dynamically extends the class
+  # with functions for each of the offices, that 
+  # renders a table of the leaders from the specific
+  # leadership. The function name is a downcased version of
+  # the office name, with any non letter characters changed
+  # to an underbar (_).
+  #
+  # leaderships.get_leaders_for.flatwater
+  # leaderships.get_leaders_for.rock_climbing
+  #
+  # We must extend the class here (delayed) because as
+  # an initializer it wants ActionView and ApplicationController
+  # which are not yet loaded.
+  #
+  def get_leaders_for
+    self
+  end
+
+  class_eval do
+    leaderships = ClubLeadership.all
+    for leadership in leaderships do 
+      name = leadership.name.downcase.gsub(/[^a-z]+/i,'_').to_sym 
+      eval "def #{name}; render_leaders(#{leadership.id}); end"
+    end
+  end
+
+  def render_leaders(id)
+    leadership = ClubLeadership.find id
+    leaders = leadership.leaders.sort {|x,y| x.end_date <=> y.end_date}
+    view = ActionView::Base.new
+    view.view_paths = RAILS_ROOT+"/app/views"
+    view.render :partial => "club_leaderships/leader_list",
+                :locals => {:leaders => leaders}
+  end
+end
+

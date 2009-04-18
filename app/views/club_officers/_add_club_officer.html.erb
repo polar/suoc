@@ -1,0 +1,37 @@
+<%
+# This partial renders the editor for the basic information
+# Locals:
+#   officer The ClubOfficer
+%>
+<input type="button" class="button-to" value="Make Me an Officer" onclick="$('OfficerInfo').show(); return false;" >
+<div class="errors"></div>
+<div id="OfficerInfo" style="display: none;" >
+<div class="errors"></div>
+<% form_remote_for(officer,
+            :update => "OfficerInfo",
+            :url => { :action => :add_club_officer }
+                      ) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :member_id %>
+  <table>
+  <tr>
+    <th>Add Officer</th>
+    <td>I was/am an Officer
+        <%= f.collection_select :office_id,
+              ClubOffice.all, :id, :name, :prompt => true %>
+        from
+        <%= f.text_field :start_date %>
+        to
+        <%= f.text_field :end_date %>
+    </td>
+  </tr>
+  <tr>
+    <th></th>
+    <td>
+      <%= f.submit "Add Officer" %>
+<input type="button" value="Cancel Officer" onclick="$('OfficerInfo').hide();">
+    </td>
+  </tr>
+  </table>
+<% end %>
+</div>
