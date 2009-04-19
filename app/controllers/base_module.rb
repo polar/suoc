@@ -138,6 +138,14 @@ module BaseModule
     @popular_polls = Poll.find_popular(:limit => 8)
   end
 
+  #
+  # This function gets called if the declarative authorization
+  # filter functions deny access.
+  #
+  def permission_denied
+    render :template => "shared/permission_denied",
+           :status => :forbidden
+  end
 
   def commentable_url(comment)
     if comment.recipient && comment.commentable

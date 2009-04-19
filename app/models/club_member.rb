@@ -1,4 +1,5 @@
 class ClubMember < User
+
       ##
       ## TODO: Get rid of this hack
       ##

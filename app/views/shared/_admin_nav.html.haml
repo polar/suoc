@@ -2,15 +2,19 @@
   %h3=:admin.l
 
   %ul.list.checks
-    %li= link_to :Pages.l, comatose_admin_path
-    - if feature_enabled?('categories')
+    - if permitted_to? :manage, :comatose_admin
+      %li= link_to :Pages.l, comatose_admin_path
+    - if feature_enabled?('categories') && current_user.admin?
       %li= link_to :categories.l, categories_path
-    - if feature_enabled?('contests')
+    - if feature_enabled?('contests') && current_user.admin?
       %li= link_to :contests.l, contests_path
-    %li= link_to :metro_areas.l, metro_areas_path
-    - if feature_enabled?('skills')
-      %li= link_to :skills.l, new_skill_path 
-    - if feature_enabled?('events')
+    - if  current_user.admin?
+      %li= link_to :metro_areas.l, metro_areas_path
+    - if feature_enabled?('skills') && current_user.admin?
+      %li= link_to :skills.l, new_skill_path
+    - if feature_enabled?('events') && current_user.admin?
       %li= link_to :events.l, events_path
-    %li= link_to :statistics.l, statistics_path
-    %li= link_to :ads.l, ads_path 
+    - if  current_user.admin?
+      %li= link_to :statistics.l, statistics_path
+    - if  current_user.admin?
+      %li= link_to :ads.l, ads_path

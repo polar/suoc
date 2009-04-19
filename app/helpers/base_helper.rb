@@ -14,4 +14,11 @@ module BaseHelper
   def club_member_favorite_url(a,b,args={}); user_favorite_url(a,b,args);end
   def club_member_comment_url(a,b,args={}); user_comment_url(a,b,args);end
 
+  #
+  # This function gets called if the filter functions deny access.
+  #
+  def permission_denied
+    render :inline => "<h3>Permission Denied</h3><p>You are not allowed to access this section.",
+           :status => :forbidden
+  end
 end

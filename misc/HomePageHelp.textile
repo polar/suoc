@@ -1,0 +1,66 @@
+h3. Homepage Organization
+
+The SUOC home pages are organized in a tree fashion with the left side
+being a navigation column containing links, with optional photo, to the
+current page's child pages. The "Home" link will always be at the top of the
+navigation bar. If the current page does not have any child pages, the
+top level page navigation will show on the left side.
+
+h3. Homepage Editing
+
+If you have privileges to allow modification of the home pages, you will be
+able to create pages, and organize them in a tree fashion, and add a tag
+photo to the page to identify it in the left side navigation. You will
+see a link under SUOC Office that will bring you to editing page. There,
+you may select any page, or create one and it will bring you to the
+editing window for that page.
+
+h3. Formatting
+
+We use "Textile" to format the home pages. If you've ever edited a Wiki
+before, like Wikipedia, you get and idea of how that works. Texttile supports
+a simple form as well as complex HTML. Here is a
+useful link. http://hobix.com/textile
+
+This reference will show you how to embed photos, etc. in to SUOC's
+home pages.
+
+h3. Editing
+
+When you are editing pages, you may upload an associate a photo with the
+page. This photo will show up in the sidebar navigation over a link of
+the homepage name. PLEASE KEEP THE PAGE NAMES SHORT.
+
+EVEN IF YOU UPLOAD A PHOTO, it will not take effect until you hit the "Save Changes"
+button.
+
+You may Preview the contents before you hit the "Save Changes" or "Create Page"
+button. Previewing is probably a good idea.
+
+h3. Caching Problems
+
+This system prebuilds the pages and caches them. However, if some of the data
+is supplied by internal variables from our database (if you look at the Officers
+page, for example), you may end up with a caching problem, that the page doen't
+appear to be updating over several clicks. To solve this problem open up the "More.."
+link in the editing page, and put "no-cache" in the Keywords field. This option will
+cause the page to be recreated each time it is loaded.
+
+h3. Conventions
+
+H3 is the coolest and fits the rest of the look in feel. If
+you need headers, use H3. H2 has some formating, it has a larger font than
+H3, bold, and no underline. H1 doesn't do anything.
+
+The following is a view of "h3. Example H3 header"
+
+h3. Example H3 header
+
+The following is a view of "h2. Example H2 header"
+
+h2. Example H2 Header
+
+The following is a view of "h1. Example H1 header"
+
+h1. Example H1 Header
+

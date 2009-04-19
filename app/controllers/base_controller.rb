@@ -16,4 +16,13 @@ class BaseController < ApplicationController
   def club_member_favorite_(a,b,args={}); user_favorite_(a,b,args);end
   def club_member_comment_(a,b,args={}); user_comment_(a,b,args);end
 
+  #
+  # This function gets called if the declarative authorization
+  # filter functions deny access.
+  #
+  def permission_denied
+    render :template => "shared/permission_denied",
+           :status => :forbidden
+  end
+
 end

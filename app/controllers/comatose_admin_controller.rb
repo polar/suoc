@@ -9,7 +9,7 @@ class ComatoseAdminController < ApplicationController
   # BaseModule that contains the pertinent methods of the CommunityEngine.
   include AuthenticatedSystem
   include BaseModule
-  helper BaseHelper
+  helper "base"
 
   #
   # In the base system we include authenticated system. We just require
@@ -22,4 +22,13 @@ class ComatoseAdminController < ApplicationController
                     :generate_page_cache,
                     :export,
                     :import], :require => :update
+
+  #
+  # This function gets called if the filter functions deny access.
+  #
+  def permission_denied
+    render :partial => "shared/permission_denied",
+           :layout => "comatose_admin",
+           :status => :forbidden
+  end
 end

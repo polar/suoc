@@ -45,4 +45,21 @@
   This section contains the old directory of documents, most notably
   the SUOC Constitution. This section is pretty crude, but will update
   it soon.
+  <h4><%= link_to "Home Pages", comatose_admin_path %></h4>
+  <p>
+  This section allows you to edit, add, manage the SUOC home pages using
+  wiki format, if you have privileges to do this.
+  <h4>
+    <%= link_to "My Officerships",
+         url_for( :controller => :club_officers, :action => "my_index", :id => "me") %>
+    |
+    <%= link_to "My Activity Chairships",
+         url_for( :controller => :club_chairs, :action => "my_index", :id => "me") %>
+    |
+    <%= link_to "My Leaderships",
+         url_for( :controller => :club_leaders, :action => "my_index", :id => "me") %>
+  </h4>
+  <p>
+  These sections allow you to add records concering your historical and current appointments
+  within the club. The are subject to removal by administrators should they not be true.
 </div>
