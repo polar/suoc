@@ -65,7 +65,7 @@ Comatose.define_drop "offices" do
 
   #
   # This definition dynamically extends the class
-  # with functions for each of the offices, that 
+  # with functions for each of the offices, that
   # renders a table of the officers from the specific
   # office. The function name is a downcased version of
   # the office name, with any non letter characters changed
@@ -73,10 +73,6 @@ Comatose.define_drop "offices" do
   #
   # offices.get_offices_for.vice_president
   # offices.get_offices_for.e_room
-  #
-  # We must extend the class here (delayed) because as
-  # an initializer it wants ActionView and ApplicationController
-  # which are not yet loaded.
   #
   def get_officers_for
     self
@@ -87,15 +83,13 @@ Comatose.define_drop "offices" do
   #
   class_eval do
     offices = ClubOffice.all
-    for office in offices do 
-      name = office.name.downcase.gsub(/[^a-z]+/i,'_').to_sym 
-      puts "$$$$OFFICE #{office.id} #{name}"
+    for office in offices do
+      name = office.name.downcase.gsub(/[^a-z]+/i,'_').to_sym
       eval "def #{name}; render_officers(#{office.id});end"
     end
   end
 
   def render_officers(id)
-    puts "RENDER OFFICE #{id}"
     office = ClubOffice.find id
     officers = office.officers.sort {|x,y| x.end_date <=> y.end_date}
     view = ActionView::Base.new
@@ -116,18 +110,14 @@ Comatose.define_drop "activities" do
 
   #
   # This definition dynamically extends the class
-  # with functions for each of the offices, that 
-  # renders a table of the officers from the specific
-  # office. The function name is a downcased version of
-  # the office name, with any non letter characters changed
+  # with functions for each of the chairs, that
+  # renders a table of the chairs from the specific
+  # activity. The function name is a downcased version of
+  # the activity name, with any non letter characters changed
   # to an underbar (_).
   #
-  # offices.get_offices_for.vice_president
-  # offices.get_offices_for.e_room
-  #
-  # We must extend the class here (delayed) because as
-  # an initializer it wants ActionView and ApplicationController
-  # which are not yet loaded.
+  # activities.get_leaders_for.vice_president
+  # activities.get_leaders_for.e_room
   #
   def get_chairs_for
     self
@@ -135,8 +125,8 @@ Comatose.define_drop "activities" do
 
   class_eval do
     activities = ClubActivity.all
-    for activity in activities do 
-      name = activity.name.downcase.gsub(/[^a-z]+/i,'_').to_sym 
+    for activity in activities do
+      name = activity.name.downcase.gsub(/[^a-z]+/i,'_').to_sym
       eval "def #{name}; render_chairs(#{activity.id}); end"
     end
   end
@@ -162,7 +152,7 @@ Comatose.define_drop "leaderships" do
 
   #
   # This definition dynamically extends the class
-  # with functions for each of the offices, that 
+  # with functions for each of the leaderships, that
   # renders a table of the leaders from the specific
   # leadership. The function name is a downcased version of
   # the office name, with any non letter characters changed
@@ -171,18 +161,14 @@ Comatose.define_drop "leaderships" do
   # leaderships.get_leaders_for.flatwater
   # leaderships.get_leaders_for.rock_climbing
   #
-  # We must extend the class here (delayed) because as
-  # an initializer it wants ActionView and ApplicationController
-  # which are not yet loaded.
-  #
   def get_leaders_for
     self
   end
 
   class_eval do
     leaderships = ClubLeadership.all
-    for leadership in leaderships do 
-      name = leadership.name.downcase.gsub(/[^a-z]+/i,'_').to_sym 
+    for leadership in leaderships do
+      name = leadership.name.downcase.gsub(/[^a-z]+/i,'_').to_sym
       eval "def #{name}; render_leaders(#{leadership.id}); end"
     end
   end
