@@ -43,9 +43,9 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
     t.text     "description",    :default => ""
     t.integer  "account_id"
     t.integer  "category_id"
+    t.integer  "action_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "action_type_id"
   end
 
   create_table "acct_categories", :force => true do |t|
@@ -146,10 +146,10 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
   create_table "club_activities", :force => true do |t|
     t.string   "name"
     t.text     "description", :default => ""
+    t.text     "tagline",     :default => ""
+    t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "tagline"
-    t.integer  "position"
   end
 
   create_table "club_affiliations", :force => true do |t|
@@ -177,12 +177,11 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
 
   create_table "club_chairs", :force => true do |t|
     t.integer  "member_id"
-    t.integer  "chairmanship_id"
+    t.integer  "activity_id"
     t.date     "start_date"
     t.date     "end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "activity_id"
   end
 
   create_table "club_leaders", :force => true do |t|
@@ -197,11 +196,11 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
   create_table "club_leaderships", :force => true do |t|
     t.string   "name"
     t.text     "description", :default => ""
+    t.text     "tagline",     :default => ""
+    t.integer  "position"
     t.integer  "activity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "tagline"
-    t.integer  "position"
   end
 
   create_table "club_member_statuses", :force => true do |t|
@@ -244,10 +243,10 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
   create_table "club_offices", :force => true do |t|
     t.string   "name"
     t.text     "description", :default => ""
+    t.text     "tagline",     :default => ""
+    t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "position"
-    t.text     "tagline"
   end
 
   create_table "club_roles", :force => true do |t|
@@ -404,7 +403,7 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
   create_table "invitations", :force => true do |t|
     t.string   "email_addresses"
     t.string   "message"
-    t.string   "user_id"
+    t.integer  "user_id"
     t.datetime "created_at"
   end
 
@@ -628,7 +627,7 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
   add_index "users", ["vendor"], :name => "index_users_on_vendor"
 
   create_table "votes", :force => true do |t|
-    t.string   "user_id"
+    t.integer  "user_id"
     t.integer  "poll_id"
     t.integer  "choice_id"
     t.datetime "created_at"
