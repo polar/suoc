@@ -1,6 +1,6 @@
 class EroomLedgersController < BaseController
   layout "club_operations"
-  
+
   helper :application
 
   before_filter :login_required
@@ -13,7 +13,7 @@ class EroomLedgersController < BaseController
   # This is the entry limit at which the auto_complete_for_club_member_login
   # will return.
   AC_CLUB_MEMBER_NAME_LIMIT = 15
- 
+
   #
   TARGET_ACCOUNT_NAME = "E-Room"
   DEPOSIT_ACCOUNT_NAME = "E-Room Deposits"
@@ -32,7 +32,7 @@ class EroomLedgersController < BaseController
 # We need to skip this for the auto complete to work.
   skip_before_filter :verify_authenticity_token,
                            :auto_complete_for_club_member_login
-  
+
   #
   # Responder for view function
   #      text_file_auto_complete(:club_member, :login)
@@ -67,18 +67,18 @@ class EroomLedgersController < BaseController
   TRANSACTIONS_PER_PAGE = 5
 
   def show
-    
-    targacct = AcctAccount.find(:first, :conditions => { 
+
+    targacct = AcctAccount.find(:first, :conditions => {
                                           :name => TARGET_ACCOUNT_NAME});
-    depacct  = AcctAccount.find(:first, :conditions => { 
+    depacct  = AcctAccount.find(:first, :conditions => {
                                           :name => DEPOSIT_ACCOUNT_NAME});
-    teacct   = AcctAccount.find(:first, :conditions => { 
+    teacct   = AcctAccount.find(:first, :conditions => {
                                           :name => TREASEROOM_ACCOUNT_NAME});
-    
+
     raise "Cannot find the E-Room Account" if !targacct
-    
+
     @transactions = get_transactions_list(targacct, params[:page])
-                       
+
     @actions     = targacct.actions
     eroom_bal = targacct.balance
     deposit_bal = depacct.balance
@@ -90,13 +90,13 @@ class EroomLedgersController < BaseController
     if te_bal != 0
       @balances[3] = ["Treas E-Room", te_bal]
     end
-    @transaction = AcctTransaction.new(:date => Date.today, 
+    @transaction = AcctTransaction.new(:date => Date.today,
                                        :target_account => targacct)
   end
-  
+
   def delete_transaction
     t = AcctTransaction.find(params[:id])
-    if t.recorded_by == current_user
+    if t.recorded_by == current_user || current_user.admin?
       t.destroy
       redirect_to :action => :show
     else
@@ -120,17 +120,17 @@ class EroomLedgersController < BaseController
   #         }
   #
   def update_transaction
-  
+
     # This boolean an error indicator
     error = false
-    
+
     #
     # This is the account from which all transactions are recorded.
     #
     targacct = AcctAccount.find(:first, :conditions => { :name => "E-Room"});
-    
+
     @transaction = AcctTransaction.new(params[:acct_transaction])
-    
+
     # We always are transfering from the E-Room Account
     @transaction.target_account = targacct  # just in case
     @transaction.recorded_by = @current_user
@@ -166,7 +166,7 @@ class EroomLedgersController < BaseController
         end
       end
     end
-    
+
     # If we entered a positive number, but the action is a debit,
     # change the transaction ammount to negative.
     if !error && @transaction.amount > 0
@@ -174,12 +174,12 @@ class EroomLedgersController < BaseController
 	@transaction.amount *= -1
       end
     end
-    
-    # If the transaction is valid, then make the AcctEntries 
+
+    # If the transaction is valid, then make the AcctEntries
     if !error && @transaction.valid?
       @transaction.make_entries
     end
-    
+
     if !error && @transaction.save
       if !@membership
           # we are done
@@ -206,26 +206,26 @@ class EroomLedgersController < BaseController
     end
     ## Fail Fall Through
     # Set up for show rendering.
-      depacct  = AcctAccount.find(:first, :conditions => { 
+      depacct  = AcctAccount.find(:first, :conditions => {
                                              :name => DEPOSIT_ACCOUNT_NAME});
       @eroom_balance     = targacct.balance
       @deposit_balance   = depacct.balance
       @balance           = @eroom_balance + @deposit_balance
       @transactions = get_transactions_list(targacct, params[:page])
-      
+
       @actions      = targacct.actions
       # bring back amount back to a positive value.
       if @transaction.amount < 0
 	@transaction.amount *= -1
-      end 
+      end
       render :action => :show
   end
-  
+
   def update_description_form
     if params[:acct_action_id] && !params[:acct_action_id].empty?
       if AcctAction.find(params[:acct_action_id]).name == "Membership Collection"
         render :update do |page|
-          page.replace_html "transaction_entry_body", 
+          page.replace_html "transaction_entry_body",
               :partial => "shared/membership_form",
               :locals => {
                    :membership => ClubMembership.new }
@@ -245,17 +245,17 @@ class EroomLedgersController < BaseController
         end
     end
   end
-  
+
   private
-  
+
   #
   # This function returns a page of transactions for the Eroom.
   #
   def get_transactions_list(targacct, page)
       AcctTransaction.paginate(
-              :page => page, 
+              :page => page,
               :per_page => TRANSACTIONS_PER_PAGE,
-              :conditions => {:target_account_id => targacct }, 
+              :conditions => {:target_account_id => targacct },
               :order => "date DESC, id DESC")
   end
 end

@@ -91,7 +91,7 @@ Comatose.define_drop "offices" do
 
   def render_officers(id)
     office = ClubOffice.find id
-    officers = office.officers.sort {|x,y| x.end_date <=> y.end_date}
+    officers = office.officers.sort {|x,y| y.end_date <=> x.end_date}
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_offices/officer_list",
@@ -175,7 +175,7 @@ Comatose.define_drop "leaderships" do
 
   def render_leaders(id)
     leadership = ClubLeadership.find id
-    leaders = leadership.leaders.sort {|x,y| x.end_date <=> y.end_date}
+    leaders = leadership.leaders.sort {|x,y| y.end_date <=> x.end_date}
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_leaderships/leader_list",

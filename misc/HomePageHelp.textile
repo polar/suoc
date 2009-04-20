@@ -43,7 +43,7 @@ This system prebuilds the pages and caches them. However, if some of the data
 is supplied by internal variables from our database (if you look at the Officers
 page, for example), you may end up with a caching problem, that the page doen't
 appear to be updating over several clicks. To solve this problem open up the "More.."
-link in the editing page, and put "no-cache" in the Keywords field. This option will
+link in the editing page, and put "nocache" in the Keywords field. This option will
 cause the page to be recreated each time it is loaded.
 
 h3. Conventions
