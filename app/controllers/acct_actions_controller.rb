@@ -1,6 +1,8 @@
 class AcctActionsController < BaseController
   layout "club_operations"
 
+  filter_access_to :all
+
   include Viewable
   uses_tiny_mce(:options => AppConfig.default_mce_options.merge({:editor_selector => "rich_text_editor"}),
     :only => [:new, :create, :update, :edit])
