@@ -1,4 +1,5 @@
 class AcctActionsController < BaseController
+  layout "club_operations"
 
   def index
     @acct_actions = AcctAction.find(:all)
@@ -10,10 +11,18 @@ class AcctActionsController < BaseController
 
   def new
     @acct_action = AcctAction.new
+    @accounts = AcctAccount.find(:all, :order => "name ASC" )
+    @categories = AcctCategory.find(:all, :order => "name ASC" )
+    @types = AcctActionType.find(:all, :order => "name ASC" )
+    @submit = "Create"
   end
 
   def edit
     @acct_action = AcctAction.find(params[:id])
+    @accounts = AcctAccount.find(:all, :order => "name ASC" )
+    @categories = AcctCategory.find(:all, :order => "name ASC" )
+    @types = AcctActionType.find(:all, :order => "name ASC" )
+    @submit = "Update"
   end
 
   def create

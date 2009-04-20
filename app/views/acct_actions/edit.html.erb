@@ -1,12 +1,5 @@
-<h1>Editing acct_action</h1>
+<h3>Editing Account Action</h3>
 
-<% form_for(@acct_action) do |f| %>
-  <%= f.error_messages %>
+<%= render :partial => "form" %>
 
-  <p>
-    <%= f.submit "Update" %>
-  </p>
-<% end %>
-
-<%= link_to 'Show', @acct_action %> |
-<%= link_to 'Back', acct_actions_path %>
+<%= link_to 'Actions', acct_actions_path %>
