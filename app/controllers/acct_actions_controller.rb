@@ -1,6 +1,10 @@
 class AcctActionsController < BaseController
   layout "club_operations"
 
+  include Viewable
+  uses_tiny_mce(:options => AppConfig.default_mce_options.merge({:editor_selector => "rich_text_editor"}),
+    :only => [:new, :create, :update, :edit])
+
   def index
     @acct_actions = AcctAction.find(:all)
   end
@@ -47,8 +51,15 @@ class AcctActionsController < BaseController
 
   def destroy
     @acct_action = AcctAction.find(params[:id])
-    @acct_action.destroy
-
-    redirect_to(acct_actions_url)
+    if !AcctTransaction.all(:conditions => { :acct_action_id => @acct_action }).empty?
+      @acct_action.errors.add_to_base "Action #{@acct_action.name} has associated Transactions."
+      error = true;
+    end
+    if !error && @acct_action.destroy
+      flash[:notice] = "Action #{@acct_action.name} has been deleted."
+      redirect_to acct_actions_path
+    else
+      flash[:error] = "Action #{@acct_action.name} cannot be deleted."
+    end
   end
 end

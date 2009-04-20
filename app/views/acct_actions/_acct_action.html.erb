@@ -1,0 +1,10 @@
+<%
+ # This partial renders a row in the table for an AcctAction
+%>
+<tr>
+ <td><%= link_to acct_action.name, acct_action_path(acct_action) %></td>
+ <td><%= link_to acct_action.account.name, acct_account_path(acct_action.account) %></td>
+ <td><%= acct_action.category.name %></td>
+ <td><%= acct_action.type.name %></td>
+ <td><%= acct_action.description %></td>
+</tr>

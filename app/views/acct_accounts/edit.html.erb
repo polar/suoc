@@ -1,23 +1,2 @@
-<%
-#
-# Edit View
-#
-%>
-
-<div class="box">
-  <h3>Edit Account</h3>
-  <div class="errors"></div>
-  <% form_for(@account, 
-        :html => { :class => "MainForm" }) do |f| %>
-    <%= f.error_messages %>
-    <%= f.label "Account Name" %>
-    <%= f.text_field "name" %>
-    <%= f.label "Description" %>
-    <%= f.text_area "description", 
-         {:size => "86x5", :class => "rich_text_editor"} %>
-    <p>
-      <%= f.submit "Update" %>
-    </p>
-  <% end %>
-  
-</div>
+<h3>Edit Account</h3>
+<%= render :partial => "form" %>

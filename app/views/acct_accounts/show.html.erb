@@ -1,12 +1,25 @@
-<div class="box">
+
 <h3>Account <%= @account.name %></h3>
 <p>
 <%= @account.description %>
-<h1>Balance: <%= @account.balance %></h1>
+<h2>Actions</h2>
+<% if @account.actions.empty? %>
+  There are no actions associated with this account.
+<% else %>
+  <% for a in @account.actions %>
+    <%= link_to a.name, acct_action_path(a) %>
+    <%= "| " unless a == @account.actions.last %>
+  <% end %>
+<% end %>
 <p>
-<%= will_paginate @entries, 
+<h2>Register</h2>
+<p>
+Balance: <%= @account.balance %>
+<p>
+<%= will_paginate @entries,
     :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
     :params => { :action => :index } %>
+<p>
 <table>
   <tr>
     <th>Date</th>
@@ -32,8 +45,14 @@
   </tr>
   <% end %>
 </table>
-<%= will_paginate @entries, 
+<p>
+<%= will_paginate @entries,
     :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
     :params => { :action => :index } %>
-</div>
+<p>
 <%= link_to "Edit", edit_acct_account_path(@account) %>
+|
+<%= link_to "Accounts", acct_accounts_path %>
+<p>
+<%= button_to "Delete This Account", acct_account_path(@account),
+              :method => :delete, :confirm => "Are you sure?" %>

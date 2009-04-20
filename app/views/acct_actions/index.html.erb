@@ -1,20 +1,15 @@
-<div class="box">
-  <h2>Account Actions</h1>
+<h3>Account Actions</h3>
 
-  <table>
-    <tr>
-      <th>Name</th>
-      <th>Target Account</th>
-      <th>Category</th>
-      <th>Type</th>
-      <th>Description</th>
-    </tr>
-
-    <% for acct_action in @acct_actions %>
-        <%= render_action acct_action %>
-    <% end %>
-  </table>
-</div>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Target Account</th>
+    <th>Category</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <%= render :partial => "acct_action", :collection => @acct_actions %>
+</table>
 
 <p>
 <%= link_to "New Account Action", new_acct_action_path %>

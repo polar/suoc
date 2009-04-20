@@ -33,6 +33,11 @@ authorization do
     has_permission_on :users, :to => :write_id
     has_permission_on :users, :to => :write
     has_permission_on :club_trips, :to => :create
+    has_permission_on :acct_accounts, :to => :manage
+    has_permission_on :acct_actions, :to => :manage
+    has_permission_on :acct_categories, :to => :manage
+    has_permission_on :acct_action_types, :to => :manage
+    has_permission_on :acct_account_types, :to => :manage
   end
 
   #

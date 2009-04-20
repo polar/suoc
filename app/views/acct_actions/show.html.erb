@@ -21,7 +21,11 @@
       <td><%= @acct_action.action_type.name %></td>
     </tr>
   </table>
-
+<p>
+<p>
 <%= link_to 'Edit', edit_acct_action_path(@acct_action) %>
 |
 <%= link_to 'Actions', acct_actions_path %>
+<p>
+<%= button_to "Delete This Action", acct_action_path(@acct_action),
+              :method => :delete, :confirm => "Are you sure?" %>

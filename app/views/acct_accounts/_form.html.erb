@@ -1,0 +1,45 @@
+  <% form_for(@account,
+        :html => { :class => "MainForm" }) do |f| %>
+    <%= f.error_messages %>
+    <%= f.label "Account Name" %>
+    <%= f.text_field "name" %>
+    <%= f.label "Account Type" %>
+    <%= f.collection_select :account_type_id, @types, :id, :name %>
+    <%= f.label "Description" %>
+    <%= f.text_area "description",
+         {:size => "86x5", :class => "rich_text_editor"} %>
+    <p>
+    <table class="acct_actions">
+      <tr>
+        <th colspan="2">Actions</th>
+        <th>Target Account</th>
+        <th>Category</th>
+        <th>Type</th>
+        <th>Description</th>
+      <tr>
+    <% for a in @actions do %>
+      <tr>
+        <td>
+          <%= check_box_tag "acct_account[action_ids][#{a.id}]", a.id, @account.actions.include?(a) %>
+        </td><td>
+          <%= label_tag "acct_account[action_ids][#{a.id}]", a.name %>
+        </td>
+        <td>
+          <%= a.account.name %>
+        </td>
+        <td>
+          <%= a.category.name %>
+        </td>
+        <td>
+          <%= a.action_type.name %>
+        </td>
+        <td>
+          <%= a.description %>
+        </td>
+     </tf>
+    <% end %>
+    </table>
+    <p>
+      <%= f.submit @submit %>
+    </p>
+  <% end %>

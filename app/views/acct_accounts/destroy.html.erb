@@ -1,0 +1,10 @@
+<%
+ # This form is merely to display destroy errors.
+%>
+<% form_for(@account,
+      :html => { :class => "MainForm" }) do |f| %>
+  <%= f.error_messages %>
+<% end %>
+
+<p>
+<%= link_to "Accounts", acct_accounts_path %>

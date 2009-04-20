@@ -1,0 +1,13 @@
+<h3>Account Categories</h3>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+  </tr>
+  <%= render :partial => "category", :collection => @categories %>
+</table>
+<p>
+<p>
+<%= link_to "New Category", new_acct_category_path %>
+<p>

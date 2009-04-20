@@ -1,0 +1,20 @@
+<h3>Account Category</h3>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <td><%= @category.name %></td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><%= @category.description %></td>
+    </tr>
+  </table>
+<p>
+<p>
+<%= link_to 'Edit', edit_acct_category_path(@category) %>
+|
+<%= link_to 'Categories', acct_categories_path %>
+<p>
+<%= button_to "Delete This Category", acct_category_path(@category),
+              :method => :delete, :confirm => "Are you sure?" %>

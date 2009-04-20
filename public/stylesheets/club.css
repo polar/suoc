@@ -485,3 +485,12 @@ em {
 strong {
   font-weight: bold;
 }
+
+
+/*
+ * Actions Table
+ */
+
+.acct_actions tr th {
+  font-weight: bold;
+}

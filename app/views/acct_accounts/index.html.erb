@@ -4,32 +4,41 @@
 #
 %>
 
-<div class="box">
-  <h3>Chart of Accounts</h3>
-  
-  <%= will_paginate @accounts,
-      :params => { :action => :index } %></td>
-  
-  <table>
-    <tr>
-      <th>Account</th>
-      <th>Type</th>
-      <th>Balance<ht>
-    </tr>
-  
-  <% for account in @accounts %>
-    <tr>
-      <td><%= link_to account.name, :action => :show, :id => account %></td>
-      <td><%= account.account_type.name %></td>
-      <td class="decimal"><%= sprintf("%0.2f",account.balance) %></td>
-    </tr>
-  <% end %>
-  </table>
-  
-  <%= will_paginate @accounts, 
-      :params => { :action => :index } %>
-  
-  <br />
-  
-  <%= link_to 'New acct_account', new_acct_account_path %>
-</div>
+<h3>Chart of Accounts</h3>
+
+<%= will_paginate @accounts,
+    :params => { :action => :index } %></td>
+
+<table>
+  <tr>
+    <th>Account</th>
+    <th>Type</th>
+    <th>Balance<ht>
+  </tr>
+
+<% for account in @accounts %>
+  <tr>
+    <td><%= link_to account.name, :action => :show, :id => account %></td>
+    <td><%= account.account_type.name %></td>
+    <td class="decimal"><%= sprintf("%0.2f",account.balance) %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= will_paginate @accounts,
+    :params => { :action => :index } %>
+
+<br />
+
+<p>
+<%= link_to "Account Types", acct_account_types_path %>
+|
+<%= link_to "Account Categories", acct_categories_path %>
+|
+<%= link_to "Account Actions", acct_actions_path %>
+|
+<%= link_to "Action Types", acct_action_types_path %>
+<p>
+<% if permitted_to? :create, :acct_accounts %>
+  <%= link_to 'New Account', new_acct_account_path %>
+<% end %>
