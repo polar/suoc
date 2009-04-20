@@ -19,7 +19,11 @@
     <td colspan="4">
         <%= will_paginate transactions,
         :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
-        :params => { :action => :index } %></td>
+        # We must sigularize the name of the controller, because the
+        # EroomLegdger and TreasureLedger is a "resource", but Rails
+        # still insists on using the plural name for the default controller.
+        # There doesn't seem to be a way around this.
+        :params => { :controller => controller.controller_name.singularize, :action => :index } %></td>
     </td>
   </tr>
   <tr class="header">
@@ -29,6 +33,15 @@
     <th>Amount</th>
     <th>Rcrd'By</th>
     <th/>
+  </tr>
+  <tr class=<%= (odd = !odd) ? "odd" : "even" %>>
+    <td class="date"></td>
+    <td class="action"></td>
+    <td class="description">Off Page Balance</td>
+    <td class="decimal"><%= sprintf("%10.2f", @offpage_balance) %></td>
+    <td class="full_name"></td>
+    <td class="form">
+    </td>
   </tr>
   <% for t in transactions.reverse %>
   <tr class=<%= (odd = !odd) ? "odd" : "even" %>>

@@ -83,6 +83,13 @@ class EroomLedgersController < BaseController
     eroom_bal = targacct.balance
     deposit_bal = depacct.balance
     te_bal      = teacct.balance
+
+    # This would be easy if we had reduce
+    # @offpage_balance = @transactions.reduce eroom_bal {|v,t| v-t}
+    @offpage_balance = eroom_bal
+    for t in @transactions do
+      @offpage_balance -= t.amount
+    end
     @balances   = []
     @balances[0] = ["Total", eroom_bal]
     @balances[1] = ["In Deposits", deposit_bal]
