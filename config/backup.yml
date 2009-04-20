@@ -27,7 +27,8 @@
 ##    - public/photos
 ##    - public/uploaded_files
 
-archivedir: db/archives
+# Make sure this directory exists or is able to be created.
+archivedir: /var/backups/suoc/website
 backupdir: db/backup
 sqldumpfile: db.sql
 
