@@ -42,7 +42,7 @@ class AcctTransaction < ActiveRecord::Base
   def make_entries
     entry1 = AcctEntry.new(
                   :acct_transaction => self,
-                  :date => date, 
+                  :date => date,
                   :account => target_account,
                   :category => acct_action.category,
                   :recorded_by => recorded_by
@@ -50,36 +50,40 @@ class AcctTransaction < ActiveRecord::Base
 
     entry2 = AcctEntry.new(
                   :acct_transaction => self,
-                  :date => date, 
+                  :date => date,
                   :account => acct_action.account,
                   :category => acct_action.category,
                   :recorded_by => recorded_by
                   )
     if amount < 0
-      if (entry1.account.account_type == AcctAccountType[:Income] ||
-        entry1.account.account_type == AcctAccountType[:Asset])
+      if (entry1.account.account_type == AcctAccountType[:Asset] ||
+          entry1.account.account_type == AcctAccountType[:Liability])
+
         entry1.debit  = abs(amount)
+
+        if (entry2.account.account_type == AcctAccountType[:Income] ||
+            entry2.account.account_type == AcctAccountType[:Expense])
+          entry2.debit = abs(amount)
+        else # Asset or Liability
+          entry2.credit = abs(amount)
+        end
       else
+        raise "Cannot target a Transaction on an Income or Liability Account."
+      end
+    else # amount >= 0
+      if (entry1.account.account_type == AcctAccountType[:Asset] ||
+          entry1.account.account_type == AcctAccountType[:Liability])
+
         entry1.credit = abs(amount)
-      end
-      if (entry2.account.account_type == AcctAccountType[:Income] ||
-        entry2.account.account_type == AcctAccountType[:Asset])
-        entry2.credit  = abs(amount)
+
+        if (entry2.account.account_type == AcctAccountType[:Income] ||
+            entry2.account.account_type == AcctAccountType[:Expense])
+          entry2.credit = abs(amount)
+        else # Asset or Liability
+          entry2.debit = abs(amount)
+        end
       else
-        entry2.debit = abs(amount)
-      end
-    else
-      if (entry1.account.account_type == AcctAccountType[:Income] ||
-        entry1.account.account_type == AcctAccountType[:Asset])
-        entry1.credit = abs(amount)
-      else
-        entry1.debit  = abs(amount)
-      end
-      if (entry2.account.account_type == AcctAccountType[:Income] ||
-        entry2.account.account_type == AcctAccountType[:Asset])
-        entry2.debit = abs(amount)
-      else
-        entry2.credit  = abs(amount)
+        raise "Cannot target a Transaction on an Income or Liability Account."
       end
     end
     entries.clear

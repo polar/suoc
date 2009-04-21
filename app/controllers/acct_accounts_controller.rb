@@ -45,7 +45,9 @@ class AcctAccountsController < BaseController
     #  "acct_account" => { "action_ids" => { "1" => "1", "4" => "4" }}
     # So, we do a little transformation on them, just to get the keys, which
     # are the ids that were clicked.
-    params[:acct_account][:action_ids] = params[:acct_account][:action_ids].keys
+    if params[:acct_account][:action_ids]
+      params[:acct_account][:action_ids] = params[:acct_account][:action_ids].keys
+    end
 
     @account = AcctAccount.new(params[:acct_account])
     if @account.save
@@ -66,7 +68,9 @@ class AcctAccountsController < BaseController
     #  "acct_account" => { "action_ids" => { "1" => "1", "4" => "4" }}
     # So, we do a little transformation on them, just to get the keys, which
     # are the ids that were clicked.
-    params[:acct_account][:action_ids] = params[:acct_account][:action_ids].keys
+    if params[:acct_account][:action_ids]
+      params[:acct_account][:action_ids] = params[:acct_account][:action_ids].keys
+    end
 
     if @account.update_attributes(params[:acct_account])
       flash[:notice] = "The account #{@account.name} was successfully updated."

@@ -93,7 +93,7 @@ class EroomLedgersController < BaseController
     @balances   = []
     @balances[0] = ["Total", eroom_bal]
     @balances[1] = ["In Deposits", deposit_bal]
-    @balances[2] = ["Available Balance", eroom_bal - deposit_bal]
+    @balances[2] = ["Available Balance", eroom_bal + deposit_bal]
     if te_bal != 0
       @balances[3] = ["Treas E-Room", te_bal]
     end
@@ -153,7 +153,7 @@ class EroomLedgersController < BaseController
       if @transaction.acct_action.name == "Membership Collection"
         if params[:club_membership]
           name = params[:club_member][:login]
-          # There may be two or more, we grab the youngest.
+          # TODO:There may be two or more, we grab the youngest.
           member = ClubMember.find(:first,
              :order => "birthday DESC",
              :conditions => { :login => name })
@@ -178,7 +178,7 @@ class EroomLedgersController < BaseController
     # change the transaction ammount to negative.
     if !error && @transaction.amount > 0
       if @transaction.acct_action.action_type == AcctActionType[:Debit]
-	@transaction.amount *= -1
+        @transaction.amount *= -1
       end
     end
 
@@ -219,11 +219,15 @@ class EroomLedgersController < BaseController
       @deposit_balance   = depacct.balance
       @balance           = @eroom_balance + @deposit_balance
       @transactions = get_transactions_list(targacct, params[:page])
+      @offpage_balance = @eroom_balance
+      for t in @transactions do
+        @offpage_balance -= t.amount
+      end
 
       @actions      = targacct.actions
       # bring back amount back to a positive value.
       if @transaction.amount < 0
-	@transaction.amount *= -1
+        @transaction.amount *= -1
       end
       render :action => :show
   end

@@ -212,11 +212,15 @@ class TreasurerLedgersController < BaseController
       @deposit_balance   = depacct.balance
       @balance           = @treasurer_balance + @deposit_balance
       @transactions = get_transactions_list(targacct, params[:page])
+      @offpage_balance = @treasurer_balance
+      for t in @transactions do
+        @offpage_balance -= t.amount
+      end
 
       @actions      = targacct.actions
       # bring back amount back to a positive value.
       if @transaction.amount < 0
-	@transaction.amount *= -1
+        @transaction.amount *= -1
       end
       render :action => :show
   end
