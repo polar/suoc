@@ -13,10 +13,10 @@ class PageController < BaseController
                 :conditions => { :slug => "about" })
 
     # If there are no children, then we make the navigation
-    # column contain the children of the root. If there are
-    # no children of the root, we don't care.
+    # column contain the children of the parent. If we are
+    # at the root, we are just home.
     if @children.empty?
-      p = @home
+      p = @page.parent ? @page.parent : @home
       @children = p.children
     end
     # Stupid shit
