@@ -68,7 +68,7 @@ class AcctTransaction < ActiveRecord::Base
           entry2.credit = abs(amount)
         end
       else
-        raise "Cannot target a Transaction on an Income or Liability Account."
+        raise "Cannot target a Transaction on an Income or Expense Account. #{entry1.account.name} is a #{entry1.account.account_type.name} account."
       end
     else # amount >= 0
       if (entry1.account.account_type == AcctAccountType[:Asset] ||
@@ -83,7 +83,7 @@ class AcctTransaction < ActiveRecord::Base
           entry2.debit = abs(amount)
         end
       else
-        raise "Cannot target a Transaction on an Income or Liability Account."
+        raise "Cannot target a Transaction on an Income or Expense Account. #{entry1.account.name} is a #{entry1.account.account_type.name} account."
       end
     end
     entries.clear

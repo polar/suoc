@@ -1,0 +1,21 @@
+<h3>Club Ledgers</h3>
+<p>
+This page contains a list of the club's ledgers.
+
+<% if @ledgers.empty? %>
+  <p>
+  The club has no ledgers defined.
+<% else %>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Balance</th>
+      <th colspan="2"></th>
+    </tr>
+  <%= render :partial => "ledger", :collection => @ledgers %>
+  </table>
+<% end %>
+<p>
+<p>
+<%= link_to "Create New Ledger", url_for(:action => "new") %>

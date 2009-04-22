@@ -9,18 +9,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090409174457) do
+ActiveRecord::Schema.define(:version => 20090421153635) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "acct_accounts", :force => true do |t|
     t.string   "name"
-    t.text     "description",     :default => ""
+    t.text     "description"
     t.integer  "account_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -33,14 +33,14 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
 
   create_table "acct_action_types", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "acct_actions", :force => true do |t|
     t.string   "name"
-    t.text     "description",    :default => ""
+    t.text     "description"
     t.integer  "account_id"
     t.integer  "category_id"
     t.integer  "action_type_id"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
 
   create_table "acct_categories", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -59,11 +59,33 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
     t.integer  "acct_transaction_id"
     t.integer  "account_id"
     t.integer  "category_id"
-    t.decimal  "debit",               :default => 0.0
-    t.decimal  "credit",              :default => 0.0
+    t.integer  "debit",               :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "credit",              :limit => 10, :precision => 10, :scale => 0, :default => 0
     t.string   "description"
     t.integer  "recorded_by_id"
     t.date     "date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "acct_ledger_accounts", :force => true do |t|
+    t.text     "label"
+    t.integer  "account_id"
+    t.integer  "ledger_id"
+    t.boolean  "show_if_zero"
+    t.integer  "balances_in"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "acct_ledgers", :force => true do |t|
+    t.text     "name"
+    t.text     "slug"
+    t.text     "description"
+    t.integer  "target_account_id"
+    t.text     "subtotal_label"
+    t.text     "total_label"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -74,15 +96,15 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
     t.integer  "acct_action_id"
     t.string   "description"
     t.date     "date"
-    t.decimal  "amount",            :default => 0.0
+    t.integer  "amount",            :limit => 10, :precision => 10, :scale => 0, :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "activities", :force => true do |t|
-    t.integer  "user_id",    :limit => 10
+    t.integer  "user_id"
     t.string   "action",     :limit => 50
-    t.integer  "item_id",    :limit => 10
+    t.integer  "item_id"
     t.string   "item_type"
     t.datetime "created_at"
   end
@@ -145,8 +167,8 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
 
   create_table "club_activities", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
-    t.text     "tagline",     :default => ""
+    t.text     "description"
+    t.text     "tagline"
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -170,7 +192,7 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
 
   create_table "club_chairmanships", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -195,8 +217,8 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
 
   create_table "club_leaderships", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
-    t.text     "tagline",     :default => ""
+    t.text     "description"
+    t.text     "tagline"
     t.integer  "position"
     t.integer  "activity_id"
     t.datetime "created_at"
@@ -205,7 +227,7 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
 
   create_table "club_member_statuses", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -242,8 +264,8 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
 
   create_table "club_offices", :force => true do |t|
     t.string   "name"
-    t.text     "description", :default => ""
-    t.text     "tagline",     :default => ""
+    t.text     "description"
+    t.text     "tagline"
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -271,7 +293,7 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
     t.integer  "comatose_page_id"
     t.integer  "version"
     t.integer  "parent_id"
-    t.text     "full_path",                      :default => ""
+    t.text     "full_path"
     t.string   "title"
     t.string   "slug"
     t.string   "keywords"
@@ -286,18 +308,21 @@ ActiveRecord::Schema.define(:version => 20090409174457) do
 
   create_table "comatose_pages", :force => true do |t|
     t.integer  "parent_id"
-    t.text     "full_path",                   :default => ""
+    t.text     "full_path"
     t.string   "title"
     t.string   "slug"
     t.string   "keywords"
     t.text     "body"
-    t.string   "filter_type",   :limit => 25, :default => "Textile"
+    t.string   "filter_type",    :limit => 25, :default => "Textile"
     t.string   "author"
-    t.integer  "position",                    :default => 0
+    t.integer  "position",                     :default => 0
     t.integer  "version"
-    t.datetime "updated_on"
-    t.datetime "created_on"
+    t.date     "created_on"
+    t.date     "updated_on"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "page_photo_id"
+    t.integer  "author_user_id"
   end
 
   create_table "comments", :force => true do |t|

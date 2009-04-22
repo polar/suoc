@@ -12,13 +12,20 @@ privileges do
   # the club_memberid attribute.
   privilege :read_id
   privilege :write_id, :includes => :read_id
+
+  #
+  # This privilege is specifically for the ledgers controller, which
+  # may be read by anybody, but only such may be able to modify or
+  # add transactions.
+  #
+  privilege :manage_transactions
 end
 
 
 authorization do
   role :admin do
-    includes :trip_admin
-    includes :pages_admin
+    includes :ops_admin
+    includes :config_admin
 
     #
     # Declarative Authorization, available in
@@ -28,16 +35,21 @@ authorization do
     has_permission_on :authorization_usages, :to => :read
 
     #
-    # An Admin may read the ClubMember.club_memberid
+    # An Admin may read,write the ClubMember.club_memberid
     #
     has_permission_on :users, :to => :write_id
-    has_permission_on :users, :to => :write
-    has_permission_on :club_trips, :to => :create
+
+  end
+
+  #
+  role :config_admin do
+    has_permission_on :users, :to => :manage
     has_permission_on :acct_accounts, :to => :manage
     has_permission_on :acct_actions, :to => :manage
     has_permission_on :acct_categories, :to => :manage
     has_permission_on :acct_action_types, :to => :manage
     has_permission_on :acct_account_types, :to => :manage
+    has_permission_on :acct_ledgers, :to => :manage
   end
 
   #
@@ -45,15 +57,15 @@ authorization do
   # table through the :club_trips controller.
   #
   role :trip_admin do
-    has_permission_on :club_trips, :to => [:manage]
+    has_permission_on :club_trips, :to => :manage
   end
 
   #
-  # The :trip_admin is allowed to manage Trips Going Out
-  # table through the :club_trips controller.
+  # The :announcement_admin is allowed to manage Announcements
+  # table through the :club_announcements controller.
   #
   role :announcement_admin do
-    has_permission_on :club_announcements, :to => [:manage]
+    has_permission_on :club_announcements, :to => :manage
   end
 
   #
@@ -61,24 +73,49 @@ authorization do
   # Home Pages.
   # TODO: Role:PagesAdmin Not yet implemented.
   role :pages_admin do
-    has_permission_on :comatose_admin, :to => [:manage]
+    has_permission_on :comatose_admin, :to => :manage
   end
 
   #
-  # Basically, Current Officers, Chairs, and Leaders
-  # are allowed to manage the Trips Going Out.
+  # The :ledgers_admin is allowed to manage creation
+  # and deletion of ledgers.
+  role :ledgers_admin do
+    has_permission_on :acct_ledgers, :to => :manage
+  end
+
   #
-  # If you are a ClubOfficer, ClubChair, or a ClubLeader
-  # you have the TripAdmin role.
+  # Ledger Transactor is an operations role in which the operator
+  # may delete or add transactions to a ledger.
+  #
+  role :ledger_transactor do
+    has_permission_on :acct_ledgers, :to => [:read, :manage_transactions]
+    has_permission_on :acct_transactions, :to => :delete do
+      if_attribute :recorded_by => is {user}
+    end
+  end
+
+  #
+  # This role is given to people who have privileges over operations.
+  #
+  role :ops_admin do
+    includes :trip_admin
+    includes :announcement_admin
+    includes :pages_admin
+    includes :ledger_transactor
+  end
+  #
+  # Basically, Current Officers, Chairs, and Leaders
+  # are allowed to manage the operations of the club,
+  # but not the configuation.
   #
   role :officer do
-    includes :trip_admin,:announcement_admin,:pages_admin
+    includes :ops_admin
   end
   role :chair do
-    includes :trip_admin,:announcement_admin,:pages_admin
+    includes :ops_admin
   end
   role :leader do
-    includes :trip_admin,:announcement_admin,:pages_admin
+    includes :ops_admin
   end
 
   #
@@ -87,7 +124,8 @@ authorization do
   #
   role :member do
     includes :guest
-    # Note: ClubMembers' table names is "users"
+    # Note: ClubMember table is an extension of User.
+    # We use the UsersController to hand its operations.
     # So to write rules for ClubMembers we must use :users.
     has_permission_on :users, :to => :write do
       if_attribute :id => is {user.id}
@@ -99,11 +137,11 @@ authorization do
 
   #
   # The Default Role.
-  #   Can read the trip list.
+  #   Can read the documents page.
+  #   The trips list and announcments are available on the
+  #   Home pages.
   #
   role :guest do
-    has_permission_on :club_announcements, :to => [:read]
-    has_permission_on :club_trips, :to => [:read]
     has_permission_on :club_documents, :to => [:read]
   end
 

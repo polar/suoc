@@ -1,0 +1,25 @@
+<tr>
+  <td>
+    <%= link_to ledger.name, acct_ledger_path(ledger) %>
+  </td>
+  <td><%= ledger.description %></td>
+  <td class="decimal"><%= sprintf("%10.2f", ledger.ledger_balance) %></td>
+  <td>
+    <%= if show_edit_ledger(ledger)
+          button_to "Edit",
+                    url_for(
+                       :action => :edit,
+                       :id => ledger), :method => "get"
+        end %>
+  </td>
+  <td>
+    <%= if show_delete_ledger(ledger)
+          button_to "Delete",
+                    url_for(
+                       :action => :delete,
+                       :id => ledger),
+                    :method => "delete",
+                    :confirm => "Are you sure you want to delete this ledger?"
+      end %>
+  </td>
+</tr>

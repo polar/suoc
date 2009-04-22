@@ -1,0 +1,12 @@
+<h3><%= "#{@ledger.name} (#{@current_user.name})" %></h3>
+<%= @ledger.description %>
+<p>
+<%= render :partial => "transaction_index_form", :locals => {
+      :ledger => @ledger,
+      :transactions => @transactions,
+      :balances => @balances,
+      :transaction => @transaction,
+      :offpage_balance => @offpage_balance,
+      :actions => @actions,
+      :member => @member,
+      :membership => @membership } %>

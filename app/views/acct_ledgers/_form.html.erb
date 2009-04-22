@@ -1,0 +1,77 @@
+<% form_for @ledger, :html => { :class => "MainForm" } do |f| %>
+  <%= f.error_messages %>
+  <%= f.label "Ledger Name" %>
+  <%= f.text_field "name" %>
+  <%= render :partial => "slug_help" %>
+  <%= f.label "Slug" %>
+  <%= f.text_field "slug" %>
+    <%= link_to_function "What's this?", "$('slug_help').show()" %>
+  <%= f.label "Target Account" %>
+  <%= f.collection_select :target_account_id,
+          @accounts, :id, :name,
+          :prompt => "Please Select" %>
+  <%= f.label "Description" %>
+  <%= f.text_area "description",
+       {:size => "86x5", :class => "rich_text_editor"} %>
+  <%= f.label "Subtotal Label" %>
+  <%= f.text_field :subtotal_label %>
+  This field will show up only if you select "Balance In" accounts below.
+  <%= f.label "Total Label" %>
+  <%= f.text_field :total_label %>
+  <p>
+  <%= render :partial => "account_help" %>
+  <p>
+  <table class="acct_accounts">
+    <tr>
+      <th class="title" colspan="7">
+        Extra Account Listings
+        <%= link_to_function "What's this?", "$('accounts_help').show()" %>
+      </th>
+    </tr>
+    <tr>
+      <th colspan="2">Account</th>
+      <th>Balance In?</th>
+      <th>Show if Zero</th>
+      <th>Position</th>
+      <th>Display Label</th>
+      <th>Type</th>
+    <tr>
+  <% i=0; for a in @accounts do %>
+    <% disp = @ledger.accounts.select {|x| x.account == a}
+       disp = disp.empty? ? AcctLedgerAccount.new : disp.first  %>
+    <tr>
+      <td>
+        <%= check_box_tag "acct_ledger[accounts][#{i}][account_id]",
+                          a.id, disp.account == a %>
+      </td>
+      <td>
+        <%= label_tag "acct_ledger[accounts][#{i}][account_id]",
+                      a.name %>
+      </td>
+      <td>
+        <%= check_box_tag "acct_ledger[accounts][#{i}][balances_in]",
+                          true, disp.balances_in %>
+      </td>
+      <td>
+        <%= check_box_tag "acct_ledger[accounts][#{i}][show_if_zero]",
+                          true, disp.show_if_zero %>
+      </td>
+      <td class="position">
+        <%= text_field_tag "acct_ledger[accounts][#{i}][position]",
+                           disp.position, :class => "decimal" %>
+      </td>
+      <td>
+        <%= text_field_tag "acct_ledger[accounts][#{i}][label]",
+                           disp.label %>
+      </td>
+      <td>
+        <%= a.account_type.name %>
+      </td>
+   </tf>
+   <% i = i + 1 %>
+ <% end %>
+ </table>
+ <p>
+   <%= f.submit @submit %>
+ </p>
+<% end %>

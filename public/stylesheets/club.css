@@ -490,7 +490,20 @@ strong {
 /*
  * Actions Table
  */
-
 .acct_actions tr th {
   font-weight: bold;
+}
+/*
+ * Accounts Table for acct_ledgers
+ */
+.acct_accounts .title {
+  text-align: center;
+  padding: 10px 20px 10px 0px;
+  border:none;
+}
+.acct_accounts tr th {
+  padding: 0px 20px 0px 0px;
+}
+.acct_accounts .position input {
+  width: 1em;
 }
