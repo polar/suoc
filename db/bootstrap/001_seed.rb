@@ -20,28 +20,28 @@ end
 ################################
 
 def activity(name, desc)
-  params = {:name => name, 
+  params = {:name => name,
             :description => desc}
   ClubActivity.create_or_update_by(:name, params)
 end
 
 def status(id, name, desc)
-  params = { :id => id, 
-             :name => name, 
+  params = { :id => id,
+             :name => name,
              :description => desc}
   ClubMemberStatus.create_or_update(params)
 end
 
 def mtype(id,name,desc)
-  params = { :id => id, 
-             :name => name, 
+  params = { :id => id,
+             :name => name,
              :description => desc}
   ClubMembershipType.create_or_update(params)
 end
 
 def leadership(name, desc, activity)
-  params = { :name => name, 
-             :description => desc, 
+  params = { :name => name,
+             :description => desc,
              :activity => activity }
   ClubLeadership.create_or_update_by(:name, params)
 end
@@ -70,7 +70,7 @@ def seed_club
    o_webmaster = office( "Web Master", "Member at Large for SUOC Web Site")
    o_orp       = office( "ORP Representative", "Member at Large for ORP")
    o_advisor   = office( "Advisor",   "Faculty/Staff Advisor")
-   
+
    #
    # Club Activities
    #
@@ -130,18 +130,18 @@ def seed_club
    l_mt_biking = leadership( "Mountain Biking",
                              "Biking on trails",
                              a_mt_biking )
-   
+
   #
   # Club Membership Statuses
   #
   ClubMemberStatus.enumeration_model_updates_permitted = true
-  status(1, "Active", 
+  status(1, "Active",
          "Member who is currently taking and/or going on trips with SUOC.")
-  status(2, "Inactive", 
+  status(2, "Inactive",
          "Member who is not currently taking and/or going on trips with SUOC.")
-  status(3, "Life", 
+  status(3, "Life",
          "Member who has achieved life status and is Active.")
-  status(4, "Retired", 
+  status(4, "Retired",
          "Member who has achieved life status and is Inactive.")
   status(5, "Deceased",
          "Member who has climbed that eternal mountain.")
@@ -151,9 +151,8 @@ def seed_club
   # Club Memberhip Types
   #
   ClubMembershipType.enumeration_model_updates_permitted = true
-  mtype(1, "Year",   "Membersip for a whole year.")
-  mtype(2, "Spring", "Membership for a single Spring Semester.")
-  mtype(3, "Fall",   "Membership for a single Fall Semester.")
+  mtype(1, "Year",   "Membership until September of next year.")
+  mtype(2, "Spring", "Membership until September of this year.")
 
 end
 
@@ -162,39 +161,39 @@ end
 # ##################################
 
 def cat(id, name, desc)
-  params = { :id => id, 
-             :name => name, 
+  params = { :id => id,
+             :name => name,
              :description => desc }
   AcctCategory.create_or_update(params);
 end
 
 def action_type(id, name, desc)
-  params = { :id => id, 
-             :name => name, 
+  params = { :id => id,
+             :name => name,
              :description => desc}
   AcctActionType.create_or_update(params);
 end
 
 def action(id, name, desc, cat, type, acct)
-  params = { :id => id, :name => name, 
-             :account => acct, 
-             :category => cat, 
+  params = { :id => id, :name => name,
+             :account => acct,
+             :category => cat,
              :action_type => type,
              :description => desc }
   AcctAction.create_or_update(params);
 end
 
 def accttype(id, name, desc)
-  params = { :id => id, 
-             :name => name, 
+  params = { :id => id,
+             :name => name,
              :description => desc }
   AcctAccountType.create_or_update(params);
 end
 
 def acct(id, name, type, descr)
-  params = { :id => id, 
-             :name => name, 
-             :account_type => type, 
+  params = { :id => id,
+             :name => name,
+             :account_type => type,
              :description => descr}
   AcctAccount.create_or_update(params)
 end
@@ -205,7 +204,7 @@ end
 
 #
 # Seed the Accounts Strutures
-# 
+#
 def seed_acct
   AcctActionType.enumeration_model_updates_permitted = true
   t_credit    = action_type(1, "Credit", "Credit Target Account")
@@ -239,7 +238,7 @@ def seed_acct
                            "This account holds initial balance and corrections.")
 
 
-  
+
   AcctCategory.enumeration_model_updates_permitted = true
   c_transfer        = cat( 1,"Transfer",       "Transfer between accounts")
   c_membership      = cat( 2,"Membership",     "Having to do with Membership money")
@@ -255,13 +254,13 @@ def seed_acct
   c_deposits        = cat(12,"Deposits",       "Having to do with E-Room Rental Deposits")
   c_bank            = cat(12,"Bank",           "Having to do with Bank charges, balance corrections, etc.")
 
-  k_membership_collect = action(1,"Membership Collection", 
+  k_membership_collect = action(1,"Membership Collection",
                                 "Collecting general membership fees",
                                 c_membership, t_credit, a_income)
   k_wva_collect        = action(2,"WVa Collection",
                                 "Collection West Virgina Spring Break money",
                                 c_wva, t_credit, a_wva_income)
-  k_wva_reimbursement  = action(3,"WVa Gas Reimbursements", 
+  k_wva_reimbursement  = action(3,"WVa Gas Reimbursements",
                                 "Money reimbursed for Gas to individuals",
                                 c_gas, t_debit, a_wva_expense)
   k_wva_cabinexp       = action(4,"WVa Cabin Expense",
@@ -280,10 +279,10 @@ def seed_acct
                                   "Fixes a descrepancy in the balance",
                                   c_bank, t_credit, a_balance)
 # Wrt E-room
-  k_to_treas   = action(8,"To Treasurer", 
+  k_to_treas   = action(8,"To Treasurer",
                         "Money taken by Treasurer from E-room",
                         c_transfer, t_debit, a_treaseroom)
-  k_from_treas = action(9,"From Treasurer", 
+  k_from_treas = action(9,"From Treasurer",
                         "Money given to E-room by Treasurer",
                         c_transfer, t_credit, a_treaseroom)
   k_deposit_collect   = action(10,"Rental Deposit Collection",

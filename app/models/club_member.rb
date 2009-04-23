@@ -1,48 +1,5 @@
 class ClubMember < User
 
-      ##
-      ## TODO: Get rid of this hack
-      ##
-      ## We want to get rid of the validates_length_of :login, 5.20 defined in User
-      ## We override the validate_callback_chain
-      def self.validate_callback_chain
-        # We assign this below in remove validation
-        if !@updated_validate_callbacks
-          @validate_callbacks || CallbackChain.new
-          if superclass.respond_to?(:validate_callback_chain)
-            CallbackChain.new(superclass.validate_callback_chain + @validate_callbacks)
-          else
-            @validate_callbacks
-          end
-        else
-          @updated_validate_callbacks
-        end
-      end
-      ##
-      ## TODO: Get rid of this hack
-      ##  Removes a named validation such as
-      ##    remove_validation("validates_length_of", :login)
-      ##
-      def self.remove_validation(validation_method_name,attr)
-        @updated_validate_callbacks = validate_callback_chain.reject! do |c|
-          proc = c.method
-          if proc.is_a?(Proc)
-            ## We evaluate expressions against the proc binding for the
-            ## callbacks. We just happen to know that for Rails 2.2.2
-            ## The variable name we want os "attrs" or "attr_names"
-            method = eval("caller[0] =~ /`([^']*)'/ and $1", proc.binding) rescue nil
-            attrs = eval("attrs", proc.binding) rescue nil
-            if !attrs
-              attrs = eval("attr_names", proc.binding) rescue nil
-            end
-            (method == validation_method_name) && attrs.include?(attr)
-          else
-            false
-          end
-        end
-      end
-
-
   has_enumerated :club_member_status
   has_enumerated :club_affiliation
 
@@ -68,18 +25,20 @@ class ClubMember < User
                       :message => "SUID must be a 9 digit number"
 
   #
-  # We use name here because the User already validates login and we cannot seem
-  # to override that, but aliasing :login to :name and pulling a validate on :name
-  # seems to work.
+  # For SUOC we want real names, at least first and last, and formated suitably
+  # with Capital first letters. We don't mind numbers in the third or later words.
+  # such as Thurston Brower Howell 3rd.
+  #
+  # TODO: Change this validation :on option from :create to :save when it becomes true for all users.
   #
   validates_format_of :login,
                       :with => /^[A-Z][A-Za-z\']+(((\s[A-Z\'])(\s*[A-Z][A-Za-z\']+)(\s*[A-Z0-9][A-Za-z0-9\']+)*)|((\s*[A-Z\'][A-Za-z\']+)(\s*[A-Z0-9][A-Za-z0-9\']+)*))$/,
-                      :message => "must contain at least your first name AND last name and starting with letters. Each word must start with a capital letter <p>Ex. Thurston Brower Howell 3rd",
+                      :message => "must contain at least your FIRST name <b>and</b> LAST name and starting with capital letters. <p>Ex. Thurston Brower Howell 3rd",
                       :on => :create
 
 
   #
-  # TODO:These validations will be changed to :save as soon as it is true for all users.
+  # TODO: Changed this validation :on option to :save as soon as it becomes true for all users.
   #
   validates_presence_of :club_affiliation, :on => :create
   validates_presence_of :club_memberid,
@@ -87,14 +46,9 @@ class ClubMember < User
                         :on => :create,
                         :message => "Your affiliation requires a SUID"
 
+  # Make sure the SUID is just nine digits
   before_validation :normalize_club_memberid
 
-  #
-  # TODO: Get rid of this hack. DONE. I changed the User model in Community Engine.
-  # This has to go last. Any subsequent validations are
-  # not recorded by the class.
-  #
-  #remove_validation "validates_length_of", :login
   def normalize_club_memberid
     self.club_memberid = self.club_memberid.delete(' -') if self.club_memberid
   end
@@ -110,23 +64,33 @@ class ClubMember < User
     roles << r if !roles.include? r
   end
 
+  #
   # This role deletes a hard role from the user.
   # It will not delete an "implied" role, either implied by
-  # "includes" or whether implied by somebody else.
+  # the Declarative Authorization "includes" or whether implied by something else,
+  # like being a current officer.
+  #
   def del_role(role)
     r = roles.find_by_title_and_club_member_id(role.to_s,self.id)
     roles.delete(r) if r
   end
 
+  #
+  # Returns the hard roles that are assigned explicity to this club member.
+  #
   def hard_roles
     (roles || []).map {|r| r.title.to_sym}
   end
 
-  # Returns the role symbols for declarative authorization.
-  # We add implied roles based on conditions.
+  #
+  # Declarative Authorization User API.
+  # This method returns the role symbols for declarative authorization.
+  # We add implied roles based on the conditions.
   def role_symbols
     rs = hard_roles
     if rs.include?(:member)
+      # This member is an officer,leader,chair if
+      # he/she is a current_officer,leader,chair respectively
       rs << :officer if !current_officers.empty?
       rs << :leader if !current_leaders.empty?
       rs << :chair if !current_chairs.empty?
@@ -140,28 +104,37 @@ class ClubMember < User
   #
   alias_attribute :name, :login
 
+  #
+  # Returns the officerships this member has that are current.
+  #
   def current_officers
     officers.select { |x| x.current? }
-  end
-
-  def past_officers
-    officers.select { |x| !x.current? }
   end
 
   def current_leaders
     leaders.select { |x| x.current? }
   end
 
-  def past_leaders
-    leaders.select { |x| !x.current? }
-  end
-
   def current_chairs
     chairs.select { |x| x.current? }
   end
 
+  #
+  # Returns the officerships this member has that are past.
+  # Assumption that Not current means past. However, if a future
+  # date were put in, that would be problematic, but this will let
+  # us at least see the problem.
+  #
+  def past_officers
+    officers.reject { |x| x.current? }
+  end
+
+  def past_leaders
+    leaders.reject { |x| x.current? }
+  end
+
   def past_chairs
-    chairs.select { |x| !x.current? }
+    chairs.reject { |x| x.current? }
   end
 
 end

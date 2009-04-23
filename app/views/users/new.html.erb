@@ -20,7 +20,7 @@
       <%= error_messages_for :user %>
       <% form_for :user, :url => users_path, :html => {:class => 'MainForm'} do |f| %>
         <label for="user_login">
-          <em>Please use your real full name! Spaces are allowed. It is also case senstive. 'Jon' and 'jon' are different.
+          <em>Please use your real full name! Spaces are allowed. It is also case senstive. 'McBain' and 'MCbain' are different, Start first, middle, and last name with capital letter. Please play along, it makes it look nice!
           </em>
           <br>
           <%= "Your Name".l %>
@@ -35,7 +35,7 @@
 
         <label for="user_club_memberid">
           <%= "Your SUID".l %>:
-          <em><%= "(Required for students.)".l %></em>
+          <em><%= "(Required for students, faculty, staff)".l %></em>
         </label>
         <%= f.text_field :club_memberid, :tabindex => 3 %>
 
@@ -54,7 +54,7 @@
 
         <label for="user_club_start_date">
           <%="Member in SUOC since".l %>:
-          <em><%= "(MM-DD-YYYY)".l %></em>
+          <em><%= "(MM-DD-YYYY)".l + " Please tell us when you first joined SUOC!"%></em>
         </label>
         <%=  f.text_field :club_start_date, :tabindex => 6, :value => (@user.club_start_date.strftime("%m-%d-%Y") if @user.club_start_date) %>
 
