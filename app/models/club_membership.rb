@@ -29,6 +29,6 @@ class ClubMembership < ActiveRecord::Base
   end
 
   def current?
-    start_date <= Date.today <= end_date
+    start_date <= Date.today && Date.today <= end_date
   end
 end
