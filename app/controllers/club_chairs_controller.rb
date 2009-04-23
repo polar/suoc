@@ -61,7 +61,7 @@ class ClubChairsController < BaseController
   def my_index
     @club_chair = ClubChair.new(:member => current_user)
     @current_chairs = current_user.current_chairs
-    @past_chair = current_user.past_chairs
+    @past_chairs = current_user.past_chairs
   end
 
   def delete_chair
