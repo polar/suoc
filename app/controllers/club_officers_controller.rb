@@ -53,6 +53,8 @@ class ClubOfficersController < BaseController
       flash[:notice] = "The Office held by #{@club_officer.member.login} was added."
       redirect_to :action => :my_index, :id => "me"
     else
+      @current_officers = current_user.current_officers
+      @past_officers = current_user.past_officers
       render :action => :my_index, :id => "me"
     end
   end

@@ -54,6 +54,8 @@ class ClubChairsController < BaseController
       flash[:notice] = "The Chairship held by #{@club_chair.member.login} was added ."
       redirect_to :action => :my_index, :id => "me"
     else
+      @current_chairs = current_user.current_chairs
+      @past_chairs = current_user.past_chairs
       render :action => :my_index, :id => "me"
     end
   end

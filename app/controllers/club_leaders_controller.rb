@@ -41,7 +41,7 @@ class ClubLeadersController < BaseController
 
   def add_club_leader
     @club_leader = ClubLeader.new(params[:club_leader])
-    if @club_leader.end_date == nil
+    if @club_leader.start_date && @club_leader.end_date == nil
       @club_leader.end_date = @club_leader.start_date + 50.years
     end
 
@@ -49,22 +49,24 @@ class ClubLeadersController < BaseController
       flash[:error] = "Error in transmission"
       @club_leader.errors.add_to_base(
           "Somehow you tried to update another members leadership. Try again");
-      @current_leaders = current_user.current_leaders
-      @past_leaders = current_user.past_leaders
+      @current_leaders = current_user.current_leaders.sort { |x,y| x.leadership.name <=> y.leadership.name }
+      @past_leaders = current_user.past_leaders.sort { |x,y| x.leadership.name <=> y.leadership.name }
       @club_leader.member = current_user
       render :action => :my_index, :id => "me"
     elsif @club_leader.update_attributes(params[:club_leader])
       flash[:notice] = "The Leadership held by #{@club_leader.member.login} was added."
       redirect_to :action => :my_index, :id => "me"
     else
+      @current_leaders = current_user.current_leaders.sort { |x,y| x.leadership.name <=> y.leadership.name }
+      @past_leaders = current_user.past_leaders.sort { |x,y| x.leadership.name <=> y.leadership.name }
       render :action => :my_index, :id => "me"
     end
   end
 
   def my_index
     @club_leader = ClubLeader.new(:member => current_user)
-    @current_leaders = current_user.current_leaders
-    @past_leaders = current_user.past_leaders
+    @current_leaders = current_user.current_leaders.sort { |x,y| x.leadership.name <=> y.leadership.name }
+    @past_leaders = current_user.past_leaders.sort { |x,y| x.leadership.name <=> y.leadership.name }
   end
 
   def delete_leader
