@@ -55,6 +55,8 @@ class UsersController #< BaseController
   ##
   def create
     #@user       = User.new(params[:user])
+    params[:user][:club_start_date] =
+        normalize_date_string(params[:user][:club_start_date])
     @user       = ClubMember.new(params[:user])
     @user.role  = Role[:member]
 
@@ -87,6 +89,8 @@ class UsersController #< BaseController
   def update_club_member_info
     member = ClubMember.find(params[:id])
     if permitted_to? :write, member
+      params[:club_member][:club_start_date] =
+          normalize_date_string(params[:club_member][:club_start_date])
       member.update_attributes(params[:club_member])
       can_edit_info = current_user.admin? || current_user == member
       if validate_club_member_info(member) && member.save
@@ -177,5 +181,18 @@ class UsersController #< BaseController
     return true
   end
 
+  protected
+
+  def normalize_date_string(stdate)
+    if stdate
+      if stdate =~ /^\s*[0-9][0-9][0-9][0-9]\s*$/
+        stdate = "09-01-#{stdate}"
+      else
+        stdate
+      end
+    else
+      stdate = "01-01-#{Date.today.year}"
+    end
+  end
 end
 

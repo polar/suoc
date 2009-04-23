@@ -30,16 +30,21 @@
   <p>
   This section contains the "Chart of Accounts", which keeps track of
   the financial aspects of the club.
-  <h4><%= link_to "E-Room Ledger", eroom_ledger_path %></h4>
+  <h4><%= link_to "E-Room Ledger", acct_ledger_path("e-room-ledger") %></h4>
   <p>
   This section contains the transaction ledger for the E-room. Its
   primary use is for the E-room Chair or anybody operating the E-room
   dealing with the E-room finances.
-  <h4><%= link_to "Treasurer Ledger", treasurer_ledger_path %></h4>
+  <h4><%= link_to "Treasurer Ledger", acct_ledger_path("treasurer-ledger") %></h4>
   <p>
   This section contains the transaction ledger for the Treasurer.
   Its primary use is for the Treasurer or anybody operating in the
-  office of the Treasury.
+  office of the Treasury handling the money the Treasurer carries.
+  <h4><%= link_to "Checking Ledger", acct_ledger_path("checking-ledger") %></h4>
+  <p>
+  This section contains the transaction ledger for the Checking account.
+  Its primary use is for the Treasurer or anybody operating in the
+  office of the Treasury writing checks and making deposits.
   <h4><%= link_to "Documents", club_documents_path %></h4>
   <p>
   This section contains the old directory of documents, most notably

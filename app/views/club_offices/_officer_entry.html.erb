@@ -1,7 +1,7 @@
 <%
  # This partial creates a table row for a single officer.
  # badge and then a vertical table of start and end date.
- # 
+ #
  #
  # Local Variables
  #        officer : ClubOfficer to be displayed.
@@ -42,22 +42,22 @@
       <ul>
         <li>
         <% if view_retire_officer(officer) %>
-          <%= button_to "Retire Officer", 
-                         url_for( :action => :retire_officer, 
-                                  :id => officer.office, 
+          <%= button_to "Retire Officer",
+                         url_for( :action => :retire_officer,
+                                  :id => officer.office,
                                   :officer => officer ),
                          :confirm => "Are you sure you want to retire #{officer.member.login} from the office of #{officer.office.name}?" %>
         <% end %>
         </li><li>
         <% if view_edit_officer(officer) %>
-          <%= button_to "Edit Officer", 
-                         url_for( :action => :edit_officer, 
-                                  :id => officer.office, 
+          <%= button_to "Edit Officer",
+                         url_for( :action => :edit_officer,
+                                  :id => officer.office,
                                   :officer => officer ) %>
         <% end %>
         </li><li>
         <% if view_delete_officer(officer) %>
-          <%= button_to "Delete Officer", 
+          <%= button_to "Delete Officer",
                          url_for( :action => :delete_officer,
                          :id => officer.office,
                          :officer => officer ),

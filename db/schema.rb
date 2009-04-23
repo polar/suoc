@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090421153635) do
+ActiveRecord::Schema.define(:version => 20090423040713) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
@@ -59,8 +59,8 @@ ActiveRecord::Schema.define(:version => 20090421153635) do
     t.integer  "acct_transaction_id"
     t.integer  "account_id"
     t.integer  "category_id"
-    t.integer  "debit",               :limit => 10, :precision => 10, :scale => 0, :default => 0
-    t.integer  "credit",              :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.decimal  "debit",               :precision => 12, :scale => 2, :default => 0.0
+    t.decimal  "credit",              :precision => 12, :scale => 2, :default => 0.0
     t.string   "description"
     t.integer  "recorded_by_id"
     t.date     "date"
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(:version => 20090421153635) do
     t.integer  "account_id"
     t.integer  "ledger_id"
     t.boolean  "show_if_zero"
-    t.integer  "balances_in"
+    t.boolean  "balances_in"
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(:version => 20090421153635) do
     t.integer  "acct_action_id"
     t.string   "description"
     t.date     "date"
-    t.integer  "amount",            :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.decimal  "amount",            :precision => 12, :scale => 2, :default => 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
   end

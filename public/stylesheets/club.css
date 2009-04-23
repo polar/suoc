@@ -159,7 +159,7 @@ b, strong {
   background: #777;
   color: #777;
   background: #f8f8f8;
-  width: 8em;
+  width: 9em;
 }
 
 .EntryForm .button-to input{
@@ -170,7 +170,7 @@ b, strong {
   margin: 1px 0;
   color: #777;
   background: #f8f8f8;
-  width: 6em;
+  width: 7em;
 }
 .EntryForm .button-to input:focus{
   color: #777;
