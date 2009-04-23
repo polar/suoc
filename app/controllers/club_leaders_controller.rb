@@ -64,7 +64,7 @@ class ClubLeadersController < BaseController
   def my_index
     @club_leader = ClubLeader.new(:member => current_user)
     @current_leaders = current_user.current_leaders
-    @past_leader = current_user.past_leaders
+    @past_leaders = current_user.past_leaders
   end
 
   def delete_leader

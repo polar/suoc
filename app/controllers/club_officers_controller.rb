@@ -60,7 +60,7 @@ class ClubOfficersController < BaseController
   def my_index
     @club_officer = ClubOfficer.new(:member => current_user)
     @current_officers = current_user.current_officers
-    @past_officer = current_user.past_officers
+    @past_officers = current_user.past_officers
   end
 
   def delete_officer

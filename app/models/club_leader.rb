@@ -4,16 +4,18 @@ class ClubLeader < ActiveRecord::Base
 
   validates_presence_of :member
   validates_presence_of :leadership
-  
-  validates_date :start_date
-  validates_date :end_date
-  
+
+  validates_date :start_date, :before => Proc.new { Date.today }
+  validates_date :end_date, :after => :start_date
+
   def current?
     start_date <= Date.today && Date.today <= end_date
   end
 
   def validate_on_create
-    if leadership.leader?(member)
+    # apparently validates_presence_of doesn't call back before this!
+
+    if leadership && leadership.leader?(member)
       errors.add_to_base("#{member.login} is already a leader in #{leadership.name}. Perhaps s/he is not Active/Life?")
     end
   end
