@@ -38,7 +38,7 @@ authorization do
     # An Admin may read,write the ClubMember.club_memberid
     #
     has_permission_on :users, :to => :write_id
-
+    has_permission_on :acct_transactions, :to => :delete
   end
 
   #

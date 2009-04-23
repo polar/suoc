@@ -284,10 +284,10 @@ class AcctLedgersController < BaseController
     end
     # We prepent a subtotal if we have balance accounts
     if !@balances.empty?
-      @balances = [{:label => "Subtotal", :value => @subtotal}] + @balances
+      @balances = [{:label => @ledger.subtotal_label, :value => @subtotal}] + @balances
     end
     # Add the total.
-    @balances << {:label => "Total", :value => @total}
+    @balances << {:label => @ledger.total_label, :value => @total}
     # List the Non-balance accounts
     for a in @ledger.nonbalance_accounts do
       if a.show_if_zero || a.account.balance != 0
