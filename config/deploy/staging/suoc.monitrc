@@ -1,0 +1,67 @@
+###############################################################################
+## Monit control file
+###############################################################################
+
+set daemon 60
+set mailserver localhost
+set mail-format { from: monit@suoc.syr.edu }
+set alert polar@syr.edu
+
+set httpd port 2812 and
+    use address localhost  # only accept connection from localhost
+    allow localhost        # allow localhost to connect to the server and
+
+
+##
+###############################################################################
+## Services
+###############################################################################
+check process mongrel-9000 with pidfile /var/run/mongrel_cluster/mongrel.9000.pid
+    start program = "/var/www/suoc/current/script/mongrel_rails start -d -e staging -p 9000 -P /var/run/mongrel_cluster/suoc.9000.pid -l /var/www/suoc/current/log/mongrel.9000.log"
+
+    stop program  = "/var/www/suoc/current/script/mongrel_rails stop -P /var/run/mongrel_cluster/suoc.9000.pid "
+
+    if totalmem is greater than 60.0 MB for 5 cycles then restart       # eating up memory?
+    if cpu is greater than 50% for 2 cycles then alert                  # send an email to admin
+    if cpu is greater than 80% for 3 cycles then restart                # hung process?
+    if loadavg(5min) greater than 10 for 8 cycles then restart          # bad, bad, bad
+    if 3 restarts within 5 cycles then timeout                         # something is wrong, call the sys-admin
+
+    if failed port 9000 protocol http                   # check for response
+        with timeout 10 seconds
+        then restart
+    group suoc
+##
+check process mongrel-9001 with pidfile /var/run/mongrel_cluster/mongrel.9001.pid
+    start program = "/var/www/suoc/current/script/mongrel_rails start -d -e staging -p 9001 -P /var/run/mongrel_cluster/suoc.9001.pid -l /var/www/suoc/current/log/mongrel.9001.log"
+
+    stop program  = "/var/www/suoc/current/script/mongrel_rails stop -P /var/run/mongrel_cluster/suoc.9001.pid "
+
+    if totalmem is greater than 60.0 MB for 5 cycles then restart       # eating up memory?
+    if cpu is greater than 50% for 2 cycles then alert                  # send an email to admin
+    if cpu is greater than 80% for 3 cycles then restart                # hung process?
+    if loadavg(5min) greater than 10 for 8 cycles then restart          # bad, bad, bad
+    if 3 restarts within 5 cycles then timeout                         # something is wrong, call the sys-admin
+
+    if failed port 9001 protocol http                   # check for response
+        with timeout 10 seconds
+        then restart
+    group suoc
+##
+check process mongrel-9002 with pidfile /var/run/mongrel_cluster/mongrel.9002.pid
+    start program = "/var/www/suoc/current/script/mongrel_rails start -d -e staging -p 9002 -P /var/run/mongrel_cluster/suoc.9002.pid -l /var/www/suoc/current/log/mongrel.9002.log"
+
+    stop program  = "/var/www/suoc/current/script/mongrel_rails stop -P /var/run/mongrel_cluster/suoc.9002.pid "
+
+    if totalmem is greater than 60.0 MB for 5 cycles then restart       # eating up memory?
+    if cpu is greater than 50% for 2 cycles then alert                  # send an email to admin
+    if cpu is greater than 80% for 3 cycles then restart                # hung process?
+    if loadavg(5min) greater than 10 for 8 cycles then restart          # bad, bad, bad
+    if 3 restarts within 5 cycles then timeout                         # something is wrong, call the sys-admin
+
+    if failed port 9002 protocol http                   # check for response
+        with timeout 10 seconds
+        then restart
+    group suoc
+##
+###

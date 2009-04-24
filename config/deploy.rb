@@ -40,10 +40,10 @@ namespace :deploy do
   task :after_default do
 
     # Move environment-specific configs into config directory.
-    %w{mongrel_cluster.yml}.each do |file|
-      run "cp #{release_path}/config/deploy/#{rails_env}/#{file} #{release_path}/config/#{file}"
-    end     
-  
+    %w{mongrel_cluster.yml suoc.monitrc}.each do |file|
+      run "cp -p #{release_path}/config/deploy/#{rails_env}/#{file} #{release_path}/config/#{file}"
+    end
+
     # Move forward uploads and index directories along with new release.
     # These are photos page_photos and homepage_features attachments.
     %w{photos page_photos homepage_features}.each do |share|
@@ -51,8 +51,8 @@ namespace :deploy do
       run "rm -rf #{release_path}/#{share}"
       run "mkdir -p #{shared_path}/system/#{share}"
       run "ln -s #{shared_path}/system/#{share} #{release_path}/public/#{share}"
-    end  
-  
+    end
+
     cleanup
   end
 
@@ -63,25 +63,20 @@ namespace :deploy do
     end
   end
 
-  desc "Restart the Mongrel processes on the app server by calling restart_mongrel_cluster. "
-  task :restart, :roles => :app do 
-    restart_mongrel_cluster 
-  end 
-  
   desc "Start Mongrel processes on the app server. "
-  task :start_mongrel_cluster , :roles => :app do 
-    sudo "/usr/sbin/monit start all -g #{monit_group}" 
-  end 
-  
-  desc "Restart the Mongrel processes on the app server by starting and stopping the cluster." 
-  task :restart_mongrel_cluster , :roles => :app do 
-    sudo "/usr/sbin/monit restart all -g #{monit_group}" 
-  end 
-  
-  desc "Stop the Mongrel processes on the app server." 
-  task :stop_mongrel_cluster , :roles => :app do 
-    sudo "/usr/sbin/monit stop all -g #{monit_group}" 
-  end 
+  task :start_mongrel_cluster , :roles => :app do
+    run "/usr/sbin/monit start all -g #{monit_group} -c #{release_path}/config/suoc.monitrc"
+  end
+
+  desc "Restart the Mongrel processes on the app server by starting and stopping the cluster."
+  task :restart_mongrel_cluster , :roles => :app do
+    run "/usr/sbin/monit restart all -g #{monit_group}-c #{release_path}/config/suoc.monitrc"
+  end
+
+  desc "Stop the Mongrel processes on the app server."
+  task :stop_mongrel_cluster , :roles => :app do
+    run "/usr/sbin/monit stop all -g #{monit_group} -c #{release_path}/config/suoc.monitrc"
+  end
 
   desc "Place the maintenance page out into the public path."
   task :disable_web, :roles => :web, :except => { :no_release => true } do
@@ -95,19 +90,19 @@ namespace :deploy do
     result = ERB.new(template).result(binding)
 
     put result, "#{shared_path}/system/maintenance.html", :mode => 0644
-  end  
-  
-  desc "Analyze Rails Log instantaneously" 
+  end
+
+  desc "Analyze Rails Log instantaneously"
   task :pl_analyze, :roles => :app do
     run "pl_analyze #{shared_path}/log/#{rails_env}.log" do |ch, st, data|
       print data
     end
   end
 
-  desc "Run rails_stat" 
+  desc "Run rails_stat"
   task :rails_stat, :roles => :app do
-    stream "rails_stat #{shared_path}/log/#{rails_env}.log" 
-  end  
+    stream "rails_stat #{shared_path}/log/#{rails_env}.log"
+  end
 end
 
 
