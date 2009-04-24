@@ -15,6 +15,9 @@
           %td
             =label_tag :sort, "Name"
             = radio_button_tag :sort, "name-asc", @sort == "name-asc"
+          %td
+            =label_tag :sort, "Most Active"
+            = radio_button_tag :sort, "activity-desc", @sort == "activity-desc"
     %p
       %input{"type"=>"submit", "value"=>"Search Members"}
 

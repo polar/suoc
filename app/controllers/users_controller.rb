@@ -80,7 +80,9 @@ class UsersController #< BaseController
     when "name-asc"
       order = 'login ASC'
     when "recent-desc"
-      order = 'created_at DESC'
+      order = 'activated_at DESC'
+    when "activity-desc"
+      order = "activities_count DESC"
     end
 
     @users = User.recent.find(:all,
