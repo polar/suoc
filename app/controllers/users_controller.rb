@@ -69,6 +69,35 @@ class UsersController #< BaseController
     end
   end
 
+  ##
+  ## Override
+  ##
+  def index
+    cond, @search, @metro_areas, @states = User.paginated_users_conditions_with_search(params)
+
+    # Add order conditions to cond.
+    case params[:sort]
+    when "name-asc"
+      order = 'login ASC'
+    when "recent-desc"
+      order = 'created_at DESC'
+    end
+
+    @users = User.recent.find(:all,
+      :conditions => cond.to_sql,
+      :include => [:tags],
+      :order => order,
+      :page => {:current => params[:page], :size => 20}
+      )
+
+    @tags = User.tag_counts :limit => 10
+
+    # for radio button display
+    @sort = params[:sort]
+
+    setup_metro_areas_for_cloud
+  end
+
   #
   # AJAX Requests
   #

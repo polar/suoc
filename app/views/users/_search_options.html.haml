@@ -5,8 +5,17 @@
     = text_field_tag 'login', @search['login']
     %p
       = render :partial => 'shared/location_chooser', :locals => {:selected_country => @search['country_id'].to_i, :selected_state => @search['state_id'].to_i, :selected_metro_area => @search['metro_area_id'].to_i, :states => @states, :metro_areas => @metro_areas}
-
-    %p 
+      %table
+        %tr
+          %th Sort By
+        %tr
+          %td
+            = label_tag :sort, "Most Recent"
+            = radio_button_tag :sort, "recent-desc", @sort == "recent-desc"
+          %td
+            =label_tag :sort, "Name"
+            = radio_button_tag :sort, "name-asc", @sort == "name-asc"
+    %p
       %input{"type"=>"submit", "value"=>"Search Members"}
 
 

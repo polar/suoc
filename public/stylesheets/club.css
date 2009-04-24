@@ -468,7 +468,13 @@ TABLE#club_announcements TR TH {
 TABLE#club_announcements TR TH {
   font-weight: bold;
 }
-
+/*
+ * Override the CE location chooser that is explicitly
+ * setting the size in the view.
+ */
+#location_chooser select{
+width: 10em !important;
+}
 .MainForm select{
 border:1px solid #ccc;
 font-weight: bold;
