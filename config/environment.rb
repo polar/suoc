@@ -125,6 +125,14 @@ AuthorizationUsagesController.send :caches_action, :site_index, :footer_content,
 
 
 Comatose.configure do |config|
+  # We are going to get rid of caching so our
+  # trips and annoucements pages work.
+  # Apparently, keyword "nocache" doesn't work.
+  # The keyword stops generating of static pages in "/public".
+  # However, I believe caching is happening in memory, which
+  # doesn't follow nocache.
+  config.disable_caching = true
+
  # We handle authorization now using the Engines Plugin architecture
  # allowing us to add filters and override methods in the
  # ComatoseAdminController.

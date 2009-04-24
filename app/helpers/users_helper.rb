@@ -1,15 +1,15 @@
 module UsersHelper
-  
-  
+
+
   #
-  # This renders the avatar with a link to 
+  # This renders the avatar with a link to
   # create on if the user doesn't have one.
   #
   def render_avatar(suocer, current)
     render :partial => "profile_picture", :locals => {
       :suocer => suocer, :current => current }
   end
-  
+
   #
   # This function renders the SuocProfile badge with an optional
   # link for the avatar.
@@ -18,7 +18,7 @@ module UsersHelper
     render :partial => "user_badge", :locals => {
       :member => member, :link => link }
   end
-  
+
   #
   # Optionally renders the "About Me" description
   #
@@ -28,24 +28,24 @@ module UsersHelper
              :member => member, :current => current }
     end
   end
-  
+
   #
   # This function renders a list of SuocLeaderships.
   #
   def render_leaderships(leaderships, clazz = nil)
     if !leaderships.empty?
-      rows = leaderships.map { |l|
-             render_leadership(l) }
+      rows = leaderships.sort {|x,y| x.leadership.name <=> y.leadership.name}
+      rows = rows.map { |l| render_leadership(l) }
       s = "<h3>Current Leaderships</h3>\n"
       s<< render_table(rows, clazz)
       return s
    end
   end
-  
+
   def render_leadership( leader )
       render_name_date_row(leader.leadership.name, leader.start_date)
   end
-  
+
   #
   # This function renders a list of SuocOfficers.
   #
@@ -58,7 +58,7 @@ module UsersHelper
       return s
    end
   end
-  
+
   def render_office( officer )
       render_name_date_row(officer.office.name, officer.start_date)
   end
@@ -77,7 +77,7 @@ module UsersHelper
       return s
     end
   end
-  
+
   #
   # This function renders a list of SuocChairmanships
   #
@@ -107,7 +107,7 @@ module UsersHelper
   # This function renders a name, date for a particular class.
   #
   def render_name_date_row( name, date, clazz = nil)
-      render :partial => "name_date_row", :locals => 
+      render :partial => "name_date_row", :locals =>
         { :name => name, :date => date, :clazz => clazz }
   end
 
@@ -144,7 +144,7 @@ module UsersHelper
       :clazz => clazz
       }
   end
-  
+
   def render_club_profile_info( member )
     render :partial => "club_profile_info", :locals => {
       :member => member,
