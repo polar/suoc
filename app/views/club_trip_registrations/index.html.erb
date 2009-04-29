@@ -19,6 +19,9 @@
     <% if show_edit?(club_trip_registration) %>
     <td><%= button_to 'Edit', edit_club_trip_registration_path(club_trip_registration), :method => :get %></td>
     <% end %>
+    <% if show_delete?(club_trip_registration) %>
+    <td><%= button_to 'Delete', club_trip_registration_path(club_trip_registration), :method => :delete %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>
