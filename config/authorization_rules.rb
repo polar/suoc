@@ -120,7 +120,7 @@ authorization do
   role :leader do
     includes :ops_admin
     has_permission_on :club_trip_registrations, :to => [:create]
-    has_permission_on :club_trip_registrations, :to => [:update] do
+    has_permission_on :club_trip_registrations, :to => [:update,:delete] do
       if_attribute :leader_id => is {user.id}
     end
   end

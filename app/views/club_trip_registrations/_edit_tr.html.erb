@@ -19,7 +19,7 @@
      # Middle Column
      %>
     <div class="yui-u">
-      <h3>Members Going <%= link_to_function "Help", :onclick => "$('invisible_help').style.display='block'" %></h3>
+      <h3>Members Going <%= link_to_function "(Help)", :onclick => "$('invisible_help').style.display='block'" %></h3>
       <div class="listBox" id="dropZone1"
               style="width:250px;height:600px;overflow:auto;">
         <%= render :partial => "member", :collection => @members_going, :as => :member %>
