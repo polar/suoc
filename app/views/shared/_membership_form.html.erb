@@ -16,7 +16,7 @@
     </tr>
     <tr class="member_entry">
     <td class="date_entry">
-      <%= text_field_with_auto_complete(:club_member, :login, :size => "20") %>
+      <%= text_field_with_auto_complete(:club_member, :login, {:size => "20"}, :skip_style => true) %>
     </td>
     <td class="action_entry">
       <%= select( :club_membership, :member_type, ClubMembershipType.all.collect {|x| [x.name, x.id]}) %>

@@ -4,6 +4,9 @@ class ClubTripsController < BaseController
 
   layout "club_operations"
 
+  #
+  # This causes downloading of Rico Javascripts.
+  #
   def index
     @club_trips = ClubTrip.find(:all)
     if @club_trips

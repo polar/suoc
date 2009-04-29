@@ -1,0 +1,86 @@
+<%= render :partial => "users/user_badge",
+           :locals => { :member => @club_trip_registration.leader } %>
+<h3>Status</h3>
+<% if @club_trip_registration.submit_date.nil? %>
+<p>
+This trip registration is PENDING.
+  <table>
+  <% if @show_addme %>
+    <tr>
+    <td> I want to go! </td>
+    <td>
+    <%= button_to "Add Me", :action => :add_me,
+                            :id => @club_trip_registration %>
+    </td>
+    </tr>
+  <% end %>
+  <% if @show_removeme %>
+    <td> I don't want to go anymore!</td>
+    <td>
+    <%=button_to "Remove Me", :action => :remove_me,
+                              :id => @club_trip_registration %>
+    </td>
+    </tr>
+  <% end %>
+  </table>
+<% else %>
+  <p>
+  This trip registration has been submitted!
+<% end %>
+<div class="yui-g">
+  <div class="yui-u first">
+    <h3>Details</h3>
+    <table>
+    <tr>
+    <th><%= "Trip Name" %></th>
+    <td><%= @club_trip_registration.trip_name %></td>
+    </tr>
+    <tr>
+    <th><%= "Leadership" %></th>
+    <td><%= @club_trip_registration.leadership.name %></td>
+    </tr>
+    <tr>
+    <th><%= "Location" %></th>
+    <td><%= @club_trip_registration.location %></td>
+    </tr>
+    <tr>
+    <th><%= "Departure Date" %></th>
+    <td><%= @club_trip_registration.departure_date %></td>
+    </tr>
+    <tr>
+    <th><%= "Return Date" %></th>
+    <td><%= @club_trip_registration.return_date %></td>
+    </tr>
+    <tr>
+    <th><%= "Email" %></th>
+    <td><%= @club_trip_registration.email %></td>
+    </tr>
+    <tr>
+    <th><%= "Phone" %></th>
+    <td><%= @club_trip_registration.phone %></td>
+    </tr>
+    <tr>
+    <th><%= "Overnight Location" %></th>
+    <td><%= @club_trip_registration.overnight_location %></td>
+    </tr>
+    <tr>
+    <th><%= "Overnight Phone" %></th>
+    <td><%= @club_trip_registration.overnight_phone %></td>
+    </tr>
+    <tr>
+    <th><%= "Mode of Transportation" %></th>
+    <td><%= @club_trip_registration.mode_of_transport %></td>
+    </tr>
+    <tr>
+    <th><%= "Additional Notes" %></th>
+    </tr>
+    <tr>
+    <td colspan="2"><%= @club_trip_registration.notes %></td>
+    </tr>
+    </table>
+  </div>
+  <div class="yui-u">
+    <h3>Members Going</h3>
+    <%= render :partial => "member", :collection => @members_going %>
+  </div>
+</div>

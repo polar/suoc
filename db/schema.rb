@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090423040713) do
+ActiveRecord::Schema.define(:version => 20090428194313) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
@@ -237,6 +237,11 @@ ActiveRecord::Schema.define(:version => 20090423040713) do
     t.datetime "updated_at"
   end
 
+  create_table "club_members_club_trip_registrations", :id => false, :force => true do |t|
+    t.integer "club_member_id"
+    t.integer "club_trip_registration_id"
+  end
+
   create_table "club_membership_types", :force => true do |t|
     t.string   "name"
     t.string   "description", :default => ""
@@ -276,6 +281,26 @@ ActiveRecord::Schema.define(:version => 20090423040713) do
     t.integer "club_member_id"
   end
 
+  create_table "club_trip_registrations", :force => true do |t|
+    t.integer  "leader_id"
+    t.integer  "leadership_id"
+    t.text     "email"
+    t.text     "phone"
+    t.text     "trip_name"
+    t.date     "departure_date"
+    t.date     "return_date"
+    t.text     "mode_of_transport"
+    t.text     "location"
+    t.text     "overnight_location"
+    t.text     "overnight_phone"
+    t.text     "notes"
+    t.text     "attendees"
+    t.date     "submit_date"
+    t.text     "submit_data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "club_trips", :force => true do |t|
     t.string   "trip"
     t.string   "swhen"
@@ -313,16 +338,13 @@ ActiveRecord::Schema.define(:version => 20090423040713) do
     t.string   "slug"
     t.string   "keywords"
     t.text     "body"
-    t.string   "filter_type",    :limit => 25, :default => "Textile"
+    t.string   "filter_type",   :limit => 25, :default => "Textile"
     t.string   "author"
-    t.integer  "position",                     :default => 0
+    t.integer  "position",                    :default => 0
     t.integer  "version"
-    t.date     "created_on"
-    t.date     "updated_on"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "updated_on"
+    t.datetime "created_on"
     t.integer  "page_photo_id"
-    t.integer  "author_user_id"
   end
 
   create_table "comments", :force => true do |t|

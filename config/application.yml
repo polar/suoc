@@ -12,6 +12,8 @@ closed_beta_mode: false
 # off of the http headers
 community_locale: "en"
 
+trip_registration_email: polar@syr.edu
+
 #
 # Options for editor
 #

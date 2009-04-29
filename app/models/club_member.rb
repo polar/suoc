@@ -137,4 +137,17 @@ class ClubMember < User
     chairs.reject { |x| x.current? }
   end
 
+  def has_current_membership?
+    ! memberships.select { |x| x.current? }.empty?
+  end
+
+  #
+  # TODO: Current status of nil is accepted.
+  # 
+  def has_current_status?
+    club_member_status.nil? ||
+      ([ClubMemberStatus[:Active], 
+       ClubMemberStatus[:Life]].include? club_member_status)
+  end
+
 end

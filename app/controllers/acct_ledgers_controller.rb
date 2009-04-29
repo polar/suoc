@@ -43,7 +43,7 @@ class AcctLedgersController < BaseController
 
     @items = ClubMember.find(:all, find_options)
 
-    render :inline => "<%= auto_complete_result @items, :login %>"
+    render :inline => "<%= auto_complete_result_2 @items %>"
   end
 
   def index
@@ -165,12 +165,23 @@ class AcctLedgersController < BaseController
     if !error
       if @transaction.acct_action.name == "Membership Collection"
         if params[:club_membership]
-          name = params[:club_member][:login]
-          # TODO:There may be two or more, we grab the youngest.
-          member = ClubMember.find(:first,
-             :order => "birthday DESC",
-             :conditions => { :login => name })
+          name, birthday, id = params[:club_member][:login].split(/[\[\]]/)
+          if id
+            member = ClubMember.find(id)
+          end
           if !member
+            # TODO:There may be two or more, we grab the youngest, but this will be rare.
+            cond = { :login => name }
+            cond << { :birthday => birthday } if birthday
+            member = ClubMember.find(:first,
+               :order => "birthday DESC",
+               :conditions => cond)
+          end
+          if member && member.name != name
+            @transactions.errors.add_to_base("Internal Error: Member '#{name}' does not match the internal id")
+            error = true
+          end
+          if !error && !member
             @transaction.errors.add(:description, "Member '#{name}' does not exist")
             error = true
           end

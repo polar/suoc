@@ -473,17 +473,23 @@ TABLE#club_announcements TR TH {
  * setting the size in the view.
  */
 #location_chooser select{
-width: 10em !important;
+  width: 10em !important;
 }
+
 .MainForm select{
-border:1px solid #ccc;
-font-weight: bold;
-font-size: 123.1%;
-color: #777;
-width: 261px;
-padding: 5px;
-background: #f8f8f8;
+  border:1px solid #ccc;
+  font-weight: bold;
+  font-size: 123.1%;
+  color: #777;
+  width: 261px;
+  padding: 5px;
+  background: #f8f8f8;
 }
+
+/*
+ * Restoring some things that were zeroed out by
+ * resetGrid.
+ */
 em {
   font-style: italic;
 }
@@ -512,4 +518,45 @@ strong {
 }
 .acct_accounts .position input {
   width: 1em;
+}
+
+/*
+ * Invisible Help
+ */
+#invisible_help {
+  display: none;
+}
+/*
+ * Trip Registrations
+ */
+.member_drag {
+}
+.member_drag img{
+  float: left;
+}
+.member_drag ul{
+  margin-left: 30px;
+  vertical-align: middle;
+}
+.member_drag .membership_current .full_name a,
+.membership_help .membership_current{
+  color: #208020;
+}
+.member_drag .membership_Active .full_name a,
+.membership_help .membership_Active{
+  color: #b28303;
+}
+.member_drag .membership_Life .full_name a,
+.membership_help .membership_Life{
+  color: #4a138a;
+}
+.member_drag .membership_Inactive {
+}
+.member_drag .membership_Deceased {
+}
+.member_drag .membership_Retired {
+}
+.member_drag .membership_other .full_name a,
+.membership_help .membership_other{
+  color: #dd1111;
 }

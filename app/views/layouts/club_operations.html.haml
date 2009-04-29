@@ -15,6 +15,7 @@
     = stylesheet_link_tag "club.css"
     - if @rss_title && @rss_url
       = auto_discovery_link_tag(:rss, @rss_url, {:title => @rss_title})
+    = render :partial => "shared/rico"
     
   %body
     #doc4{:class => "yui-t4"}

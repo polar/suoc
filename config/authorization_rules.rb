@@ -13,6 +13,9 @@ privileges do
   privilege :read_id
   privilege :write_id, :includes => :read_id
 
+  # For club trip registrations
+  privilege :add_remove
+
   #
   # This privilege is specifically for the ledgers controller, which
   # may be read by anybody, but only such may be able to modify or
@@ -116,6 +119,10 @@ authorization do
   end
   role :leader do
     includes :ops_admin
+    has_permission_on :club_trip_registrations, :to => [:create]
+    has_permission_on :club_trip_registrations, :to => [:update] do
+      if_attribute :leader_id => is {user.id}
+    end
   end
 
   #
@@ -133,6 +140,7 @@ authorization do
     has_permission_on :users, :to => :write_id do
       if_attribute :id => is {user.id}
     end
+    has_permission_on :club_trip_registrations, :to => [:read,:add_remove]
   end
 
   #

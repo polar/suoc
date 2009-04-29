@@ -1,0 +1,46 @@
+<%
+ # We set up a three column display, with the text data
+ # in the first, the members going on the trip in the
+ # second, and the third column for member selection to
+ # drag over into the members going column.
+ %>
+<div class="yui-gb">
+  <% form_for @club_trip_registration, :html => { :class => "MainForm" } do |f| %>
+    <%
+     # First Column
+     %>
+    <div class="yui-u first">
+      <h3>Details</h3>
+
+      <%= render :partial => "form", :locals => { :f => f } %>
+    </div>
+
+    <%
+     # Middle Column
+     %>
+    <div class="yui-u">
+      <h3>Members Going <%= link_to_function "Help", :onclick => "$('invisible_help').style.display='block'" %></h3>
+      <div class="listBox" id="dropZone1"
+              style="width:250px;height:600px;overflow:auto;">
+        <%= render :partial => "member", :collection => @members_going, :as => :member %>
+
+      </div>
+    </div>
+  <% end %>
+  <%
+   # Third Column
+   %>
+  <div class="yui-u">
+    <div id="dropBox" style="margin-left:8px;margin-bottom:8px;float:left">
+    <h3>Possible Attendees</h3>
+      <div class="listBox" id="dropZone2"
+              style="width:250px;height:600px;overflow:auto;">
+      <%= render :partial => "member", :collection => @members, :as => :member %>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  dndMgr.registerDropZone( new Rico.Dropzone($('dropZone1')));
+  dndMgr.registerDropZone( new Rico.Dropzone($('dropZone2')));
+</script>

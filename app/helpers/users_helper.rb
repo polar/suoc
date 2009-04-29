@@ -152,6 +152,17 @@ module UsersHelper
       }
   end
 
+  def render_trip_registrations( member )
+    trip_regs = ClubTripRegistration.all(
+                    :conditions => { :leader_id => member },
+                    :order => "departure_date DESC")
+    render :partial => "club_trip_registrations", :locals => {
+      :member => member,
+      :trip_regs => trip_regs,
+      :showedit => current_user == member
+    }
+  end
+
   def fmt_memberid(member)
     if member.club_memberid && member.club_memberid.length > 5
       member.club_memberid.insert(5,"-")

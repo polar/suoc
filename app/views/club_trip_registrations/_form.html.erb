@@ -1,0 +1,25 @@
+<%= f.error_messages %>
+<%= f.label :trip_name, "Trip Name" %>
+<%= f.text_field :trip_name %>
+<%= f.label :leadership_id, "Leadership" %>
+<%= f.collection_select :leadership_id, @leaderships, :id, :name %>
+<%= f.label :location, "Location" %>
+<%= f.text_field :location %>
+<%= f.label :departure_date, "Departure Date" %>
+<%= f.text_field :departure_date %>
+<%= f.label :return_date, "Return Date" %>
+<%= f.text_field :return_date %>
+<%= f.label :email, "Email" %>
+<%= f.text_field :email %>
+<%= f.label :phone, "Phone" %>
+<%= f.text_field :phone %>
+<%= f.label :overnight_location, "Overnight Location" %>
+<%= f.text_field :overnight_location %>
+<%= f.label :overnight_phone, "Overnight Phone" %>
+<%= f.text_field :overnight_phone %>
+<%= f.label :mode_of_transport, "Mode of Transportation" %>
+<%= f.text_field :mode_of_transport %>
+<%= f.label :notes, "Additional Notes" %>
+<%= f.text_area :notes %>
+<p>
+<%= f.submit @submit %>

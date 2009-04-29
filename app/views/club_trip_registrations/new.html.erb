@@ -1,0 +1,7 @@
+<h3>New Club Trip Registration</h1>
+<%= render :partial => "users/user_badge", 
+           :locals => { :member => @club_trip_registration.leader } %>
+
+<%= render :partial => "edit_tr" %>
+
+<%= link_to 'Back', club_trip_registrations_path %>

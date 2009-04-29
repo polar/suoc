@@ -1,0 +1,29 @@
+<h3>Club Trip Registrations</h3>
+<p>
+<strong style="color:red">The trips registrations are EXPERIMENTAL right now and they do not submit to Recreation Services Yet!
+</strong>
+<table>
+  <tr>
+   <th>Trip Name</th>
+   <th>Leader</th>
+   <th>Activity</th>
+   <th>Date</th>
+  </tr>
+
+<% for club_trip_registration in @club_trip_registrations %>
+  <tr>
+    <td><%= link_to club_trip_registration.trip_name, club_trip_registration %></td>
+    <td><%= link_to club_trip_registration.leader.name, user_path(club_trip_registration.leader) %></td>
+    <td><%= club_trip_registration.leadership.name %></td>
+    <td><%= club_trip_registration.departure_date.strftime("%m-%d-%Y") %></td>
+    <% if show_edit?(club_trip_registration) %>
+    <td><%= button_to 'Edit', edit_club_trip_registration_path(club_trip_registration), :method => :get %></td>
+    <% end %>
+  </tr>
+<% end %>
+</table>
+
+<br />
+<% if permitted_to? :create, :club_trip_registrations %>
+<%= link_to 'Create New Trip Registration', new_club_trip_registration_path %>
+<% end %>
