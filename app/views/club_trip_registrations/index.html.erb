@@ -27,6 +27,6 @@
 </table>
 
 <br />
-<% if permitted_to? :create, :club_trip_registrations %>
+<% if @show_create %>
 <%= link_to 'Create New Trip Registration', new_club_trip_registration_path %>
 <% end %>

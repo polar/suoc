@@ -2,7 +2,7 @@
 <%= f.label :trip_name, "Trip Name" %>
 <%= f.text_field :trip_name %>
 <%= f.label :leadership_id, "Leadership" %>
-<%= f.collection_select :leadership_id, @leaderships, :id, :name %>
+<%= f.collection_select :leadership_id, @leaderships, :id, :name, :prompt => "Please Select"%>
 <%= f.label :location, "Location" %>
 <%= f.text_field :location %>
 <%= f.label :departure_date, "Departure Date" %>

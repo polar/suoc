@@ -16,6 +16,7 @@ class ClubTripRegistrationsController < BaseController
     @club_trip_registrations = ClubTripRegistration.find(:all,
            :order => "departure_date DESC",
            :conditions => "submit_date IS NULL")
+    @show_create = permitted_to? :create, :club_trip_registrations
   end
 
   def show
