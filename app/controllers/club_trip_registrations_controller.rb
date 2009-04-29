@@ -30,7 +30,7 @@ class ClubTripRegistrationsController < BaseController
     @show_submit =
       !@club_trip_registration.submitted? &&
         @club_trip_registration.leader == current_user
-    @show_edit
+    @show_edit =
       !@club_trip_registration.submitted? &&
         @club_trip_registration.leader == current_user
   end
