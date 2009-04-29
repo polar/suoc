@@ -15,5 +15,8 @@
 
 <p>
 <p>
-<%= link_to 'Edit Trip Registration', edit_club_trip_registration_path(@club_trip_registration) if @show_edit %> |
+<% if @show_edit %>
+<%= link_to 'Edit Trip Registration', edit_club_trip_registration_path(@club_trip_registration) %>
+|
+<% end %>
 <%= link_to 'Trip Registrations', club_trip_registrations_path %>
