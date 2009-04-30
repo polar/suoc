@@ -8,7 +8,7 @@ class ClubDocumentsController < BaseController
     Dir.foreach(RAILS_ROOT+"/public/admin") do |d|
       puts d  if !(d =~/^\./)
       if !(d =~/^\./) && d =~/.*\.html$/
-        @files << { :url => url_for ("admin/"+d), :name => d}
+        @files << {:url => url_for("admin/"+d), :name => d}
         puts @files
       end
     end

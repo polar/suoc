@@ -18,15 +18,6 @@
           <li class="full_name">
             <%= link_to member.login, user_path(member) %>
           </li>
-          <% if member.club_memberid %>
-            <li class="member_id">
-              SUID: <%= if permitted_to? :read_id, member
-                          fmt_memberid(member)
-                        else 
-                          "[hidden]"
-                        end %>
-            </li>
-          <% end %>
           <% if member.club_affiliation %>
             <li class="affiliation">
               Affiliation: <%= member.club_affiliation.name %>
