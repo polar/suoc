@@ -6,6 +6,8 @@ privileges do
   privilege :update, :includes => :edit
   privilege :delete, :includes => :destroy
 
+  privilege :configure
+
   # I assume we have :read, :create, :update, :delete
   # This privilege has only meaning in the context
   # of a User/ClubMember and allows the display of
@@ -53,6 +55,7 @@ authorization do
     has_permission_on :acct_action_types, :to => :manage
     has_permission_on :acct_account_types, :to => :manage
     has_permission_on :acct_ledgers, :to => :manage
+    has_permission_on :club_trip_registrations, :to => :configure
   end
 
   #

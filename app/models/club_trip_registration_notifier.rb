@@ -37,8 +37,9 @@ class ClubTripRegistrationNotifier < ActionMailer::Base
       "          "
     end
   end
+
   def setup_email
-    @recipients  = "#{AppConfig.trip_registration_email}"
+    @recipients  = ClubTripRegistrationsConfiguration.first.notification_email
     setup_sender_info
     @subject     = "[#{AppConfig.community_name}] "
     @sent_on     = Time.now

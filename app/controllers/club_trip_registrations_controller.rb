@@ -6,6 +6,8 @@ class ClubTripRegistrationsController < BaseController
   filter_access_to :submit_registration, :require => :update
   filter_access_to [:add_me, :remove_me],
                    :require => [:read, :add_remove]
+  filter_access_to [:configure, :update_configuration],
+                   :require => [:configure]
 
   #
   # This makes us load the Rico Javascripts
@@ -17,6 +19,7 @@ class ClubTripRegistrationsController < BaseController
            :order => "departure_date DESC",
            :conditions => "submit_date IS NULL")
     @show_create = permitted_to? :create, :club_trip_registrations
+    @show_configure = permitted_to? :configure, :club_trip_registrations
   end
 
   def show
@@ -147,6 +150,27 @@ class ClubTripRegistrationsController < BaseController
       redirect_to :action => :edit
     end
   end
+
+  def configure
+    @config = ClubTripRegistrationsConfiguration.first;
+    if (!@config)
+      @config = ClubTripRegistrationsConfiguration.new
+      @config.save
+    end
+  end
+
+  def update_configuration
+    @config = ClubTripRegistrationsConfiguration.first;
+
+    if @config.update_attributes(params[:club_trip_registrations_configuration])
+      flash[:error] = "Could not save configuration"
+      redirect_to :action => :index
+    else
+      flash[:error] = "Configuration changed."
+      render :action => :configure
+    end
+  end
+
   def destroy
     @club_trip_registration = ClubTripRegistration.find(params[:id])
     @club_trip_registration.destroy

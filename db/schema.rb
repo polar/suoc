@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090430215658) do
+ActiveRecord::Schema.define(:version => 20090430223036) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
@@ -297,6 +297,12 @@ ActiveRecord::Schema.define(:version => 20090430215658) do
     t.text     "attendees"
     t.date     "submit_date"
     t.text     "submit_data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "club_trip_registrations_configurations", :force => true do |t|
+    t.text     "notification_email"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

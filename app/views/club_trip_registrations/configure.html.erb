@@ -1,0 +1,11 @@
+<h3>Configure Club Trip Registrations</h3>
+
+<% form_for :club_trip_registrations_configuration, @config,
+           :url => url_for(:controller => :club_trip_registrations,
+                           :action => :update_configuration),
+            :html => { :class => "MainForm" } do |f| %>
+  <%= f.label :notification_email, "Trip Registration Email" %>
+  <%= f.text_field :notification_email %>
+  <p>
+  <%= f.submit "Configure" %>
+<% end %>

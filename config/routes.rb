@@ -1,5 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :club_trip_registrations
+  map.resources :club_trip_registrations, :collection => {
+    :configure => :get,
+    :update_configuration => :post}
+
   map.resources :acct_ledgers
 
   map.resources :club_ledgers

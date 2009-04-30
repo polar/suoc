@@ -30,3 +30,8 @@
 <% if @show_create %>
 <%= link_to 'Create New Trip Registration', new_club_trip_registration_path %>
 <% end %>
+<% if @show_configure %>
+<p>
+<p>
+<%= link_to 'Configure Trip Registration', url_for(:action => :configure) %>
+<% end %>
