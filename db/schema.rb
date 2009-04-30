@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090428194313) do
+ActiveRecord::Schema.define(:version => 20090430215658) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
@@ -642,8 +642,8 @@ ActiveRecord::Schema.define(:version => 20090428194313) do
     t.integer  "state_id"
     t.integer  "metro_area_id"
     t.string   "login_slug"
-    t.boolean  "notify_comments",                         :default => false
-    t.boolean  "notify_friend_requests",                  :default => false
+    t.boolean  "notify_comments",                         :default => true
+    t.boolean  "notify_friend_requests",                  :default => true
     t.boolean  "notify_community_news",                   :default => false
     t.integer  "country_id"
     t.boolean  "featured_writer",                         :default => false

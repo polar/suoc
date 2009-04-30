@@ -100,23 +100,6 @@ class UsersController #< BaseController
     setup_metro_areas_for_cloud
   end
 
-  #
-  # AJAX Requests
-  #
-  def validate_club_member_info(member)
-    if !member.club_affiliation
-      member.errors.add("You need to supply an affiliation")
-      return false
-    else
-      if member.club_affiliation.requires_memberid &&
-         member.club_memberid.empty?
-         member.errors.add_to_base("Your affiliation requires an SUID")
-         return false
-      end
-    end
-    return true
-  end
-
   def update_club_member_info
     member = ClubMember.find(params[:id])
     if permitted_to? :write, member
@@ -125,8 +108,6 @@ class UsersController #< BaseController
       if member.update_attributes(params[:club_member])
         can_edit_info = current_user.admin? || current_user == member
         render_club_member_info(member, can_edit_info)
-#       elsif validate_club_member_info(member) && member.save
-#         render_club_member_info(member, can_edit_info)
       else
         render_edit_club_member_info(member)
       end
