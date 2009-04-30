@@ -33,14 +33,14 @@ class ClubMember < User
   #
   validates_format_of :login,
                       :with => /^[A-Z][A-Za-z\']+(((\s[A-Z\'])(\s*[A-Z][A-Za-z\']+)(\s*[A-Z0-9][A-Za-z0-9\']+)*)|((\s*[A-Z\'][A-Za-z\']+)(\s*[A-Z0-9][A-Za-z0-9\']+)*))$/,
-                      :message => "must contain at least your FIRST name <b>and</b> LAST name and starting with capital letters. <p>Ex. Thurston Brower Howell 3rd",
-                      :on => :create
+                      :message => "must contain at least your FIRST name <b>and</b> LAST name and starting with capital letters. <p>Ex. Thurston Brower Howell 3rd"
 
 
   validates_presence_of :club_affiliation_id
   validates_presence_of :club_memberid,
                         :if => Proc.new { |u| u.club_affiliation.requires_memberid},
                         :message => "Your affiliation requires a SUID"
+
   validates_presence_of :club_member_status_id
 
   # Make sure the SUID is just nine digits
@@ -193,15 +193,21 @@ class ClubMember < User
   def self.rectify
     members = ClubMember.all
     members.each do |m|
-      if !m.valid?
         if m.club_start_date.nil?
           m.club_start_date = m.created_at
         end
         if m.club_affiliation.nil?
-          if m.club_memberid.nil?
+          if m.club_memberid.empty?
             m.club_affiliation = ClubAffiliation["SU Alumni"]
           else
             m.club_affiliation = ClubAffiliation["SU"]
+          end
+        end
+        if m.club_affiliation.requires_memberid && m.club_memberid.empty?
+          if /ESF/ =~ m.club_affiliation.name
+            m.club_affiliation = ClubAffiliation["ESF Alumni"]
+          else
+            m.club_affiliation = ClubAffiliation["SU Alumni"]
           end
         end
         if m.club_member_status.nil?
@@ -210,12 +216,14 @@ class ClubMember < User
         if !m.valid?
           m.club_member_status = ClubMemberStatus[:Active]
         end
-      end
-      p "#{m.name} = #{m.valid?}"
+      p "#{m.name} = #{m.valid?} #{m.club_affiliation.name}"
       if !m.valid?
         p m.errors
+      else
+        m.save
       end
     end
+    nil
   end
 
   def self.print_unactivated
