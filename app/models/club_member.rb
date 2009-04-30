@@ -181,49 +181,9 @@ class ClubMember < User
     ! memberships.select { |x| x.current? }.empty?
   end
 
-  #
-  # TODO: Current status of nil is accepted.
-  #
   def has_current_status?
-    club_member_status.nil? ||
-      ([ClubMemberStatus[:Active],
-       ClubMemberStatus[:Life]].include? club_member_status)
-  end
-
-  def self.rectify
-    members = ClubMember.all
-    members.each do |m|
-        if m.club_start_date.nil?
-          m.club_start_date = m.created_at
-        end
-        if m.club_affiliation.nil?
-          if m.club_memberid.empty?
-            m.club_affiliation = ClubAffiliation["SU Alumni"]
-          else
-            m.club_affiliation = ClubAffiliation["SU"]
-          end
-        end
-        if m.club_affiliation.requires_memberid && m.club_memberid.empty?
-          if /ESF/ =~ m.club_affiliation.name
-            m.club_affiliation = ClubAffiliation["ESF Alumni"]
-          else
-            m.club_affiliation = ClubAffiliation["SU Alumni"]
-          end
-        end
-        if m.club_member_status.nil?
-          m.club_member_status = ClubMemberStatus[:Active]
-        end
-        if !m.valid?
-          m.club_member_status = ClubMemberStatus[:Active]
-        end
-      p "#{m.name} = #{m.valid?} #{m.club_affiliation.name}"
-      if !m.valid?
-        p m.errors
-      else
-        m.save
-      end
-    end
-    nil
+      [ClubMemberStatus[:Active],
+       ClubMemberStatus[:Life]].include?(club_member_status)
   end
 
   def self.print_unactivated
@@ -231,6 +191,7 @@ class ClubMember < User
     members.each do |m|
       p "#{m.id} #{m.name} created at: #{m.created_at}"
     end
+    nil
   end
 
   def self.remove_unactivated
@@ -238,6 +199,7 @@ class ClubMember < User
     members.each do |m|
       m.delete
     end
+    nil
   end
 
 end

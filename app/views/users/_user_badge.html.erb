@@ -18,6 +18,11 @@
           <li class="full_name">
             <%= link_to member.login, user_path(member) %>
           </li>
+          <% if !member.club_aliases.nil? && !member.club_aliases.empty? %>
+            <li class="aliases">
+              Aliases: <%= member.club_aliases %>
+            </li>
+          <% end %>
           <% if member.club_affiliation %>
             <li class="affiliation">
               Affiliation: <%= member.club_affiliation.name %>
