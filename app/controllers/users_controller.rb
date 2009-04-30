@@ -122,10 +122,11 @@ class UsersController #< BaseController
     if permitted_to? :write, member
       params[:club_member][:club_start_date] =
           normalize_date_string(params[:club_member][:club_start_date])
-      member.update_attributes(params[:club_member])
-      can_edit_info = current_user.admin? || current_user == member
-      if validate_club_member_info(member) && member.save
+      if member.update_attributes(params[:club_member])
+        can_edit_info = current_user.admin? || current_user == member
         render_club_member_info(member, can_edit_info)
+#       elsif validate_club_member_info(member) && member.save
+#         render_club_member_info(member, can_edit_info)
       else
         render_edit_club_member_info(member)
       end

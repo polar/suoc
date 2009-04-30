@@ -9,7 +9,7 @@ class ClubMember < User
 
   has_many :memberships, :class_name => "ClubMembership",  :foreign_key => :member_id
 
-  validates_date :club_start_date, :allow_nil => true
+  validates_date :club_start_date, :allow_nil => false
   validates_date :club_end_date, :allow_nil => true
 
   #
@@ -37,17 +37,57 @@ class ClubMember < User
                       :on => :create
 
 
-  #
-  # TODO: Changed this validation :on option to :save as soon as it becomes true for all users.
-  #
-  validates_presence_of :club_affiliation, :on => :create
+  validates_presence_of :club_affiliation_id
   validates_presence_of :club_memberid,
-                        :if => Proc.new { |u| puts u.name; u.club_affiliation.requires_memberid},
-                        :on => :create,
+                        :if => Proc.new { |u| u.club_affiliation.requires_memberid},
                         :message => "Your affiliation requires a SUID"
+  validates_presence_of :club_member_status_id
 
   # Make sure the SUID is just nine digits
   before_validation :normalize_club_memberid
+
+  def validate
+    validate_club_member_status
+  end
+
+  #
+  # Inorder to be a life member, you have to have a member since date of at
+  # least 4 years ago, i.e. the possibility of 4 paid memberships. They should
+  # be consecutive.
+  # Alternatively, you could just pay for 4 years, even in the future.
+  # Or you are an X-president.
+  def can_be_life
+    club_start_date && (
+      club_start_date < Date.today - 3.years ||
+      memberships.count >= 4 ||
+      !officers.select{|o| o.office.name == "President" && o.end_date < Date.today}.empty?)
+  end
+
+  def validate_club_member_status
+    case club_member_status
+    when ClubMemberStatus[:Life]
+      if !can_be_life
+        errors.add :club_member_status_id, "You can't possibly be a life member!"
+        false
+      else
+        true
+      end
+    when ClubMemberStatus[:Retired]
+      if !can_be_life
+        errors.add_to_base "You can't possibly be retired!"
+        false
+      else
+        true
+      end
+    when ClubMemberStatus[:Active]
+      true
+    when ClubMemberStatus[:Inactive]
+      true
+    else
+      # shouldn't happen
+      false
+    end
+  end
 
   def normalize_club_memberid
     self.club_memberid = self.club_memberid.delete(' -') if self.club_memberid
@@ -143,11 +183,53 @@ class ClubMember < User
 
   #
   # TODO: Current status of nil is accepted.
-  # 
+  #
   def has_current_status?
     club_member_status.nil? ||
-      ([ClubMemberStatus[:Active], 
+      ([ClubMemberStatus[:Active],
        ClubMemberStatus[:Life]].include? club_member_status)
+  end
+
+  def self.rectify
+    members = ClubMember.all
+    members.each do |m|
+      if !m.valid?
+        if m.club_start_date.nil?
+          m.club_start_date = m.created_at
+        end
+        if m.club_affiliation.nil?
+          if m.club_memberid.nil?
+            m.club_affiliation = ClubAffiliation["SU Alumni"]
+          else
+            m.club_affiliation = ClubAffiliation["SU"]
+          end
+        end
+        if m.club_member_status.nil?
+          m.club_member_status = ClubMemberStatus[:Active]
+        end
+        if !m.valid?
+          m.club_member_status = ClubMemberStatus[:Active]
+        end
+      end
+      p "#{m.name} = #{m.valid?}"
+      if !m.valid?
+        p m.errors
+      end
+    end
+  end
+
+  def self.print_unactivated
+    members = ClubMember.all( :conditions => "activated_at IS NULL" )
+    members.each do |m|
+      p "#{m.id} #{m.name} created at: #{m.created_at}"
+    end
+  end
+
+  def self.remove_unactivated
+    members = ClubMember.all( :conditions => "activated_at IS NULL" )
+    members.each do |m|
+      m.delete
+    end
   end
 
 end
