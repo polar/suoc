@@ -4,6 +4,8 @@
   %ul.list.checks
     - if permitted_to? :manage, :comatose_admin
       %li= link_to :Pages.l, comatose_admin_path
+    - if permitted_to? :manage, :club_login_messages
+      %li= link_to "Login Messages".l, club_login_messages_path
     - if feature_enabled?('categories') && current_user.admin?
       %li= link_to :categories.l, categories_path
     - if feature_enabled?('contests') && current_user.admin?

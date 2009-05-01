@@ -1,0 +1,12 @@
+<h3>Club Message</h3>
+
+<table>
+  <%= render :partial => "club_login_message", :object => @club_login_message %>
+</table>
+<p>
+
+<% if @show_edit %>
+ <%= link_to 'Edit this Message', edit_club_login_message_path(@club_login_message) %>
+ |
+<% end %>
+<%= link_to 'All Messages', club_login_messages_path %>

@@ -1,0 +1,9 @@
+<% form_for @club_login_message, :html => { :class => "MainForm" } do |f| %>
+  <%= f.label :date %>
+  <%= f.text_field :date,
+         :value => (@club_login_message.date.strftime("%m-%d-%Y") if @club_login_message.date) %>
+  <%= f.label :message %>
+  <%=  f.text_area :message %>
+  <p>
+  <%= f.submit @submit %>
+<% end %>

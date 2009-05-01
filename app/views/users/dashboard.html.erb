@@ -1,13 +1,22 @@
 <% @section = 'my_profile' %>
 
 <%= render :partial => "users/dashboard_nav" %>
-    
+
 
 <div id="yui-main">
   <div class="yui-b">
     <div class="box">
         <h3><%=  random_greeting(@user) %></h3>
-      
+
+        <% if @messages && !@messages.empty? %>
+          <h2>Messages from the Master</h2>
+          <p>
+          <table class="login_messages">
+            <%= render :partial => "club_login_messages/club_login_message",
+                       :collection => @messages %>
+          </table>
+          <p>
+        <% end %>
         <% if @user.pending_friendships.any? %>
           <p>
             <%= link_to "#{image_tag 'icons/user_add.png', :plugin => 'community_engine'} #{:you_have_pending_friendship_requests.l}",
@@ -28,21 +37,21 @@
           <p>
             <%= link_to 'Update your profile and tag yourself'.l(:update_profile_and_tag_yourself),
                         edit_user_path(current_user) %>
-            <%= "to start getting recommended content on your dashboard.".l 
+            <%= "to start getting recommended content on your dashboard.".l
                  :to_get_recommended_content_on_your_dashboard %>
         <% end %>
-  
+
         <% unless @network_activity.empty? %>
           <h2><%= "Activity from your network".l %></h2>
           <div class="box fresh">
-            <%= render :partial => "activities/activity", 
+            <%= render :partial => "activities/activity",
                        :collection => @network_activity %>
             <h6 class="all">
               <%= link_to "See all activity".l, network_user_activities_path(current_user) %>
             </h6>
           </div>
         <% end %>
-  
+
         <% unless @recommended_posts.empty? %>
           <h3><%= "Recommended Posts".l %></h3>
           <div id="posts">
@@ -50,7 +59,7 @@
               <% @recommended_posts.each do |post| %>
                 <li>
                   <%= link_to( "#{post.tag_for_first_image_in_body} #{truncate(post.display_title, 75)} <span class='post_excerpt'>#{ truncate_words(post.post, 35, '...' )} (by #{post.user.login})</span>",
-                               user_post_path(post.user, post), 
+                               user_post_path(post.user, post),
                                :title => "by #{post.user.login}" ) %>
                 </li>
               <% end %>

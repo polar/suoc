@@ -468,6 +468,27 @@ TABLE#club_announcements TR TH {
 TABLE#club_announcements TR TH {
   font-weight: bold;
 }
+
+/*
+ * Login Messages
+ */
+TABLE.login_messages{
+  border: 1px solid #ccc;
+  background: #ffffee;
+  width: 100%;
+  font-size: 123%;
+}
+TABLE.login_messages TR {
+  margin: 10px;
+}
+TABLE.login_messages TR TD,
+TABLE#club_announcements TR TH {
+  padding: 5px 2em 10px 10px;
+}
+TABLE.login_messages TR TH {
+  font-weight: bold;
+}
+
 /*
  * Override the CE location chooser that is explicitly
  * setting the size in the view.

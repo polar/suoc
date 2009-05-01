@@ -44,6 +44,7 @@ authorization do
     #
     has_permission_on :users, :to => :write_id
     has_permission_on :acct_transactions, :to => :delete
+    has_permission_on :club_login_messages, :to => :manage
   end
 
   #
@@ -144,6 +145,7 @@ authorization do
       if_attribute :id => is {user.id}
     end
     has_permission_on :club_trip_registrations, :to => [:read,:add_remove]
+    has_permission_on :club_login_messages, :to => :read
   end
 
   #

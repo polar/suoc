@@ -50,6 +50,12 @@ class UsersController #< BaseController
     end
   end
 
+  before_filter :before_dashboard, :only => :dashboard
+
+  def before_dashboard
+    @messages = ClubLoginMessage.all(:limit => 4, :order => "date DESC")
+  end
+
   ##
   ## Override
   ##

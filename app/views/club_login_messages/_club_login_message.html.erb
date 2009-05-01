@@ -1,0 +1,14 @@
+<tr>
+  <td><%= club_login_message.date.strftime("%m-%d-%Y") %></td>
+  <td><%= club_login_message.message %></td>
+  <% if @show_edit %>
+    <td>
+    <%= button_to "Edit", edit_club_login_message_path(club_login_message), :method => :get %>
+    </td>
+  <% end %>
+  <% if @show_destroy %>
+    <td>
+    <%= button_to "Delete", club_login_message_path(club_login_message), :method => :delete, :confirm => "Are you sure?" %>
+    </td>
+  <% end %>
+</tr>

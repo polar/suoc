@@ -1,0 +1,16 @@
+<h3>Login Messages</h3>
+
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Message</th>
+  </tr>
+
+  <%= render :partial => "club_login_message", :collection => @club_login_messages %>
+
+</table>
+<p>
+<p>
+<% if @show_create %>
+  <%= link_to 'New Message', new_club_login_message_path %>
+<% end %>
