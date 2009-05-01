@@ -33,7 +33,7 @@ class ClubMember < User
   #
   validates_format_of :login,
                       :with => /^[A-Z][A-Za-z\'\-]+(((\s[A-Z\'\-])(\s*[A-Z][A-Za-z\'\-]+)(\s*[A-Z0-9][A-Za-z0-9\'\-]+)*)|((\s*[A-Z\'][A-Za-z\'\-]+)(\s*[A-Z0-9][A-Za-z0-9\'\-]+)*))$/,
-                      :message => "must contain at least your FIRST name <b>and</b> LAST name and starting with capital letters. <p>Ex. Thurston Brower Howell 3rd"
+                      :message => "must contain at least your FIRST name <b>and</b> LAST name and starting with capital letters. <p>Ex. Thurston Brower-Bastie Howell 3rd"
 
 
   validates_presence_of :club_affiliation_id
