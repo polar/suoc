@@ -32,7 +32,7 @@ class ClubMember < User
   # TODO: Change this validation :on option from :create to :save when it becomes true for all users.
   #
   validates_format_of :login,
-                      :with => /^[A-Z][A-Za-z\']+(((\s[A-Z\'])(\s*[A-Z][A-Za-z\']+)(\s*[A-Z0-9][A-Za-z0-9\']+)*)|((\s*[A-Z\'][A-Za-z\']+)(\s*[A-Z0-9][A-Za-z0-9\']+)*))$/,
+                      :with => /^[A-Z][A-Za-z\'\-]+(((\s[A-Z\'\-])(\s*[A-Z][A-Za-z\'\-]+)(\s*[A-Z0-9][A-Za-z0-9\'\-]+)*)|((\s*[A-Z\'][A-Za-z\'\-]+)(\s*[A-Z0-9][A-Za-z0-9\'\-]+)*))$/,
                       :message => "must contain at least your FIRST name <b>and</b> LAST name and starting with capital letters. <p>Ex. Thurston Brower Howell 3rd"
 
 
