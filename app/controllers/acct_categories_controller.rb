@@ -15,6 +15,16 @@ class AcctCategoriesController < BaseController
     @categories = AcctCategory.paginate(:all,
         :page => params[:page], :per_page => PER_PAGE)
 
+    @categories = @categories.map do |c|
+      r = {}
+      r["category"] = c
+      r["name"] = c.name
+      r["description"] = c.description
+      r["income_balance"] = c.balance(AcctAccountType[:Income])
+      r["expense_balance"] = c.balance(AcctAccountType[:Expense])
+      r["balance"] = r.income_balance + r.expense_balance
+      r
+    end
   end
 
   def show

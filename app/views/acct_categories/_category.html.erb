@@ -2,6 +2,9 @@
  # This partial renders a row in the table for an AcctAction
 %>
 <tr>
- <td><%= link_to category.name, acct_category_path(category) %></td>
+ <td><%= link_to category.name, acct_category_path(category.category) %></td>
  <td><%= category.description %></td>
+ <td class="decimal"><%= sprintf("%10.2f", category.income_balance) %></td>
+ <td class="decimal"><%= sprintf("%10.2f", category.expense_balance) %></td>
+ <td class="decimal"><%= sprintf("%10.2f", category.balance) %></td>
 </tr>
