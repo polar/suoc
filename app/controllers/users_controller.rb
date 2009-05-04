@@ -20,6 +20,7 @@ class UsersController #< BaseController
   # rendering functions
   # for Ajax calls
   include UsersHelper
+  include BaseHelper
 
   # This function gets called as a before filter to
   # transform the current user, if any, to its extension.
