@@ -1,5 +1,6 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  include BaseHelper
 
   #
   # We have a special error message that just puts the
