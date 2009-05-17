@@ -37,10 +37,35 @@
       </td>
     </tr>
   </table></td>
+  <td><table>
+   <tr>
+     <th>Verified By</th>
+     <td>
+       <div class="name">
+         <%= leader.verified_by.name if leader.verified_by %>
+       </div>
+     </td>
+    </tr>
+    <tr>
+      <th>Verified Date</th>
+      <td>
+        <div class="date">
+          <%= leader.verified_date.strftime("%m-%d-%Y") if leader.verified_date %>
+        </div>
+      </td>
+    </tr>
+  </table></td>
   <td>
     <div class="EntryForm">
       <ul>
         <li>
+        <% if view_verify_leader(leader) %>
+          <%= button_to "Verify Leader", 
+                         url_for( :action => :verify_leader, 
+                                  :id => leader.leadership, 
+                                  :leader => leader ) %>
+        <% end %>
+        </li><li>
         <% if view_retire_leader(leader) %>
           <%= button_to "Retire Leader", 
                          url_for( :action => :retire_leader, 

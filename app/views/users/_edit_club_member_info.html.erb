@@ -61,6 +61,7 @@
   </table>
   <p>
   <%= f.submit "Save Changes" %>
+  </p>
 <% end %>
 </div>
 <div class="links">
@@ -72,5 +73,8 @@
 |
 <%= link_to "Make me a Leader",
     url_for(:controller => "club_leaders", :action => "my_index", :id => "me") %>
+|
+<%= link_to "Add Certification",
+    url_for(:controller => "cert_member_certs", :action => "my_index", :id => "me") %>
 </div>
 </div>

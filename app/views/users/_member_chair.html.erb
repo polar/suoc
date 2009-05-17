@@ -1,0 +1,10 @@
+<%
+# Renders a row of a ClubChair
+#  Locals
+#    member_chair  a ClubChair
+%>
+<tr <%= "class='chair#{" current" if member_chair.current?}'" %>>
+  <td><%= member_chair.activity.name %></td>
+  <td><%= member_chair.start_date.strftime("%d-%m-%Y") %></td>
+  <td><%= member_chair.end_date.strftime("%d-%m-%Y") %></td>
+</tr>

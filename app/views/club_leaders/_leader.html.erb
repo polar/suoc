@@ -1,6 +1,8 @@
-<tr>
+<tr <%= "class='leader#{" current" if leader.current?}#{"verified'" if leader.verified?}'" %>>
  <td><%= leader.leadership.name %></td>
  <td><%= leader.start_date.strftime("%m-%d-%Y") %></td>
+ <td><%= leader.verified_by.name if leader.verified? %></td>
+ <td><%= leader.verified_date.strftime("%m-%d-%Y") if leader.verified? %></td>
  <td> <%= button_to "Delete",
                     url_for( :action => :delete_leader,
                              :id => leader),

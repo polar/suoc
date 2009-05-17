@@ -1,0 +1,18 @@
+<h1>Listing cert_member_certs</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% for cert_member_cert in @cert_member_certs %>
+  <tr>
+    <td><%= link_to 'Show', cert_member_cert %></td>
+    <td><%= link_to 'Edit', edit_cert_member_cert_path(cert_member_cert) %></td>
+    <td><%= link_to 'Destroy', cert_member_cert, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New cert_member_cert', new_cert_member_cert_path %>

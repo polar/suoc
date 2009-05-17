@@ -26,11 +26,16 @@ class ClubLeadershipsController < BaseController
   uses_tiny_mce :options => AppConfig.default_mce_options.merge({:editor_selector => "rich_text_editor"}),
     :only => [:new, :create, :update, :edit]
   
-  #
-  # We do not need a log in for show.
-  #
-  before_filter :login_required
-  before_filter :admin_required, :except => [:index, :show]
+  # Declaritive Authorization
+  filter_access_to :all
+  filter_access_to :auto_complete_for_club_member_login, :require => :update
+  filter_access_to [:move_up, :move_down], :require => :update
+  filter_access_to :select_new_leader, :require => :update
+  filter_access_to :new_leader, :require => :update
+  filter_access_to :retire_leader, :require => :update
+  filter_access_to :delete_leader, :require => :update
+  filter_access_to :edit_leader, :require => :update
+  filter_access_to :update_leader, :require => :update
 
   #
   # This filter determines whether the modification links should be viewed.
@@ -54,7 +59,7 @@ class ClubLeadershipsController < BaseController
   # The current initial criteria is that the current logged in user is an admin.
   #
   def filter_view_modify
-    @view_modify = current_user && current_user.admin?
+    @view_modify = permitted_to? :update, :club_leaderships
   end
   
   #
@@ -308,6 +313,8 @@ class ClubLeadershipsController < BaseController
       redirect_to :action => :show
     else
       flash[:error] = "Could not update attributes of Leader"
+      @club_leadership = club_leadership
+      @club_leader = leader
       render :action => :edit_leader
     end
   end
@@ -320,18 +327,41 @@ class ClubLeadershipsController < BaseController
   #  :leader => ClubLeader id
   #
   def retire_leader
-    @club_leadership      = ClubLeadership.find(params[:id])
-    @current_leader  = ClubLeader.find(params[:leader])
-    @current_leader.end_date = Date.today - 1.day;
-    if @current_leader.save
-      flash[:notice] = "Leader #{@current_leader.member.login} has been retired."
-      redirect_to @club_leadership
+    leadership = ClubLeadership.find(params[:id])
+    leader  = ClubLeader.find(params[:leader])
+    leader.end_date = Date.today - 1.day;
+    if leader.save
+      flash[:notice] = "Leader #{leader.member.login} has been retired."
+      redirect_to leadership
     else
-      flash[:error] = "Could not retire Leader #{@current_leader.member.login}."
-      redirect_to @club_leadership
+      flash[:error] = "Could not retire Leader #{leader.member.login}."
+      redirect_to eadership
     end
   end
   
+  # AccessControl, this method stands by itself
+  # Only officer "Leadership" has :verify_leader
+  #
+  # PUT /suoc_leadership/1/verify_leader
+  #
+  # Requirements by form to set params:
+  #  :id => ClubLeaderhips id
+  #  :leader => ClubLeader id
+  #
+  def verify_leader
+    leadership = ClubLeadership.find(params[:id])
+    leader = ClubLeader.find(params[:leader])
+    leader.verified_by = current_user
+    leader.verified_date = Date.today
+    if leader.save
+      flash[:notice] = "Leader #{leader.member.login} has been verified."
+      redirect_to leadership
+    else
+      flash[:error] = "Could not verify Leader #{leader.member.login}."
+      redirect_to leadership
+    end
+  end
+
   #
   # DELETE /suoc_leaderships/1/delete_leader
   #
@@ -340,10 +370,10 @@ class ClubLeadershipsController < BaseController
   #  :leader => ClubLeader id
   #
   def delete_leader
-    @club_leadership      = ClubLeadership.find(params[:id])
-    @current_leader  = ClubLeader.find(params[:leader])
-    @current_leader.destroy
+    leadership      = ClubLeadership.find(params[:id])
+    leader  = ClubLeader.find(params[:leader])
+    eader.destroy
 
-    redirect_to @club_leadership
+    redirect_to leadership
   end
 end

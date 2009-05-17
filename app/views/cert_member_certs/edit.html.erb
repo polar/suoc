@@ -1,0 +1,12 @@
+<h1>Editing cert_member_cert</h1>
+
+<% form_for(@cert_member_cert) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @cert_member_cert %> |
+<%= link_to 'Back', cert_member_certs_path %>

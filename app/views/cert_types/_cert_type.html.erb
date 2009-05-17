@@ -1,0 +1,12 @@
+<%
+ # This partial renders a row in the table for a CertType
+%>
+<tr>
+ <td><%= link_to cert_type.name, 
+                 cert_type_path(cert_type) %></td>
+ <td><%= cert_type.description %></td>
+ <td><%= button_to "Edit", edit_cert_type_path(cert_type), 
+                   :method => :get %></td>
+ <td><%= button_to "Delete", cert_type_path(cert_type), 
+                   :method => :delete, :confirm => "Are you sure?" %></td>
+</tr>

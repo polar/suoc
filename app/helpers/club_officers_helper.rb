@@ -40,4 +40,7 @@ module ClubOfficersHelper
                        :rowclass => (officer.current? ? "alt" : "box") }
   end
   
+  def show_officer_delete(officer)
+    permitted_to? :delete, officer
+  end
 end

@@ -3,7 +3,7 @@
 # an chair
 %>
 <% form_for(chair,
-            :url => { :action => :add_club_chair },
+            :url => { :action => :new_chair },
             :html => { :class => "MainForm" }) do |f| %>
   <%= f.error_messages %>
   <%= f.hidden_field :member_id %>
@@ -18,4 +18,5 @@
           :value => (chair.end_date.strftime("%m-%d-%Y") if chair.end_date) %>
   <p>
   <%= f.submit "Add Chair" %>
+  </p>
 <% end %>

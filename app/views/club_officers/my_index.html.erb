@@ -1,24 +1,17 @@
-<h3>My Officerships</h3>
-  <%= render :partial => "edit_club_officer", :locals => { :officer => @club_officer } %>
+<h3>My Officerships (<%= @current_user.name %>)</h3>
+  <%= render :partial => "edit_club_officer", 
+             :locals => { :officer => @club_officer } %>
 <h3>My Current Officerships</h3>
-  <% if @current_officers.nil? %>
+  <% if @current_officers.empty? %>
     You have no current officerships.
   <% else %>
-  <div class="EntryForm">
-    <table class="listing">
-      <th>Officership</th><th>Start Date</th><th>End Date</th>
-      <%= render :partial => "officer", :collection => @current_officers %>
-    </table>
-  </div>
+    <%= render :partial => "member_officers",
+               :locals => { :member_officers => @current_officers } %>
   <% end %>
 <h3>My Past Officerships</h3>
-  <% if @past_officers.nil? %>
+  <% if @past_officers.empty? %>
     You have no past officerships.
   <% else %>
-  <div class="EntryForm">
-    <table class="listing">
-      <th>Officership</th><th>Start Date</th><th>End Date</th>
-      <%= render :partial => "officer", :collection => @past_officers %>
-    </table>
-  </div>
+    <%= render :partial => "member_officers", 
+               :locals => { :member_officers => @past_officers } %>
   <% end %>

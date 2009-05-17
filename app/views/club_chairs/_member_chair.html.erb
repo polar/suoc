@@ -1,0 +1,17 @@
+<%
+# Renders a row of a ClubOfficer
+#  Locals
+#    member_chair  a ClubOfficer
+%>
+<tr <%= "class='chair#{" current" if member_chair.current?}'" %>>
+  <td><%= member_chair.activity.name %></td>
+  <td><%= member_chair.start_date.strftime("%d-%m-%Y") %></td>
+  <td><%= member_chair.end_date.strftime("%d-%m-%Y") %></td>
+  <% if show_chair_delete(member_chair) %>
+      <td><%= button_to "Delete", 
+                         url_for( :action => :delete_chair,
+                                  :id => member_chair), 
+                        :method => "delete",
+                        :confirm => "Are you sure?" %></td>
+  <% end %>
+</tr>

@@ -43,8 +43,11 @@ authorization do
     # An Admin may read,write the ClubMember.club_memberid
     #
     has_permission_on :users, :to => :write_id
+    has_permission_on :users, :to => :verify_cert
     has_permission_on :acct_transactions, :to => :delete
     has_permission_on :club_login_messages, :to => :manage
+
+    has_permission_on :club_leaderships, :to => :manage
   end
 
   #
@@ -56,6 +59,8 @@ authorization do
     has_permission_on :acct_action_types, :to => :manage
     has_permission_on :acct_account_types, :to => :manage
     has_permission_on :acct_ledgers, :to => :manage
+    has_permission_on :cert_types, :to => :manage
+    has_permission_on :cert_orgs, :to => :manage
     has_permission_on :club_trip_registrations, :to => :configure
   end
 
@@ -128,6 +133,12 @@ authorization do
       if_attribute :leader_id => is {user.id}
     end
   end
+  role :leadership_officer do
+    has_permission_on :users, :to => [:verify_cert, :delete_cert]
+    has_permission_on :cert_member_certs, :to => [:verify]
+    has_permission_on :users, :to => [:verify_leader, :delete_leader]
+    has_permission_on :club_leaders, :to => [:verify]
+  end
 
   #
   # The role :member is assigned once the user successfully
@@ -146,6 +157,30 @@ authorization do
     end
     has_permission_on :club_trip_registrations, :to => [:read,:add_remove]
     has_permission_on :club_login_messages, :to => :read
+
+    has_permission_on :cert_member_certs, :to => [:read]
+    has_permission_on :cert_member_certs, :to => [:create,:update,:delete] do
+      if_attribute :member_id => is {user.id}
+    end
+
+    has_permission_on :club_leaders, :to => [:read]
+    has_permission_on :club_leaders, :to => [:create,:update,:delete] do
+      if_attribute :member_id => is {user.id}
+    end
+    has_permission_on :club_officers, :to => [:read]
+    has_permission_on :club_officers, :to => [:create,:update,:delete] do
+      if_attribute :member_id => is {user.id}
+    end
+    has_permission_on :club_chairs, :to => [:read]
+    has_permission_on :club_chairs, :to => [:create,:update,:delete] do
+      if_attribute :member_id => is {user.id}
+    end
+
+    has_permission_on :club_leaderships, :to => [:read]
+    has_permission_on :club_leaderships, :to => [:create,:update,:delete] do
+      if_attribute :member_id => is {user.id}
+    end
+
   end
 
   #

@@ -4,14 +4,10 @@
 class ClubLeadersController < BaseController
   layout "club_operations"
 
-  #
-  # We do not need a log in for show.
-  #
-  before_filter :login_required,
-                :only =>  [:edit, :update, :destroy,
-                           :add_club_leader, :my_index,
-                           :delete_leader]
-  before_filter :admin_required, :only =>  [:update, :destroy]
+  filter_access_to :all
+  filter_access_to :my_index, :require => :read
+  filter_access_to :new_leader, :require => :create
+  filter_access_to :delete_leader, :require => :delete
 
   def index
     @club_leaders = ClubLeader.paginate(
@@ -39,7 +35,7 @@ class ClubLeadersController < BaseController
     end
   end
 
-  def add_club_leader
+  def new_leader
     @club_leader = ClubLeader.new(params[:club_leader])
     if @club_leader.start_date && @club_leader.end_date == nil
       @club_leader.end_date = @club_leader.start_date + 50.years

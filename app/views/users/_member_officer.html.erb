@@ -1,0 +1,10 @@
+<%
+# Renders a row of a ClubOfficer
+#  Locals
+#    member_officer  a ClubOfficer
+%>
+<tr <%= "class='officer#{" current" if member_officer.current?}'" %>>
+  <td><%= member_officer.office.name %></td>
+  <td><%= member_officer.start_date.strftime("%d-%m-%Y") %></td>
+  <td><%= member_officer.end_date.strftime("%d-%m-%Y") %></td>
+</tr>

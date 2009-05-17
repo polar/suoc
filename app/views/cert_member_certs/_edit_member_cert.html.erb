@@ -1,0 +1,30 @@
+<%
+# This partial renders the editor button for adding
+# a certification
+%>
+<% form_for(member_cert,
+            :url => { :action => :add_member_cert },
+            :html => { :class => "MainForm" }) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :member_id %>
+  <%= label_tag :x, "I have a certification in" %>
+  <%= collection_select :params, :cert_type_id, cert_types, :id, :name, 
+           { :prompt => "Please Select" },
+           :onChange => 
+               remote_function(
+                   :update => 'update', 
+                   :url => { :action => :update_form_cert_orgs },
+                   :with => "'cert_type_id='+this[selectedIndex].value") %>
+  <%= f.label :cert_org, "From" %>
+  <div id="update">
+  <%= render :partial => "form_cert_orgs", :locals => { :cert_orgs => @cert_orgs } %>
+  </div>
+  <%= f.label :start_date, "Issue Date" %>
+  <%= f.text_field :start_date,
+          :value => (member_cert.start_date.strftime("%m-%d-%Y") if member_cert.start_date) %>
+  <%= f.label :end_date, "Expiry Date" %>
+  <%= f.text_field :end_date,
+          :value => (member_cert.start_date.strftime("%m-%d-%Y") if member_cert.start_date) %>
+  <p>
+  <%= f.submit "Add Certification" %>
+<% end %>

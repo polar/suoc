@@ -1,0 +1,12 @@
+<%
+ # This form is merely to display destroy errors.
+%>
+<% form_for(@cert_type,
+      :html => { :class => "MainForm" }) do |f| %>
+  <%= f.error_messages %>
+<% end %>
+
+<p>
+<%= link_to "Certification Types", cert_types_path %>
+|
+<%= link_to "Certification Organizations", cert_orgs_path %>

@@ -1,0 +1,14 @@
+<h3>Certification Organization</h3>
+<p>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Certification Type</th>
+    <th>Description</th>
+  </tr>
+  <%= render :partial => "cert_org", :object => @cert_org %>
+</table>
+<p>
+<%= link_to 'Certification Types', cert_types_path %>
+|
+<%= link_to 'Certification Organizations', cert_orgs_path %>

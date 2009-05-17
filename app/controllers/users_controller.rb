@@ -140,6 +140,48 @@ class UsersController #< BaseController
     render_club_member_info(member, can_edit_info)
   end
 
+  def update_form_cert_orgs
+    cert_orgs = CertOrg.find_by_cert_type_id(params[:cert_type])
+    render :partial => "cert_member_certs/form_cert_orgs", :locals => {
+      :cert_orgs => cert_orgs }
+  end
+
+  def verify_cert
+    cert = CertMemberCert.find(params[:cert_member_cert_id])
+    cert.verified_by = current_user
+    cert.verified_date = Date.today
+    if cert.save
+      redirect_to :action => "show", :id => params[:id]
+    else
+      flash[:error] = "Cannot verify certification"
+      redirect_to :action => "show", :id => params[:id]
+    end
+  end
+
+  def delete_cert
+    cert = CertMemberCert.find(params[:cert_member_cert_id])
+    cert.destroy
+    redirect_to :action => "show", :id => params[:id]
+  end
+
+  def verify_leader
+    leader = ClubLeader.find(params[:club_leader_id])
+    leader.verified_by = current_user
+    leader.verified_date = Date.today
+    if leader.save
+      redirect_to :action => "show", :id => params[:id]
+    else
+      flash[:error] = "Cannot verify leadership"
+      redirect_to :action => "show", :id => params[:id]
+    end
+  end
+
+  def delete_leader
+    leader = ClubLeader.find(params[:club_leader_id])
+    leader.destroy
+    redirect_to :action => "show", :id => params[:id]
+  end
+
   protected
 
   #

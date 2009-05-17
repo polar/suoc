@@ -1,0 +1,27 @@
+<%
+# Renders a row of a CertMemberCert
+#  Locals
+#    member_cert  a CertMemberCert
+%>
+<tr <%= "class='certification#{" current" if member_cert.current?}#{"verified'" if member_cert.verified?}'" %>>
+  <td><%= member_cert.cert_type.name %></td>
+  <td><%= member_cert.cert_org.name %></td>
+  <td><%= member_cert.start_date.strftime("%d-%m-%Y") %></td>
+  <td><%= member_cert.end_date.strftime("%d-%m-%Y") %></td>
+  <td><%= member_cert.verified_by.name if member_cert.verified? %></td>
+  <td><%= member_cert.verified_date.strftime("%m-%d-%Y") if member_cert.verified? %></td>
+  <% if show_cert_verify(@user, member_cert) %>
+    <td><%= button_to "Verify", 
+                      url_for(:action => :verify_cert,
+                              :id => @user,
+                              :cert_member_cert_id => member_cert) %></td>
+  <% end %>
+  <% if show_cert_delete(@user, member_cert) %>
+      <td><%= button_to "Delete", 
+                         url_for( :action => :delete_cert,
+                                  :id => @user, 
+                                  :cert_member_cert_id => member_cert ), 
+                        :method => "delete",
+                        :confirm => "Are you sure?" %></td>
+  <% end %>
+</tr>

@@ -1,4 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :cert_member_certs
+
+  map.resources :cert_orgs
+
+  map.resources :cert_types
+
   map.resources :club_login_messages
 
   map.resources :club_trip_registrations, :collection => {

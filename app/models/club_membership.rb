@@ -9,9 +9,9 @@ class ClubMembership < ActiveRecord::Base
   validates_presence_of :year
 
   def start_date
-    if member_type.name == "Spring"
+    if member_type == ClubMembershipType[:Spring]
       Date.parse("#{year}-01-01")
-    elsif member_type.name == "Year"
+    elsif member_type == ClubMembershipType[:Year]
       Date.parse("#{year}-09-01")
     else
       raise "Illegal Member Type"
@@ -19,9 +19,9 @@ class ClubMembership < ActiveRecord::Base
   end
 
   def end_date
-    if member_type.name = "Spring"
+    if member_type == ClubMembershipType[:Spring]
       Date.parse("#{year}-09-01")
-    elsif member_type.name == "Year"
+    elsif member_type == ClubMembershipType[:Year]
       Date.parse("#{year+1}-09-01")
     else
       raise "Illegal Member Type"

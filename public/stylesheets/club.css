@@ -85,29 +85,21 @@ b, strong {
 }
 
 /*
- * This is for a medium badge, with pic on the left and list
- * info on the right.
+ * Club Member badge is a table.
  */
 
-.badge_medium .vcard{
-  float: left;
-  width: 35em; /*13.8461em; /* about 180px */
-  /**width:  13.5em; /* for IE, but is not valid */
-}
-
 /* Avatar Header */
-.badge_medium .vcard h5{
+.badge tr td h5{
   float: left;
-  width: 100px;
+  width: 90px;
 }
 
-.badge_medium .vcard ul{
-  margin-left: 66px;
+.badge tr td ul{
   font-size: 85%;
 }
 
 /* Avatar Image and Link */
-.badge_medium .vcard h5 a img{
+.badge tr td h5 a img{
   display: block;
   border: 1px solid #a2a19b;
   padding: 2px;
@@ -115,36 +107,26 @@ b, strong {
   width: 80px;
 }
 
-.badge_medium .vcard h5 a:hover img{
+.badge tr td h5 a:hover img{
   background: #a2a19b;
 }
-
-/* Each Side list element is padded left 20px
- * to leave room for a small icon.
+/* Each Side list element is padded left 16px
+ * to give a small indent
  */
-.badge_medium .vcard ul li{
+.badge tr td ul li{
   padding: 3px 0;
   border-bottom: 1px dotted #a2a19b;
-  padding-left: 20px;
-  background-color: transparent;
-  background-position: left center;
-  background-repeat: no-repeat;
+  padding-left: 15px;
 }
 
 /* The full name, usually the first list element
- * Will be slightly larger.
+ * will be slightly larger.
  */
-.badge_medium .vcard ul li.full_name{
-  font-size: 130%;
+.badge tr td ul li.full_name{
+  font-size: 110%;
   font-weight: bold;
   padding:0 0 3px 0;
 }
-
-/*
-.badge_medium .vcard ul li.update{
-  background-image: url(/plugin_assets/community_engine/images/icons/date.png)
-}
-*/
 
 /*
  * The EntryForm is used to give the same look and feel
@@ -342,6 +324,91 @@ b, strong {
 }
 
 .membership .date td{
+  text-align: left
+}
+/*
+ * Current Certifications in User/show
+ */
+.certifications table{
+  padding: 2em;
+}
+
+.certifications th{
+  padding: 0px 10px 0px 0px;
+}
+.certifications .certification td{
+  padding: 0px 10px 0px 0px;
+}
+
+.certifications .currentverified {
+  color: #008800;
+}
+
+.certification .date td{
+  text-align: left
+}
+/*
+ * Current Leaders in User/show
+ */
+.leaders table{
+  padding: 2em;
+}
+
+.leaders th{
+  padding: 0px 10px 0px 0px;
+}
+.leaders .leader td{
+  padding: 0px 10px 0px 0px;
+}
+
+.leaders .currentverified {
+  color: #008800;
+}
+
+.leader .date td{
+  text-align: left
+}
+/*
+ * Current Officers in User/show
+ */
+.officers table{
+  padding: 2em;
+}
+
+.officers th{
+  padding: 0px 10px 0px 0px;
+}
+.officers .officer td{
+  padding: 0px 10px 0px 0px;
+}
+
+.officers .current {
+  color: #008800;
+}
+
+.officer .date td{
+  text-align: left
+}
+
+/*
+ * Current Chairs in User/show
+ */
+.chairs table{
+  padding: 2em;
+}
+
+.chairs th{
+  padding: 0px 10px 0px 0px;
+}
+.chairs .chair td{
+  padding: 0px 10px 0px 0px;
+}
+
+.chairs .current {
+  color: #008800;
+}
+
+.chair .date td{
   text-align: left
 }
 

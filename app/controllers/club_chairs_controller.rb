@@ -4,14 +4,10 @@
 class ClubChairsController < BaseController
   layout "club_operations"
 
-  #
-  # We do not need a log in for show.
-  #
-  before_filter :login_required,
-                :only => [:edit, :update, :destroy,
-                          :add_club_chair, :my_index,
-                          :delete_chair]
-  before_filter :admin_required, :only => [:update, :destroy]
+  filter_access_to :all
+  filter_access_to :new_chair, :require => :create
+  filter_access_to :delete_chair, :require => :delete
+  filter_access_to :my_index, :require => :read
 
   def index
     @club_chairs = ClubChair.paginate(
@@ -39,7 +35,7 @@ class ClubChairsController < BaseController
     end
   end
 
-  def add_club_chair
+  def new_chair
     @club_chair = ClubChair.new(params[:club_chair])
 
     if @club_chair.member != current_user

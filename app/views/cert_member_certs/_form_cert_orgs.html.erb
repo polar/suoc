@@ -1,0 +1,5 @@
+<%
+# The updated organizations for the certification type.
+%>
+<%= collection_select :cert_member_cert, :cert_org_id, 
+       cert_orgs, :id, :name, :prompt => "Please Select" %>

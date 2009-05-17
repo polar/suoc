@@ -1,0 +1,19 @@
+<% form_for @cert_member_cert do |f| %>
+  <%= label_tag "Certification", :cert_type %>
+  <%= collection_select_tag @cert_types, :id, :name, 
+           :prompt => "Please Select",
+           :onChange => 
+               remote_function(
+                   :update => 'cert_member_cert_cert_org_id', 
+                   :url => { :action => :update_orgs }) %>
+  <%= f.label "Organization", "cert_org %>
+  <%= render :partial => "form_cert_orgs", :locals { :cert_orgs => @cert_orgs } %>
+  <%= f.label "Date Issued", :start_date %>
+  <%= f.text_field, :start_date %>
+  <%= f.label "Expiry Date", :end_date %>
+  <%= f.text_field, "end_date %>
+  <%= f.label "Comment", :comment %>
+  <%= f.text_field, :comment %>
+  <%= f.hidden_field :member_id %>
+<% end %>
+  

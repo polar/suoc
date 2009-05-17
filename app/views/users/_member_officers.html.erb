@@ -1,0 +1,15 @@
+<%
+# Render ClubOfficers
+# Locals: 
+#   member_officers  Collection of ClubOfficer
+%>
+<h3>Current Officerships</h3>
+<table class="officers">
+  <tr>
+    <th>Office</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+  <tr>
+  <%= render :partial => "member_officer",
+             :collection => member_officers %>
+</table>

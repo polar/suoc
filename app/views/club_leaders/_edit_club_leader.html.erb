@@ -3,7 +3,7 @@
 # an leader
 %>
 <% form_for(leader,
-            :url => { :action => :add_club_leader },
+            :url => { :action => :new_leader },
             :html => { :class => "MainForm" }) do |f| %>
   <%= f.error_messages %>
   <%= f.hidden_field :member_id %>
@@ -14,5 +14,6 @@
   <%= f.text_field :start_date,
           :value => (leader.start_date.strftime("%m-%d-%Y") if leader.start_date) %>
   <p>
-  <%= f.submit "Add Leader" %>
+  <%= f.submit "Add Leadership" %>
+  </p>
 <% end %>

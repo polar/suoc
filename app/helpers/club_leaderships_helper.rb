@@ -144,4 +144,8 @@ module ClubLeadershipsHelper
   def view_delete_leader(leader)
     @view_modify
   end
+
+  def view_verify_leader(leader)
+    !leader.verified? && permitted_to?(:verify_leader, leader.leadership)
+  end
 end

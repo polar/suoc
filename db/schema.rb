@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090430233019) do
+ActiveRecord::Schema.define(:version => 20090516160908) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
@@ -147,6 +147,35 @@ ActiveRecord::Schema.define(:version => 20090430233019) do
     t.string "nav_text"
   end
 
+  create_table "cert_member_certs", :force => true do |t|
+    t.integer  "cert_org_id"
+    t.integer  "member_id"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.text     "comment"
+    t.integer  "verified_by_id"
+    t.date     "verified_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "cert_orgs", :force => true do |t|
+    t.text     "name"
+    t.text     "description"
+    t.integer  "position"
+    t.integer  "cert_type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "cert_types", :force => true do |t|
+    t.text     "name"
+    t.text     "description"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "choices", :force => true do |t|
     t.integer "poll_id"
     t.string  "description"
@@ -213,6 +242,8 @@ ActiveRecord::Schema.define(:version => 20090430233019) do
     t.date     "end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified_by_id"
+    t.date     "verified_date"
   end
 
   create_table "club_leaderships", :force => true do |t|

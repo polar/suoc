@@ -1,0 +1,18 @@
+<h3>Certification Organizations</h3>
+
+<table>
+  <tr>
+   <th>Name</th>
+   <th>Type</th>
+   <th>Description</th>
+  </tr>
+  <%= render :partial => "cert_org",
+             :collection => @cert_orgs %>
+</table>
+<p>
+<p>
+<%= link_to 'New Certification Organziation', new_cert_org_path %>
+<p>
+<%= link_to 'Certification Types', cert_types_path %>
+|
+<%= link_to 'Certification Organziations', cert_orgs_path %>

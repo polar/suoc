@@ -1,0 +1,16 @@
+<%
+# Render Current Leaderships for a ClubMember
+# Locals: 
+#   member_leaders  Collection of ClubLeader
+%>
+<h3>Current Leaderships</h3>
+<table class="leaders">
+  <tr>
+    <th>Leadership</th>
+    <th>Since</th>
+    <th>Verified By</th>
+    <th>Verified Date</th>
+  <tr>
+  <%= render :partial => "member_leader",
+             :collection => member_leaders %>
+</table>

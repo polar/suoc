@@ -1,0 +1,16 @@
+<%
+# Render Current Certifications
+# Locals: 
+#   member_certs  Collection of CertMemeberCert
+%>
+<h3>Current Certifications</h3>
+<table>
+  <tr>
+    <th>Certification</th>
+    <th>Organization</th>
+    <th>Issued</th>
+    <th>Expires</th>
+  <tr>
+  <%= render :partial => "cert_member_certs/member_cert,
+             :collection => member_certs %>
+</table>

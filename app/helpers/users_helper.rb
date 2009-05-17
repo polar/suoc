@@ -1,6 +1,5 @@
 module UsersHelper
 
-
   #
   # This renders the avatar with a link to
   # create on if the user doesn't have one.
@@ -11,7 +10,7 @@ module UsersHelper
   end
 
   #
-  # This function renders the SuocProfile badge with an optional
+  # This function renders the badge with an optional
   # link for the avatar.
   #
   def render_badge(member, link = nil)
@@ -30,37 +29,23 @@ module UsersHelper
   end
 
   #
-  # This function renders a list of SuocLeaderships.
+  # This function renders a list of Current ClubLeaderships.
   #
-  def render_leaderships(leaderships, clazz = nil)
-    if !leaderships.empty?
-      rows = leaderships.sort {|x,y| x.leadership.name <=> y.leadership.name}
-      rows = rows.map { |l| render_leadership(l) }
-      s = "<h3>Current Leaderships</h3>\n"
-      s<< render_table(rows, clazz)
-      return s
+  def render_leaderships(leaders)
+    if !leaders.empty?
+      render :partial => "member_leaders", 
+             :locals => { :member_leaders => leaders }
    end
   end
 
-  def render_leadership( leader )
-      render_name_date_row(leader.leadership.name, leader.start_date)
-  end
-
   #
-  # This function renders a list of SuocOfficers.
+  # This function renders a list of Current ClubcOfficers.
   #
-  def render_offices(officers, clazz = nil)
+  def render_offices(officers)
     if !officers.empty?
-      rows = officers.map { |officer|
-             render_office(officer) }
-      s = "<h3>Current Offices</h3>\n"
-      s<< render_table(rows, clazz)
-      return s
+      render :partial => "member_officers",
+             :locals => { :member_officers => officers }
    end
-  end
-
-  def render_office( officer )
-      render_name_date_row(officer.office.name, officer.start_date)
   end
 
   include ClubMembershipsHelper
@@ -70,57 +55,28 @@ module UsersHelper
   def render_memberships(member)
     memberships = member.memberships
     if !memberships.empty?
-      rows = memberships.map { |m| render_membership_row(m, false) }
-      s = "<h3>Paid Memberships</h3>\n"
-      header = render_table_header_row(["Date","Type","Year", "Amount", "Recorded By"])
-      s << render_table([header] + rows, "memberships")
-      return s
-    end
-  end
-
-  #
-  # This function renders a list of SuocChairmanships
-  #
-  def render_chairmanships(chairs, clazz = nil)
-    if !chairs.empty?
-      rows = chairs.map { |chair|
-             render_chairmanship(chair) }
-      s = "<h3>Current Chairmanshps</h3>\n"
-      s<< render_table(rows, clazz)
-      return s
+      render :partial => "member_memberships",
+             :locals => { :member_memberships => memberships }
    end
   end
 
-  def render_chairmanship( chair )
-      render_name_date_row(chair.activity.name, chair.start_date)
+  #
+  # This function renders a list of ClubChairmanships
+  #
+  def render_chairmanships(chairs)
+    if !chairs.empty?
+      render :partial => "member_chairs",
+             :locals => { :member_chairs => chairs }
+   end
   end
 
-  #
-  # This function renders a table of rows.
-  #
-  def render_table( rows, clazz = nil )
-    render :partial => "table_of_rows", :locals => {
-         :rows => rows, :clazz => clazz }
-  end
-
-  #
-  # This function renders a name, date for a particular class.
-  #
-  def render_name_date_row( name, date, clazz = nil)
-      render :partial => "name_date_row", :locals =>
-        { :name => name, :date => date, :clazz => clazz }
-  end
-
-  def render_table_header_row( headers, clazz = nil)
-    if clazz
-      row = "<tr class='#{clazz}'"
-    else
-      row = '<tr>'
+  def render_certifications(certs)
+    if !certs.empty?
+      render :partial => "member_certs", 
+             :locals => { :member_certs => certs }
     end
-    cells = headers.map { |h| "<th>#{h}</th>\n"}
-    row = row + cells.join + '</tr>'
-    return row
   end
+
   #
   # This function renders the information of a particular
   # ClubMember. The boolean showedit is if we should render
@@ -163,12 +119,35 @@ module UsersHelper
     }
   end
 
+
+  def render_current_certs( member )
+    certs = CertMemberCert.current(member)
+    render :partial => "cert_collection", :locals => {
+        :certs => certs }
+  end
+
   def show_tr_edit(trip_reg)
     !trip_reg.submitted? && trip_reg.leader == current_user
   end
 
   def show_tr_delete(trip_reg)
     !trip_reg.submitted? && trip_reg.leader == current_user
+  end
+
+  def show_cert_verify(user, cert)
+    !cert.verified? && permitted_to?(:verify_cert, user) && permitted_to?(:verify, cert)
+  end
+
+  def show_cert_delete(user,cert)
+     permitted_to?(:delete_cert, user) && permitted_to?(:delete, cert)
+  end
+
+  def show_leader_verify(user, leader)
+    !leader.verified? && permitted_to?(:verify_leader, user) && permitted_to?(:verify, leader)
+  end
+
+  def show_leader_delete(user, leader)
+     permitted_to?(:delete_leader, user) && permitted_to?(:delete, leader)
   end
 
   def fmt_memberid(member)

@@ -1,0 +1,18 @@
+<%
+# Renders a row of a CertMemberCert
+#  Locals
+#    member_leader  a CertMemberCert
+%>
+<tr <%= "class='leader#{" current" if member_leader.current?}#{"verified'" if member_leader.verified?}'" %>>
+  <td><%= member_leader.leadership.name %></td>
+  <td><%= member_leader.start_date.strftime("%d-%m-%Y") %></td>
+  <td><%= member_leader.verified_by.name if member_leader.verified? %></td>
+  <td><%= member_leader.verified_date.strftime("%m-%d-%Y") if member_leader.verified? %></td>
+  <% if show_leader_delete(member_leader) %>
+      <td><%= button_to "Delete", 
+                         url_for( :action => :delete_leader,
+                                  :id => member_leader), 
+                        :method => "delete",
+                        :confirm => "Are you sure?" %></td>
+  <% end %>
+</tr>

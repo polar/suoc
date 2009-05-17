@@ -1,0 +1,16 @@
+<%
+# Render ClubMemberships
+# Locals: 
+#   member_officers  Collection of ClubMemberships
+%>
+<h3>Paid Memberships</h3>
+<table class="memberships">
+  <tr>
+    <th>Date</th>
+    <th>Type</th>
+    <th>Year</th>
+    <th>Recorded By</th>
+  <tr>
+  <%= render :partial => "member_membership",
+             :collection => member_memberships %>
+</table>

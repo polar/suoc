@@ -7,7 +7,8 @@ class ClubMember < User
   has_many :chairs,   :class_name => "ClubChair",   :foreign_key => :member_id
   has_many :leaders,  :class_name => "ClubLeader",  :foreign_key => :member_id
 
-  has_many :memberships, :class_name => "ClubMembership",  :foreign_key => :member_id
+  has_many :certifications,  :class_name => "CertMemberCert", :foreign_key => :member_id
+  has_many :memberships,     :class_name => "ClubMembership", :foreign_key => :member_id
 
   validates_date :club_start_date, :allow_nil => false
   validates_date :club_end_date, :allow_nil => true
@@ -134,6 +135,7 @@ class ClubMember < User
       rs << :officer if !current_officers.empty?
       rs << :leader if !current_leaders.empty?
       rs << :chair if !current_chairs.empty?
+      rs << :leadership_officer if current_officers.any? {|x| x.office.name == "Leadership"}
     end
     rs
   end
@@ -159,6 +161,10 @@ class ClubMember < User
     chairs.select { |x| x.current? }
   end
 
+  def current_certifications
+    certifications.select { |x| x.current? }
+  end
+
   #
   # Returns the officerships this member has that are past.
   # Assumption that Not current means past. However, if a future
@@ -175,6 +181,10 @@ class ClubMember < User
 
   def past_chairs
     chairs.reject { |x| x.current? }
+  end
+
+  def past_certifications
+    certifications.reject { |x| x.current? }
   end
 
   def has_current_membership?

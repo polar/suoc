@@ -1,0 +1,18 @@
+<h3>My Certifications (<%= @current_user.name %>)</h3>
+  <%= render :partial => "edit_member_cert", 
+             :locals => { :member_cert => @cert_member_cert,
+                          :cert_types => @cert_types } %>
+<h3>My Current Certifications</h3>
+  <% if @current_certs.nil? || @current_certs.empty? %>
+    You have no current certifications.
+  <% else %>
+  <%= render :partial => "member_certs",
+             :locals => { :member_certs => @current_certs } %>
+  <% end %>
+<h3>My Past Certifications</h3>
+  <% if @past_certs.nil? || @past_certs.empty? %>
+    You have no past certifications.
+  <% else %>
+  <%= render :partial => "member_certs",
+             :locals => { :member_certs => @past_certs } %>
+  <% end %>

@@ -1,0 +1,11 @@
+<%
+# Renders a row of a ClubOfficer
+#  Locals
+#    member_membership  a ClubOfficer
+%>
+<tr <%= "class='membership#{" current" if member_membership.current?}'" %>>
+  <td><%= member_membership.acct_transaction.date.strftime("%m-%d-%Y") %></td>
+  <td><%= member_membership.member_type.name %></td>
+  <td><%= member_membership.year %></td>
+  <td><%= member_membership.acct_transaction.recorded_by.name %></td>
+</tr>

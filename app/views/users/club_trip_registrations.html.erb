@@ -1,0 +1,21 @@
+<h3>Trip Registrations</h3>
+<table>
+  <tr>
+    <th>Trip Name</th>
+    <th>Activity</th>
+    <th>Date<th>
+    <th>Status</th>
+  </tr>
+<% for t in trip_regs %>
+  <tr>
+   <% if showedit %>
+     <td><%= link_to t.trip_name, edit_club_trip_registration_path(t) %></td>
+   <% else %>
+     <td><%= link_to t.trip_name, club_trip_registration_path(t) %></td>
+   <% end %>
+   <td><%= t.leadership.name %></td>
+   <td><%= t.departure_date %></td>
+   <td><%= t.submitted? ? "Submitted" : "Pending" %></td>
+  </tr>
+<% end %>
+</table>

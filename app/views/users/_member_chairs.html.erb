@@ -1,0 +1,15 @@
+<%
+# Render Current Leaderships for a ClubChairs
+# Locals: 
+#   member_chairs  Collection of ClubChairs
+%>
+<h3>Current Chairmanships</h3>
+<table class="chairs">
+  <tr>
+    <th>Activity</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+  <tr>
+  <%= render :partial => "member_chair",
+             :collection => member_chairs %>
+</table>
