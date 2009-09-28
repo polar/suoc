@@ -129,7 +129,7 @@ class ClubTripRegistrationsController < BaseController
     ctr = ClubTripRegistration.find(params[:id])
     member = current_user
     if ctr.club_members << member
-      flash[:notice] = "#{current_user.name} has been removed from #{ctr.leader.name}'s trip called #{ctr.trip_name}"
+      flash[:notice] = "#{current_user.name} has been added to #{ctr.leader.name}'s trip called #{ctr.trip_name}"
     else
       flash[:error] = "#{current_user.name} was not registered for #{ctr.leader.name}'s
  trip called #{ctr.trip_name}"

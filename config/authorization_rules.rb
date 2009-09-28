@@ -122,6 +122,7 @@ authorization do
   #
   role :officer do
     includes :ops_admin
+    has_permission_on :club_memberships, :to => [:manage]
   end
   role :chair do
     includes :ops_admin

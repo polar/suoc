@@ -1,4 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :club_memberships, :collection => {
+    :submit_list => :post }
+  
   map.resources :cert_member_certs
 
   map.resources :cert_orgs
