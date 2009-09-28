@@ -1,0 +1,7 @@
+Change Log
+
+Sun 27 September 2009
+
+Added a Club Memberships controller and added to it a capability to
+send the currently logged in user a list of students that are 
+currently paid members.
