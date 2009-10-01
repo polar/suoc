@@ -29,7 +29,7 @@ class AcctActionSetsController < BaseController
 
   def create
     # have to name the checkboxes acct_account[action_ids][1] which results in
-    #  "acct_account" => { "action_ids" => { "1" => "1", "4" => "4" }}
+    #  "acct_action_set" => { "action_ids" => { "1" => "1", "4" => "4" }}
     # So, we do a little transformation on them, just to get the keys, which
     # are the ids that were clicked.
     if params[:acct_action_set][:action_ids]
@@ -53,7 +53,7 @@ class AcctActionSetsController < BaseController
     @action_set = AcctActionSet.find(params[:id])
 
     # have to name the checkboxes acct_account[action_ids][1] which results in
-    #  "acct_account" => { "action_ids" => { "1" => "1", "4" => "4" }}
+    #  "acct_action_set" => { "action_ids" => { "1" => "1", "4" => "4" }}
     # So, we do a little transformation on them, just to get the keys, which
     # are the ids that were clicked.
     if params[:acct_action_set][:action_ids]
