@@ -9,6 +9,11 @@ class AcctLedger < ActiveRecord::Base
   # This is the account we are ledgering.
   belongs_to :target_account, :class_name => "AcctAccount"
 
+  has_many :action_sets, :class_name => "AcctActionSet",
+                         :foreign_key => "ledger_id", :dependent => :destroy
+
+      
+  
   validates_presence_of :name
   validates_presence_of :target_account
 

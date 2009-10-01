@@ -1,0 +1,34 @@
+<h3>Action Set</h3>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <td><%= @action_set.name %></td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><%= @action_set.description %></td>
+    <tr>
+      <th>Ledger</th>
+      <td><%= @action_set.ledger.name %></td>
+    </tr>
+    <tr>
+      <th>Actions</th>
+      <td>
+	<% actions = @action_set.actions %>
+	<%= link_to actions.first.name, acct_action_path(actions.first) %>
+	<% actions.shift %>
+	<% for action in actions do %>
+	  <%= ", #{link_to "#{action.name}", acct_action_path(action)}" %>
+	<% end %>
+      </td>
+    </tr>
+  </table>
+<p>
+<p>
+<%= link_to 'Edit', edit_acct_action_set_path(@action_set) %>
+|
+<%= link_to 'Action Sets', acct_action_sets_path %>
+<p>
+<%= button_to "Delete This Action Set", acct_action_set_path(@action_set),
+              :method => :delete, :confirm => "Are you sure?" %>

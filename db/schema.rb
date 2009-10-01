@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090516160908) do
+ActiveRecord::Schema.define(:version => 20090929190051) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
@@ -31,6 +31,19 @@ ActiveRecord::Schema.define(:version => 20090516160908) do
     t.integer "acct_action_id"
   end
 
+  create_table "acct_action_sets", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.integer  "ledger_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "acct_action_sets_acct_actions", :id => false, :force => true do |t|
+    t.integer "acct_action_id"
+    t.integer "acct_action_set_id"
+  end
+
   create_table "acct_action_types", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -46,6 +59,11 @@ ActiveRecord::Schema.define(:version => 20090516160908) do
     t.integer  "action_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "acct_actions_acct_action_sets", :id => false, :force => true do |t|
+    t.integer "acct_action_id"
+    t.integer "acct_action_set_id"
   end
 
   create_table "acct_categories", :force => true do |t|

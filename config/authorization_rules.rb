@@ -59,6 +59,7 @@ authorization do
     has_permission_on :acct_action_types, :to => :manage
     has_permission_on :acct_account_types, :to => :manage
     has_permission_on :acct_ledgers, :to => :manage
+    has_permission_on :acct_action_sets, :to => :manage
     has_permission_on :cert_types, :to => :manage
     has_permission_on :cert_orgs, :to => :manage
     has_permission_on :club_trip_registrations, :to => :configure

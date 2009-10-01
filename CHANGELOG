@@ -5,3 +5,12 @@ Sun 27 September 2009
 Added a Club Memberships controller and added to it a capability to
 send the currently logged in user a list of students that are 
 currently paid members.
+
+Added Action Sets, which allow you do define sets of Actions that can
+be solely displayed for a particular ledger.
+
+Added Action Sets selection box for display of transactions on the 
+ledger.
+
+Added Transactions per page for ledgers.
+

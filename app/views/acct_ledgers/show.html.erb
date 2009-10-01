@@ -1,4 +1,11 @@
-<h3><%= "#{@ledger.name} (#{@current_user.name})" %></h3>
+<%
+# Name the ledger. The E-Room ledger may have the deposits variable in which the 
+# controller only finds the transactions with the
+# Rental Deposit Collection and Return actions.
+%>
+<h3>
+  <%= "#{@ledger.name} #{@action_set_name} (#{@current_user.name})" %>
+</h3>
 <%= @ledger.description %>
 <p>
 <%= render :partial => "transaction_index_form", :locals => {
@@ -9,4 +16,6 @@
       :offpage_balance => @offpage_balance,
       :actions => @actions,
       :member => @member,
-      :membership => @membership } %>
+      :membership => @membership,
+      :action_set => @action_set,
+      :per_page => params[:per_page]} %>

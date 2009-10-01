@@ -1,0 +1,51 @@
+<%
+#
+# Index View
+#
+%>
+
+<h3>Action Sets</h3>
+
+<%= will_paginate @action_sets,
+    :params => { :action => :index } %></td>
+
+<table>
+  <tr>
+    <th>Action Set</th>
+    <th>Ledger</th>
+    <th>Actions</th>
+  </tr>
+
+<% for actionset in @action_sets %>
+  <tr>
+    <td><%= link_to actionset.name, :action => :show, :id => actionset %></td>
+    <td><%= actionset.ledger.name %></td>
+    <td>
+      <% actions = actionset.actions %>
+      <%= link_to actions.first.name, acct_action_path(actions.first) %>
+      <% actions.shift %>
+      <% for action in actions do %>
+        <%= link_to ", #{action.name}", acct_action_path(action) %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<%= will_paginate @action_sets,
+    :params => { :action => :index } %>
+
+<br />
+
+<p>
+<% if permitted_to? :create, :acct_action_sets %>
+  <%= link_to 'New Action Set', new_acct_action_set_path %>
+<% end %>
+<p>
+<%= link_to "Account Types", acct_account_types_path %>
+|
+<%= link_to "Account Categories", acct_categories_path %>
+|
+<%= link_to "Account Actions", acct_actions_path %>
+|
+<%= link_to "Action Sets", acct_action_sets_path %>

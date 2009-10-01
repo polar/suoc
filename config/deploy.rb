@@ -16,8 +16,8 @@ set :_PRODUCTION_PATH, "/var/www/suoc/current"
 #
 set :scm,          "git"
 set :scm_username, "polar"
-#set :repository,   "git://github.com/polar/suoc.git"
-set :repository,   "git://adiron.kicks-ass.net/suoc.git"
+set :repository,   "git://github.com/polar/suoc.git"
+#set :repository,   "git://adiron.kicks-ass.net/suoc"
 
 #
 # Do not use sudo and use user "deploy"

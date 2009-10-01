@@ -101,14 +101,21 @@ class AcctLedgersController < BaseController
 
   def show
     @ledger = AcctLedger.find_by_id_or_slug params[:id]
+    @action_set = !params[:action_set].nil? && !params[:action_set].empty? ? 
+                     AcctActionSet.find(params[:action_set]) : 
+		     nil
+    @action_set_name = @action_set ? @action_set.name : ""
+    @action_sets = @ledger.action_sets
     targacct = @ledger.target_account
     raise "Cannot find the Ledger Account" if !targacct
 
-    @transactions = get_transactions_list(targacct, params[:page])
+    per_page = params[:per_page] ? params[:per_page] : TRANSACTIONS_PER_PAGE
+    @transactions = get_transactions_list(targacct, params[:action_set], params[:page], per_page)
     setup_totals_for_render(targacct)
     @actions = targacct.actions
     @transaction = AcctTransaction.new(:date => Date.today,
                                        :target_account => targacct)
+    @params = params
   end
 
   def delete_transaction
@@ -237,7 +244,13 @@ class AcctLedgersController < BaseController
     end
     ## Fail Fall Through
     # Set up for show rendering.
-      @transactions = get_transactions_list(targacct, params[:page])
+      per_page = params[:per_page] ? params[:per_page] : TRANSACTIONS_PER_PAGE
+      @transactions = get_transactions_list(targacct, params[:page], per_page)
+      @action_set = !params[:action_set].nil? && !params[:action_set].empty? ? 
+		      AcctActionSet.find(params[:action_set]) : 
+		      nil
+      @action_set_name = @action_set ? @action_set.name : ""
+      @action_sets = @ledger.action_sets
       setup_totals_for_render(targacct)
       @actions = targacct.actions
 
@@ -311,11 +324,31 @@ class AcctLedgersController < BaseController
   #
   # This function returns a page of transactions for the Eroom.
   #
-  def get_transactions_list(targacct, page)
-      AcctTransaction.paginate(
+  def get_transactions_list(targacct, action_set, page, per_page)
+    # Set up the :conditons query 
+    query = "target_account_id = ?"
+    args = [targacct]
+    # If we have and action set add the actions.
+    if (!action_set.nil? && !action_set.empty?)
+      as = AcctActionSet.find(action_set)
+      if as
+	actions = as.actions
+	query << " AND (acct_action_id = ? "
+	args << actions.first
+	actions.shift
+	for act in actions
+	  query << "OR acct_action_id = ? "
+	  args << act
+	end
+        query << ")"
+      end
+    end
+    conditions = [query] + args
+    p conditions
+    AcctTransaction.paginate(
               :page => page,
-              :per_page => TRANSACTIONS_PER_PAGE,
-              :conditions => {:target_account_id => targacct },
+              :per_page => per_page,
+              :conditions => conditions,
               :order => "date DESC, id DESC")
   end
 end

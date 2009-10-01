@@ -1,6 +1,6 @@
 set :application, "suoc"
-#set :repository,  "git://github.com/polar/suoc.git"
-set :repository,  "git://adiron.kicks-ass.net/suoc.git"
+set :repository,  "git://github.com/polar/suoc.git"
+#set :repository,  "git://adiron.kicks-ass.net/suoc"
 set :git_enable_submodules, 1
 
 # If you aren't deploying to /u/apps/#{application} on the target

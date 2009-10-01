@@ -38,6 +38,8 @@
 <%= link_to "Account Actions", acct_actions_path %>
 |
 <%= link_to "Action Types", acct_action_types_path %>
+|
+<%= link_to "Action Sets", acct_action_sets_path %>
 <p>
 <% if permitted_to? :create, :acct_accounts %>
   <%= link_to 'New Account', new_acct_account_path %>

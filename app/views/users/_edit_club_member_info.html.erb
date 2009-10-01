@@ -40,8 +40,8 @@
   </tr>
   <tr>
     <th>Affiliation:</th>
-    <td><%= f.select :club_member_status_id,
-                ClubMemberStatus.find(:all).collect {|s| [ "#{s.name}: #{s.description}", s.id]},
+    <td><%= f.select :club_affiliation_id,
+                ClubAffiliation.find(:all).collect {|s| [ "#{s.name}: #{s.description}", s.id]},
                 {:prompt => "Please Select"} %>
     </td>
   </tr>

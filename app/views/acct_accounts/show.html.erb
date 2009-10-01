@@ -18,7 +18,7 @@ Balance: <%= @account.balance %>
 <p>
 <%= will_paginate @entries,
     :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
-    :params => { :action => :index } %>
+    :params => { :action => :show } %>
 <p>
 <table>
   <tr>
@@ -48,7 +48,7 @@ Balance: <%= @account.balance %>
 <p>
 <%= will_paginate @entries,
     :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
-    :params => { :action => :index } %>
+    :params => { :action => :show } %>
 <p>
 <%= link_to "Edit", edit_acct_account_path(@account) %>
 |
