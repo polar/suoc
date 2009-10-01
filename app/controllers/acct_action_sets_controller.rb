@@ -41,6 +41,10 @@ class AcctActionSetsController < BaseController
       flash[:notice] = 'AcctActionSet was successfully created.'
       redirect_to(@action_set)
     else
+      p @action_set.errors
+      @ledgers = AcctLedger.all
+      @actions = AcctAction.find(:all, :order => "name ASC")
+      @submit = "Create"
       render :action => "new"
     end
   end
@@ -60,7 +64,10 @@ class AcctActionSetsController < BaseController
       flash[:notice] = 'AcctActionSet was successfully updated.'
       redirect_to(@action_set)
     else
-      ender :action => "edit"
+      @ledgers = AcctLedger.all
+      @actions = AcctAction.find(:all, :order => "name ASC")
+      @submit = "Create"
+      render :action => "edit"
     end
   end
   
