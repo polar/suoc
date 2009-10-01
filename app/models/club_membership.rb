@@ -12,20 +12,14 @@ class ClubMembership < ActiveRecord::Base
     if member_type == ClubMembershipType[:Spring]
       Date.parse("#{year}-01-01")
     elsif member_type == ClubMembershipType[:Year]
-      Date.parse("#{year}-09-01")
+      Date.parse("#{year-1}-09-01")
     else
       raise "Illegal Member Type"
     end
   end
 
   def end_date
-    if member_type == ClubMembershipType[:Spring]
-      Date.parse("#{year}-09-01")
-    elsif member_type == ClubMembershipType[:Year]
-      Date.parse("#{year+1}-09-01")
-    else
-      raise "Illegal Member Type"
-    end
+    Date.parse("#{year}-09-01")
   end
 
   def current?

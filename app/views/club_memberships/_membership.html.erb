@@ -1,0 +1,34 @@
+<%
+ # This partial renders a Club membership as a row in a table.
+ # locals =>
+ #  membership  => The ClubMembership
+ %>
+<%= "<tr class='membership row#{' current' if membership.current?}'>" %>
+  <td class="full_name">
+    <%= link_to membership.member.name, :id => membership.member, :controller => :users, :action => :show %>
+  </td>
+  <td class="suid">
+    <%= fmt_memberid(membership.member) %>
+  </td>
+  <td class="name">
+    <%= membership.member.club_affiliation.name %>
+  </td>
+  <td class="name">
+    <%= membership.member.club_member_status.name %>
+  </td>
+  <td class="member_type">
+    <%= membership.member_type.name %>
+  </td>
+  <td class="year">
+    <%= membership.year %>
+  </td>
+  <td class="date">
+    <%= membership.acct_transaction.date.strftime("%m/%d/%Y") %>
+  </td>
+  <td class="decimal">
+    <%= "%.2f" % membership.acct_transaction.amount  %>
+  </td>
+  <td class="full_name">
+    <%= membership.acct_transaction.recorded_by.name %>
+  </td>
+</tr>

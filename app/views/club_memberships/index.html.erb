@@ -1,6 +1,39 @@
 <h3>Club Memberships</h3>
-
-<h2>Current Memberships</h2>
+<% form_tag "", :method => :get do %>
+  Year: <%= text_field_tag "year", @year %>
+  <%= submit_tag "GO" %>
+<% end %>
+<table class="memberships">
+<tr>
+  <th>Name</th>
+  <th>ID</th>
+  <th>Affiliation</th>
+  <th>Status</th>
+  <th>Type</th>
+  <th>Year</th>
+  <th>Date</th>
+  <th>Amount</th>
+  <th>Rcvd By</th>
+</tr>
+<% if @memberships.empty? %>
+  <tr>
+    <td colspan="9">
+    <%= "There are no memberships recorded for the year #{@year}." %>
+    </td>
+  </tr>
+<% else %>
+  <%= render :partial => "membership", :collection => @memberships %>
+<% end %>
+</table>
+<h3>Slackers</h3>
+<div id="Slackers">
+<% form_remote_tag :update => "Slackers",
+    :url => { :action => :render_slackers } do %>
+  <%= submit_tag "Show me the Slackers"%>
+<% end %>
+</div>
+</table>
+<h3>Current Memberships</h3>
 Hit the button below to send yourself the current membership list for
 Recreation Services. This button sends you a list of members that have
 currently paid memberships, and that state they are student, undergraduate

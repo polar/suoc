@@ -1,0 +1,13 @@
+<%
+# locals
+#  members  The members.
+%>
+<table class="memberships">
+<tr>
+  <th>Name</th>
+  <th>ID</th>
+  <th>Affiliation</th>
+  <th>Status</th>
+</tr>
+<%= render :partial => "member", :collection => members %>
+</table>

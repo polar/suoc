@@ -57,6 +57,12 @@ module UsersHelper
     if !memberships.empty?
       render :partial => "member_memberships",
              :locals => { :member_memberships => memberships }
+    end
+  end
+  
+  def render_membership_slacker(member)
+    if member.is_slacker?
+      render :partial => "member_slacker"
    end
   end
 

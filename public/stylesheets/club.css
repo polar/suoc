@@ -594,6 +594,10 @@ strong {
   font-weight: bold;
 }
 
+.alert {
+  color: red;
+}
+
 
 /*
  * Actions Table

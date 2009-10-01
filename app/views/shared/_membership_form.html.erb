@@ -6,7 +6,8 @@
 #    actions
 #    amount
 #    member   The ClubMembership
-#    membership_types
+#    membership_types.
+#    default_year
 %>
   <table>
     <tr>
@@ -22,7 +23,7 @@
       <%= select( :club_membership, :member_type, ClubMembershipType.all.collect {|x| [x.name, x.id]}) %>
     </td>
     <td class="year_entry">
-      <%= text_field_tag "club_membership[year]", Date.today.year %>
+      <%= text_field_tag "club_membership[year]", default_year %>
     </td>
     </tr>
   </table>

@@ -1,0 +1,18 @@
+<%
+ # This partial renders a Club member as a row in a table.
+ # locals =>
+ #  member  => The ClubMember
+ %>
+<tr class='membership'>
+  <td class="full_name">
+    <%= link_to member.name, :id => member, :controller => :users, :action => :show %>
+  </td>
+  <td class="suid">
+    <%= fmt_memberid(member) %>
+  </td>
+  <td class="name">
+    <%= member.club_affiliation.name %>
+  </td>
+  <td class="name">
+    <%= member.club_member_status.name %>
+</tr>

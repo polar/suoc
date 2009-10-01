@@ -115,6 +115,7 @@ class AcctLedgersController < BaseController
     @actions = targacct.actions
     @transaction = AcctTransaction.new(:date => Date.today,
                                        :target_account => targacct)
+    @default_year = Time.now.month <= 8 ? Time.now.year : Time.now.year + 1 
     @params = params
   end
 
@@ -253,6 +254,7 @@ class AcctLedgersController < BaseController
       @action_sets = @ledger.action_sets
       setup_totals_for_render(targacct)
       @actions = targacct.actions
+      @default_year = default_year 
 
       # bring back amount back to a positive value.
       if @transaction.amount < 0
@@ -262,13 +264,16 @@ class AcctLedgersController < BaseController
   end
 
   def update_description_form
+    # TODO: Why can't we call default_year here?
+    default_year = Time.now.month <= 8 ? Time.now.year : Time.now.year + 1 
     if params[:acct_action_id] && !params[:acct_action_id].empty?
       if AcctAction.find(params[:acct_action_id]).name == "Membership Collection"
         render :update do |page|
           page.replace_html "transaction_entry_body",
               :partial => "shared/membership_form",
               :locals => {
-                   :membership => ClubMembership.new }
+                   :membership => ClubMembership.new,
+		   :default_year => default_year }
         end
       else
         render :update do |page|
@@ -287,6 +292,11 @@ class AcctLedgersController < BaseController
   end
 
   protected
+
+  # TODO: Why doesn't this work for update_description_form?
+  def default_year
+    Time.now.month <= 8 ? Time.now.year : Time.now.year + 1 
+  end
 
   def setup_totals_for_render(targacct)
     @actions      = targacct.actions
@@ -351,4 +361,6 @@ class AcctLedgersController < BaseController
               :conditions => conditions,
               :order => "date DESC, id DESC")
   end
+  
+  private 
 end

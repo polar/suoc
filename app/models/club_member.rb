@@ -191,6 +191,12 @@ class ClubMember < User
     ! memberships.select { |x| x.current? }.empty?
   end
 
+  def is_slacker?
+    club_member_status == ClubMemberStatus[:Active] && 
+	!has_current_membership? &&
+	memberships.size < 4
+  end
+  
   def has_current_status?
       [ClubMemberStatus[:Active],
        ClubMemberStatus[:Life]].include?(club_member_status)

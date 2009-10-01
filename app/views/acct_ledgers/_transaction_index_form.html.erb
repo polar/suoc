@@ -17,12 +17,13 @@
 #    balances        The balances displayed at the bottom. [[label,value],...]
 #    action_set      The current action_set.
 #    per_page        The transactions per page that are shown.
+#    default_year    The Default Year for the membership form.
 %>
 <table class="transactions">
   <tr colspan="5">  
     <% form_tag url_for(ledger), :method => :get do %>
     Show <%= select_tag 'action_set', 
-              options_for_showing_action_sets1(@action_sets, @action_set_name)
+              options_for_showing_action_sets(@action_sets, @action_set_name)
     %> Per Page
    <%= radio_button_tag "per_page", "5", per_page.nil? || per_page.empty? || per_page == "5" %>5
    <%= radio_button_tag "per_page", "10", per_page == "10" %>10
@@ -134,7 +135,8 @@
         <% if transaction.acct_action &&
                 transaction.acct_action.name == "Membership Collection" %>
           <%= render :partial => "shared/membership_form", :locals => {
-                     :membership => membership } %>
+                     :membership => membership,
+                     :default_year => default_year } %>
         <% else %>
           <%= render :partial => "shared/description_form", :locals => {
                      :description => transaction.description } %>
