@@ -22,6 +22,9 @@ class AcctActionSetsController < BaseController
 
   def edit
     @action_set = AcctActionSet.find(params[:id])
+    @ledgers = AcctLedger.all
+    @actions = AcctAction.find(:all, :order => "name ASC")
+    @submit = "Update"
   end
 
   def create
@@ -60,6 +63,7 @@ class AcctActionSetsController < BaseController
       ender :action => "edit"
     end
   end
+  
   def destroy
     @action_set = AcctActionSet.find(params[:id])
     @action_set.destroy
