@@ -7,7 +7,9 @@
   <div class="yui-b">
     <div class="box">
         <h3><%=  random_greeting(@user) %></h3>
-
+        <% if @user.is_slacker? %>
+          <%= render :partial => "member_slacker" %>
+        <% end %>
         <% if @messages && !@messages.empty? %>
           <h2>Messages from the Master</h2>
           <p>
