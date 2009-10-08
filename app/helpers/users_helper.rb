@@ -117,8 +117,8 @@ module UsersHelper
   # TODO: Split up submitted trips into a scroll box.
   def render_trip_registrations( member )
     trip_regs = ClubTripRegistration.all(
-                    :conditions => { :leader_id => member },
-                    :order => "submit_date ASC, departure_date DESC")
+                    :conditions => { :leader_id => member, :submit_date => nil },
+                    :order => "departure_date DESC")
     render :partial => "club_trip_registrations", :locals => {
       :member => member,
       :trip_regs => trip_regs
