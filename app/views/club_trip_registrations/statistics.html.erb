@@ -57,7 +57,7 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
 <% ls = trips_by_leader(@trips) %>
 <% for l in ls.sort {|x,y| x[:name] <=> y[:name]} do %>
   <tr class="leaderstats">
-   <td><%= link_to l[:name], l[:leader] %></td>
+   <td><%= link_to l[:name], user_path(l[:leader]) %></td>
    <td><%= l[:trips] %></td>
    <td><%= l[:people] %></td>
    <% leaderships = l[:leaderships].sort {|x,y| x[:name] <=> y[:name]} %>
