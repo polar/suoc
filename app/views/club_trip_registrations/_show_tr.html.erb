@@ -7,15 +7,15 @@ This trip registration is PENDING.
   <table>
   <% if @show_addme %>
     <tr>
-    <td> I want to go! </td>
+    <td>I'm going</td>
     <td>
-    <%= button_to "Add Me", :action => :add_me,
+    <%= button_to "Register Me", :action => :add_me,
                             :id => @club_trip_registration %>
     </td>
     </tr>
   <% end %>
   <% if @show_removeme %>
-    <td> I don't want to go anymore!</td>
+    <td>I'm not going</td>
     <td>
     <%=button_to "Remove Me", :action => :remove_me,
                               :id => @club_trip_registration %>
