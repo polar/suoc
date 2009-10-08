@@ -7,7 +7,7 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
 <% end %>
 <H3>Submitted Trip Registrations</H3>
 <table class="tripstats">
-<tr>
+<tr class="tripstats">
   <th>Date of Trip</th>
   <th>Leader</th>
   <th>Trip Name</th>
@@ -21,7 +21,7 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
   <td><%= link_to t.leader.name, user_path(t.leader) %></td>
   <td><%= t.trip_name %></td>
   <td><%= link_to t.leadership.name, t.leadership %></td>
-  <td><%= t.club_members.size %></td>
+  <td class="decimal"><%= t.club_members.size %></td>
   <td><%= t.submit_date.strftime("%m/%d/%Y") %></td>
  </tr>
 <% end %>
