@@ -3,6 +3,7 @@ class ClubTripRegistrationsController < BaseController
 
   before_filter :login_required
   filter_access_to :all
+  filter_access_to :statistics, :require => :read
   filter_access_to :submit_registration, :require => :update
   filter_access_to [:add_me, :remove_me],
                    :require => [:read, :add_remove]
@@ -20,6 +21,7 @@ class ClubTripRegistrationsController < BaseController
            :conditions => "submit_date IS NULL")
     @show_create = permitted_to? :create, :club_trip_registrations
     @show_configure = permitted_to? :configure, :club_trip_registrations
+    @show_statistics = permitted_to? :read, :club_trip_registrations
   end
 
   def show
@@ -151,6 +153,33 @@ class ClubTripRegistrationsController < BaseController
     end
   end
 
+  def statistics
+    start_date = params[:start_date] ?
+                   params[:start_date] :
+		   (Time.now.month < 8 ? "#{Time.now.year}-01-01" : "#{Time.now.year}-08-01")
+    end_date = params[:end_date] ?
+                   params[:end_date] :
+		   (Time.now.month >= 8 ? "#{Time.now.year}-12-31" : "#{Time.now.year}-08-01")
+    begin
+      start_date1 = Date.parse(start_date)
+      end_date1 = Date.parse(end_date)
+      if start_date1 > end_date1 
+	raise ArgumentError, "Invalid Dates"
+      end
+      @start_date = start_date1.strftime("%m/%d/%Y")
+      @end_date   = end_date1.strftime("%m/%d/%Y")
+      @trips = ClubTripRegistration.find :all,
+                 :conditions => 
+                   ['? <= departure_date AND departure_date < ?', start_date1, end_date1], 
+		 :include => :club_members
+      rescue ArgumentError
+	flash[:error] = "Badly formated date or date combination"
+	@start_date = start_date
+	@end_date = end_date
+	@trips = []
+    end
+  end
+  
   def configure
     @config = ClubTripRegistrationsConfiguration.first;
     if (!@config)

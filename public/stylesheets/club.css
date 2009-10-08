@@ -412,6 +412,15 @@ b, strong {
   text-align: left
 }
 
+.tripstats table{
+  padding: 2em;
+}
+.tripstats th{
+  padding: 0px 10px 0px 0px;
+}
+.tripstats .leadershipstats .leaderstats td{
+  padding: 0px 10px 0px 0px;
+}
 /*
  * Page Navigation Column
  * It's a table sitting the left column.
