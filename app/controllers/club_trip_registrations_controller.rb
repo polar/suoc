@@ -39,6 +39,9 @@ class ClubTripRegistrationsController < BaseController
     @show_edit =
       !@club_trip_registration.submitted? &&
         @club_trip_registration.leader == current_user
+    @show_create = permitted_to? :create, :club_trip_registrations
+    @show_configure = permitted_to? :configure, :club_trip_registrations
+    @show_statistics = permitted_to? :read, :club_trip_registrations
   end
 
   def new
@@ -178,6 +181,9 @@ class ClubTripRegistrationsController < BaseController
 	@end_date = end_date
 	@trips = []
     end
+    @show_create = permitted_to? :create, :club_trip_registrations
+    @show_configure = permitted_to? :configure, :club_trip_registrations
+    @show_statistics = permitted_to? :read, :club_trip_registrations
   end
   def list_submitted
     start_date = params[:start_date] ?
