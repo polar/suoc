@@ -1,5 +1,10 @@
 <h3>Club Trip Registrations</h3>
 <p>
+Select a trip registration from below to examine and add or remove yourself from the registration.
+<p>
+Leaders, use "Create New Trip Registration link below to create a new pending trip registration.
+Remember, you must submit the trip before you go.
+<h3>Pending Trip Registrations</h3>
 <table>
   <tr>
    <th>Trip Name</th>
@@ -29,6 +34,8 @@
 <p>
 <%= link_to 'Create New Trip Registration', new_club_trip_registration_path %>
 <% end %>
+<p>
+<%= link_to 'Submitted Trip Registrations', url_for(:action => :list_submitted) %>
 <% if @show_statistics %>
 <p>
 <%= link_to "Trip Registration Statistics", url_for(:action => :statistics) %>

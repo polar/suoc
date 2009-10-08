@@ -14,6 +14,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :club_trip_registrations, :collection => {
     :statistics => :get,
+    :list_submitted => :get,
     :configure => :get,
     :update_configuration => :post}
 

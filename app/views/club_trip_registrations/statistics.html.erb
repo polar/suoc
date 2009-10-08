@@ -5,10 +5,14 @@
 Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag :end_date, @end_date %>
 <%= submit_tag "GO" %>
 <% end %>
-
 <H3>By Leadership</H3>
 <table class="tripstats">
 <% as = ClubAffiliation.all %>
+<tr>
+  <th></th>
+  <th colspan="2">Totals</th>
+  <th colspan='<%= as.size %>' align="center">Average Percentage Makeup per Trip (May not add up to 100% across)</th>
+</tr>
 <tr>
   <th>Leadership</th>
   <th>Trips</th>
@@ -21,13 +25,23 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
 <% for l in ls.sort {|x,y| x[:name] <=> y[:name]} do %>
   <tr class="leaderhipstats">
     <td><%= link_to l[:name], l[:leadership] %></td>
-    <td><%= l[:trips] %></td>
+    <td><%= l[:totals][:trips] %></td>
     <td><%= l[:totals][:members] %></td>
     <% for a in as do %>
-       <td><%= l[:totals][:affil][a.id] %></td>
+       <td><%= sprintf "%.1d%", l[:totals][:percent][a.id] %></td>
     <% end %>
   </tr>
 <% end %>
+<% ts = add(@trips.map{|t| members_of_trip(t)}) %>
+<tr>
+  <td>Total</td>
+  <td><%= ts[:trips] %></td>
+  <td><%= ts[:members] %></td>
+  <% for a in as do %>
+      <td><%= sprintf "%.1d%", ts[:percent][a.id] %></td>
+  <% end %>
+</tr>
+
 </table>
 
 <H3>By Leader</H3>
@@ -50,7 +64,7 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
    <% if leaderships.size > 1 %>
        <% for x in leaderships do %>
          <td><%= x[:name] %></td>
-         <td><%= x[:trips] %></td>
+         <td><%= x[:totals][:trips] %></td>
          <td><%= x[:totals][:members] %></td>
          </tr>
          <tr>
@@ -61,7 +75,7 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
    <% else %>
        <% x = leaderships[0] %>
          <td><%= x[:name] %></td>
-         <td><%= x[:trips] %></td>
+         <td><%= x[:totals][:trips] %></td>
          <td><%= x[:totals][:members] %></td>
    <% end %>
   </tr>

@@ -1,0 +1,45 @@
+<%= render :partial => "shared/messages" %>
+<h3>Trip Registrations</h3>
+<p>
+<% form_tag url_for(:action => :list_submitted), :method => "get" do %>
+Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag :end_date, @end_date %>
+<%= submit_tag "GO" %>
+<% end %>
+<H3>Submitted Trip Registrations</H3>
+<table class="tripstats">
+<tr>
+  <th>Date of Trip</th>
+  <th>Leader</th>
+  <th>Trip Name</th>
+  <th>Leadership</th>
+  <th>People</th>
+  <th>Date Submitted</th>
+</tr>
+<% for t in @trips %>
+<tr>
+  <td><%= t.departure_date.strftime("%m/%d/%Y") %></td>
+  <td><%= link_to t.leader.name, t.leader %></td>
+  <td><%= t.trip_name %></td>
+  <td><%= link_to t.leadership.name, t.leadership %></td>
+  <td><%= t.club_members.size %></td>
+  <td><%= t.submit_date.strftime("%m/%d/%Y") %></td>
+ </tr>
+<% end %>
+</table>
+
+
+<br />
+<p>
+<%= link_to 'Pending Trip Registrations', url_for(:action => :index) %>
+<% if @show_create %>
+<p>
+<%= link_to 'Create New Trip Registration', new_club_trip_registration_path %>
+<% end %>
+<% if @show_statistics %>
+<p>
+<%= link_to "Trip Registration Statistics", url_for(:action => :statistics) %>
+<% end %>
+<% if @show_configure %>
+<p>
+<%= link_to 'Configure Trip Registration', url_for(:action => :configure) %>
+<% end %>
