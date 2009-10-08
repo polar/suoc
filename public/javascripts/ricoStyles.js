@@ -1,23 +1,28 @@
+/*
+ *  Copyright 2005 Sabre Airline Solutions
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ *  file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the
+ *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ *  either express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
+
+
+Rico.Color = Class.create(
+/** @lends Rico.Color# */
+{
 /**
-  *
-  *  Copyright 2005 Sabre Airline Solutions
-  *
-  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
-  *  file except in compliance with the License. You may obtain a copy of the License at
-  *
-  *         http://www.apache.org/licenses/LICENSE-2.0
-  *
-  *  Unless required by applicable law or agreed to in writing, software distributed under the
-  *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-  *  either express or implied. See the License for the specific language governing permissions
-  *  and limitations under the License.
-  **/
-
-//-------------------- ricoColor.js
-Rico.Color = Class.create();
-
-Rico.Color.prototype = {
-
+ * @class Methods to manipulate color values.
+ * @constructs
+ * @param red integer (0-255)
+ * @param green integer (0-255)
+ * @param blue integer (0-255)
+ */
    initialize: function(red, green, blue) {
       this.rgb = { r: red, g : green, b : blue };
    },
@@ -103,12 +108,17 @@ Rico.Color.prototype = {
       return this.asHex();
    }
 
-};
+});
 
+/**
+ * Factory method for creating a color from an RGB string
+ * @param hexCode a 3 or 6 digit hex string, optionally preceded by a # symbol
+ * @returns a Rico.Color object
+ */
 Rico.Color.createFromHex = function(hexCode) {
   if(hexCode.length==4) {
     var shortHexCode = hexCode;
-    var hexCode = '#';
+    hexCode = '#';
     for(var i=1;i<4;i++)
       hexCode += (shortHexCode.charAt(i) + shortHexCode.charAt(i));
   }
@@ -119,11 +129,12 @@ Rico.Color.createFromHex = function(hexCode) {
   var green = hexCode.substring(2,4);
   var blue  = hexCode.substring(4,6);
   return new Rico.Color( parseInt(red,16), parseInt(green,16), parseInt(blue,16) );
-}
+};
 
 /**
- * Factory method for creating a color from the background of
- * an HTML element.
+ * Retrieves the background color of an HTML element
+ * @param elem the DOM element whose background color should be retreived
+ * @returns a Rico.Color object
  */
 Rico.Color.createColorFromBackground = function(elem) {
 
@@ -140,9 +151,9 @@ Rico.Color.createColorFromBackground = function(elem) {
    if ( actualColor.indexOf("rgb(") == 0 ) {
       var colors = actualColor.substring(4, actualColor.length - 1 );
       var colorArray = colors.split(",");
-      return new Rico.Color( parseInt( colorArray[0] ),
-                            parseInt( colorArray[1] ),
-                            parseInt( colorArray[2] )  );
+      return new Rico.Color( parseInt( colorArray[0],10 ),
+                             parseInt( colorArray[1],10 ),
+                             parseInt( colorArray[2],10 )  );
 
    }
    else if ( actualColor.indexOf("#") == 0 ) {
@@ -150,16 +161,20 @@ Rico.Color.createColorFromBackground = function(elem) {
    }
    else
       return new Rico.Color(255,255,255);
-}
+};
 
+/**
+ * Converts hue/saturation/brightness to RGB
+ * @returns a 3-element object: r=red, g=green, b=blue.
+ */
 Rico.Color.HSBtoRGB = function(hue, saturation, brightness) {
 
-   var red   = 0;
+  var red   = 0;
 	var green = 0;
 	var blue  = 0;
 
-   if (saturation == 0) {
-      red = parseInt(brightness * 255.0 + 0.5);
+  if (saturation == 0) {
+     red = parseInt(brightness * 255.0 + 0.5,10);
 	   green = red;
 	   blue = red;
 	}
@@ -170,7 +185,7 @@ Rico.Color.HSBtoRGB = function(hue, saturation, brightness) {
       var q = brightness * (1.0 - saturation * f);
       var t = brightness * (1.0 - (saturation * (1.0 - f)));
 
-      switch (parseInt(h)) {
+      switch (parseInt(h,10)) {
          case 0:
             red   = (brightness * 255.0 + 0.5);
             green = (t * 255.0 + 0.5);
@@ -204,12 +219,16 @@ Rico.Color.HSBtoRGB = function(hue, saturation, brightness) {
 	    }
 	}
 
-   return { r : parseInt(red), g : parseInt(green) , b : parseInt(blue) };
-}
+   return { r : parseInt(red,10), g : parseInt(green,10) , b : parseInt(blue,10) };
+};
 
 /**
- * Returns a 3-element object: h=hue, s=saturation, b=brightness.
- * Unlike some HSB documentation which states hue should be a value 0-360, this routine returns hue values from 0 to 1.0
+ * Converts RGB value to hue/saturation/brightness
+ * @param r integer (0-255)
+ * @param g integer (0-255)
+ * @param b integer (0-255)
+ * @returns a 3-element object: h=hue, s=saturation, b=brightness.
+ * (unlike some HSB documentation which states hue should be a value 0-360, this routine returns hue values from 0 to 1.0)
  */
 Rico.Color.RGBtoHSB = function(r, g, b) {
 
@@ -251,19 +270,25 @@ Rico.Color.RGBtoHSB = function(r, g, b) {
    }
 
    return { h : hue, s : saturation, b : brightness };
-}
+};
 
+/**
+ * Creates a vertical gradient inside an element
+ * @param e element where gradient will be created
+ * @param startColor starting color, either a Rico.Color object or 6-character RGB string
+ * @param endColor ending color, either a Rico.Color object or 6-character RGB string
+ */
 Rico.Color.createGradientV = function(e,startColor,endColor) {
   var c1=typeof(startColor)=='string' ? Rico.Color.createFromHex(startColor) : startColor;
   var c2=typeof(endColor)=='string' ? Rico.Color.createFromHex(endColor) : endColor;
   if (Prototype.Browser.IE) {
     e.style.filter = "progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=\"" + c1.asHex() + "\",EndColorStr=\"" + c2.asHex() + "\")";
   } else {
-    colorArray = Rico.Color.createColorPath(c1,c2,Math.min(e.offsetHeight,50));
+    var colorArray = Rico.Color.createColorPath(c1,c2,Math.min(e.offsetHeight,50));
     var remh=e.offsetHeight,l=colorArray.length;
     var div=Rico.Color.createGradientContainer();
     var tmpDOM = document.createDocumentFragment();
-    for(p=0;p<colorArray.length;p++) {
+    for(var g,h,p=0;p<colorArray.length;p++) {
       h = Math.round(remh/l) || 1;
       g = document.createElement("div");
       g.setAttribute("style","height:" + h + "px;width:100%;background-color:" + colorArray[p].asRGB() + ";");
@@ -275,19 +300,25 @@ Rico.Color.createGradientV = function(e,startColor,endColor) {
     e.appendChild(div);
     tmpDOM = null;
   }
-}
+};
 
+/**
+ * Creates a horizontal gradient inside an element
+ * @param e element where gradient will be created
+ * @param startColor starting color, either a Rico.Color object or 6-character RGB string
+ * @param endColor ending color, either a Rico.Color object or 6-character RGB string
+ */
 Rico.Color.createGradientH = function(e,startColor,endColor) {
   var c1=typeof(startColor)=='string' ? Rico.Color.createFromHex(startColor) : startColor;
   var c2=typeof(endColor)=='string' ? Rico.Color.createFromHex(endColor) : endColor;
   if (Prototype.Browser.IE) {
     e.style.filter = "progid:DXImageTransform.Microsoft.Gradient(GradientType=1,StartColorStr=\"" + c1.asHex() + "\",EndColorStr=\"" + c2.asHex() + "\")";
   } else {
-    colorArray = Rico.Color.createColorPath(c1,c2,Math.min(e.offsetWidth,50));
+    var colorArray = Rico.Color.createColorPath(c1,c2,Math.min(e.offsetWidth,50));
     var x=0,remw=e.offsetWidth,l=colorArray.length;
     var div=Rico.Color.createGradientContainer();
     var tmpDOM = document.createDocumentFragment();
-    for(p=0;p<colorArray.length;p++) {
+    for(var p=0;p<colorArray.length;p++) {
       var w=Math.round(remw/l) || 1;
       var g = document.createElement("div");
       g.setAttribute("style","position:absolute;top:0px;left:" + x + "px;height:100%;width:" + w + "px;background-color:" + colorArray[p].asRGB() + ";");
@@ -300,8 +331,9 @@ Rico.Color.createGradientH = function(e,startColor,endColor) {
     e.appendChild(div);
     tmpDOM = null;
   }
-}
+};
 
+/** creates containing element for gradient methods */
 Rico.Color.createGradientContainer = function() {
   var div=document.createElement('div');
   div.style.height='100%';
@@ -311,8 +343,9 @@ Rico.Color.createGradientContainer = function() {
   div.style.left='0px';
   div.style.zIndex=-1;
   return div;
-}
+};
 
+/** calculates intermediate color values for gradient methods */
 Rico.Color.createColorPath = function(color1,color2,slices) {
   var colorPath = [];
   var colorPercent = 1.0;
@@ -322,7 +355,7 @@ Rico.Color.createColorPath = function(color1,color2,slices) {
     colorPercent-=delta;
   } while(colorPercent>0);
   return colorPath;
-}
+};
 
 Rico.Color.setColorHue = function(originColor,opacityPercent,maskRGB) {
   return new Rico.Color(
@@ -330,13 +363,16 @@ Rico.Color.setColorHue = function(originColor,opacityPercent,maskRGB) {
     Math.round(originColor.rgb.g*opacityPercent + maskRGB.rgb.g*(1.0-opacityPercent)),
     Math.round(originColor.rgb.b*opacityPercent + maskRGB.rgb.b*(1.0-opacityPercent))
   );
-}
+};
 
-//-------------------- ricoCorner.js
+
+/**
+ * @namespace
+ */
 Rico.Corner = {
 
    round: function(e, options) {
-      var e = $(e);
+      e = $(e);
       this._setOptions(options);
       var color = this.options.color == "fromElement" ? this._background(e) : this.options.color;
       var bgColor = this.options.bgColor == "fromParent" ? this._background(e.parentNode) : this.options.bgColor;
@@ -362,24 +398,24 @@ Rico.Corner = {
    _roundCornersGecko: function(e, color) {
       var radius=this.options.compact ? '4px' : '8px';
       if (this._hasString(this.options.corners, "all"))
-        Element.setStyle(e, {MozBorderRadius:radius}, true)
+        Element.setStyle(e, {MozBorderRadius:radius}, true);
       else {
-        if (this._hasString(this.options.corners, "top", "tl")) Element.setStyle(e, {MozBorderRadiusTopleft:radius}, true)
-        if (this._hasString(this.options.corners, "top", "tr")) Element.setStyle(e, {MozBorderRadiusTopright:radius}, true)
-        if (this._hasString(this.options.corners, "bottom", "bl")) Element.setStyle(e, {MozBorderRadiusBottomleft:radius}, true)
-        if (this._hasString(this.options.corners, "bottom", "br")) Element.setStyle(e, {MozBorderRadiusBottomright:radius}, true)
+        if (this._hasString(this.options.corners, "top", "tl")) Element.setStyle(e, {MozBorderRadiusTopleft:radius}, true);
+        if (this._hasString(this.options.corners, "top", "tr")) Element.setStyle(e, {MozBorderRadiusTopright:radius}, true);
+        if (this._hasString(this.options.corners, "bottom", "bl")) Element.setStyle(e, {MozBorderRadiusBottomleft:radius}, true);
+        if (this._hasString(this.options.corners, "bottom", "br")) Element.setStyle(e, {MozBorderRadiusBottomright:radius}, true);
       }
    },
 
    _roundCornersWebKit: function(e, color) {
       var radius=this.options.compact ? '4px' : '8px';
       if (this._hasString(this.options.corners, "all"))
-        Element.setStyle(e, {WebkitBorderRadius:radius}, true)
+        Element.setStyle(e, {WebkitBorderRadius:radius}, true);
       else {
-        if (this._hasString(this.options.corners, "top", "tl")) Element.setStyle(e, {WebkitBorderTopLeftRadius:radius}, true)
-        if (this._hasString(this.options.corners, "top", "tr")) Element.setStyle(e, {WebkitBorderTopRightRadius:radius}, true)
-        if (this._hasString(this.options.corners, "bottom", "bl")) Element.setStyle(e, {WebkitBorderBottomLeftRadius:radius}, true)
-        if (this._hasString(this.options.corners, "bottom", "br")) Element.setStyle(e, {WebkitBorderBottomRightRadius:radius}, true)
+        if (this._hasString(this.options.corners, "top", "tl")) Element.setStyle(e, {WebkitBorderTopLeftRadius:radius}, true);
+        if (this._hasString(this.options.corners, "top", "tr")) Element.setStyle(e, {WebkitBorderTopRightRadius:radius}, true);
+        if (this._hasString(this.options.corners, "bottom", "bl")) Element.setStyle(e, {WebkitBorderBottomLeftRadius:radius}, true);
+        if (this._hasString(this.options.corners, "bottom", "br")) Element.setStyle(e, {WebkitBorderBottomRightRadius:radius}, true);
       }
    },
 
@@ -460,7 +496,7 @@ Rico.Corner = {
          border  : false,
          compact : false,
          useMoz  : true  // use native Gecko corners
-      }
+      };
       Object.extend(this.options, options || {});
       if (this._isTransparent()) this.options.blend = false;
    },
@@ -594,8 +630,9 @@ Rico.Corner = {
    },
 
    _hasString: function(str) {
-     for(var i=1 ; i<arguments.length ; i++)
+     for(var i=1 ; i<arguments.length ; i++) {
        if (str.indexOf(arguments[i]) >= 0) return true;
+     }
      return false;
    },
 
@@ -603,6 +640,6 @@ Rico.Corner = {
    _isTopRounded: function() { return this._hasString(this.options.corners, "all", "top", "tl", "tr"); },
    _isBottomRounded: function() { return this._hasString(this.options.corners, "all", "bottom", "bl", "br"); },
    _hasSingleTextChild: function(el) { return el.childNodes.length == 1 && el.childNodes[0].nodeType == 3; }
-}
+};
 
 Rico.includeLoaded('ricoStyles.js');

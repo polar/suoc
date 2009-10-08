@@ -1,12 +1,29 @@
+/*
+ *  (c) 2005-2009 Matt Brown (http://dowdybrown.com)
+ *
+ *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ *  file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the
+ *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ *  either express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
+
 if(typeof Rico=='undefined') throw("LiveGridForms requires the Rico JavaScript framework");
 if(typeof RicoUtil=='undefined') throw("LiveGridForms requires the RicoUtil object");
 if(typeof RicoTranslate=='undefined') throw("LiveGridForms requires the RicoTranslate object");
 
 
-Rico.TableEdit = Class.create();
-
-Rico.TableEdit.prototype = {
-
+Rico.TableEdit = Class.create(
+/** @lends Rico.TableEdit# */
+{
+/**
+ * @class Supports editing LiveGrid data.
+ * @constructs
+ */
   initialize: function(liveGrid) {
     Rico.writeDebugMsg('Rico.TableEdit initialize: '+liveGrid.tableId);
     this.grid=liveGrid;
@@ -21,7 +38,7 @@ Rico.TableEdit.prototype = {
       updateURL        : window.location.href, // default is that updates post back to the generating page
       readOnlyColor    : '#AAA',   // read-only fields displayed using this color
       showSaveMsg      : 'errors'  // disposition of database update responses (full - show full response, errors - show full response for errors and short response otherwise)
-    }
+    };
     Object.extend(this.options, liveGrid.options);
     this.hasWF2=(document.implementation && document.implementation.hasFeature && document.implementation.hasFeature('WebForms', '2.0'));
     this.menu=liveGrid.menu;
@@ -38,15 +55,21 @@ Rico.TableEdit.prototype = {
   },
 
   canDragFunc: function(elem,event) {
-    if (elem.componentFromPoint && elem.componentFromPoint(event.clientX,event.clientY)!='') return false;
+    if (elem.componentFromPoint) {
+      //Rico.writeDebugMsg('canDragFunc: '+elem.tagName+' '+elem.componentFromPoint(event.clientX,event.clientY));
+      var c=elem.componentFromPoint(event.clientX,event.clientY);
+      // for some reason, IE returns outside when this is called inside a frame
+      if (c!='' && c!='outside') return false;
+    }
     return (elem==this.editDiv || elem.tagName=='FORM');
   },
 
   createKeyArray: function() {
     this.keys=[];
-    for (var i=0; i<this.grid.columns.length; i++)
+    for (var i=0; i<this.grid.columns.length; i++) {
       if (this.grid.columns[i].format && this.grid.columns[i].format.isKey)
         this.keys.push(i);
+    }
   },
 
   createEditDiv: function() {
@@ -60,22 +83,22 @@ Rico.TableEdit.prototype = {
       this.startForm();
       this.createForm(this.form);
     } else {
-      var button=this.createButton(RicoTranslate.getPhraseById("close"));
-      Event.observe(button,"click", this.cancelEdit.bindAsEventListener(this), false);
+      var buttonClose=this.createButton(RicoTranslate.getPhraseById("close"));
+      Event.observe(buttonClose,"click", this.cancelEdit.bindAsEventListener(this), false);
       this.createForm(this.editDiv);
     }
     this.editDivCreated=true;
-    this.formPopup=new Rico.Popup({ignoreClicks:true, canDragFunc: this.canDragFunc.bind(this) }, this.editDiv);
+    this.formPopup=new Rico.Popup({ignoreClicks:true, hideOnClick:false, canDragFunc: this.canDragFunc.bind(this) }, this.editDiv);
 
     // create responseDialog
 
     this.responseDialog = this.grid.createDiv('editResponse',document.body);
     this.responseDialog.style.display='none';
 
-    var button = document.createElement('button');
-    button.appendChild(document.createTextNode('OK'));
-    button.onclick=this.ackResponse.bindAsEventListener(this);
-    this.responseDialog.appendChild(button);
+    var buttonOK = document.createElement('button');
+    buttonOK.appendChild(document.createTextNode('OK'));
+    buttonOK.onclick=this.ackResponse.bindAsEventListener(this);
+    this.responseDialog.appendChild(buttonOK);
 
     this.responseDiv = this.grid.createDiv('editResponseText',this.responseDialog);
 
@@ -89,7 +112,7 @@ Rico.TableEdit.prototype = {
     this.requestCount--;
     Rico.writeDebugMsg("initPanelGroup: "+this.requestCount);
     if (this.requestCount>0) return;
-    var wi=parseInt(this.options.panelWidth);
+    var wi=parseInt(this.options.panelWidth,10);
     if (this.form) {
       this.form.style.width=(wi+10)+'px';
       if (Prototype.Browser.WebKit) this.editDiv.style.display='block';  // this causes display to flash briefly
@@ -106,6 +129,7 @@ Rico.TableEdit.prototype = {
 
   startForm: function() {
     this.form = document.createElement('form');
+    /** @ignore */
     this.form.onsubmit=function() {return false;};
     this.editDiv.appendChild(this.form);
 
@@ -114,8 +138,8 @@ Rico.TableEdit.prototype = {
     var cell = row.insertCell(-1);
     var button=cell.appendChild(this.createButton(RicoTranslate.getPhraseById("saveRecord",this.options.RecordName)));
     Event.observe(button,"click", this.TESubmit.bindAsEventListener(this), false);
-    var cell = row.insertCell(-1);
-    var button=cell.appendChild(this.createButton(RicoTranslate.getPhraseById("cancel")));
+    cell = row.insertCell(-1);
+    button=cell.appendChild(this.createButton(RicoTranslate.getPhraseById("cancel")));
     Event.observe(button,"click", this.cancelEdit.bindAsEventListener(this), false);
     this.form.appendChild(tab);
 
@@ -123,8 +147,9 @@ Rico.TableEdit.prototype = {
     this.hiddenFields = document.createElement('div');
     this.hiddenFields.style.display='none';
     this.action = this.appendHiddenField(this.grid.tableId+'__action','');
-    for (var i=0; i<this.grid.columns.length; i++) {
-      var fldSpec=this.grid.columns[i].format;
+    var i,fldSpec;
+    for (i=0; i<this.grid.columns.length; i++) {
+      fldSpec=this.grid.columns[i].format;
       if (fldSpec && fldSpec.FormView && fldSpec.FormView=="hidden")
         this.appendHiddenField(fldSpec.FieldName,fldSpec.ColData);
     }
@@ -143,7 +168,7 @@ Rico.TableEdit.prototype = {
     for (var j=0; j<this.grid.columns.length; j++) {
       var fldSpec=this.grid.columns[j].format;
       if (!fldSpec) continue;
-      if (!fldSpec.EntryType) continue
+      if (!fldSpec.EntryType) continue;
       if (fldSpec.EntryType=='H') continue;
       var panelIdx=fldSpec.panelIdx || 0;
       if (panelIdx==i) {
@@ -163,7 +188,7 @@ Rico.TableEdit.prototype = {
   },
 
   createForm: function(parentDiv) {
-    var tables=[];
+    var i,div,fldSpec,panelIdx,tables=[];
     this.panelHdr=[];
     this.panelContent=[];
     if (this.options.panels) {
@@ -176,25 +201,27 @@ Rico.TableEdit.prototype = {
       this.panelGroup.appendChild(this.panelContents);
       parentDiv.appendChild(this.panelGroup);
       if (this.grid.direction=='rtl') {
-        for (var i=this.options.panels.length-1; i>=0; i--)
+        for (i=this.options.panels.length-1; i>=0; i--) {
           if (this.createPanel(i))
             tables[i]=this.createFormTable(this.panelContent[i],'tabContent');
+        }
       } else {
-        for (var i=0; i<this.options.panels.length; i++)
+        for (i=0; i<this.options.panels.length; i++) {
           if (this.createPanel(i))
             tables[i]=this.createFormTable(this.panelContent[i],'tabContent');
+        }
       }
       parentDiv.appendChild(this.panelGroup);
     } else {
-      var div=document.createElement('div');
+      div=document.createElement('div');
       div.className='noTabContent';
       tables[0]=this.createFormTable(div);
       parentDiv.appendChild(div);
     }
-    for (var i=0; i<this.grid.columns.length; i++) {
-      var fldSpec=this.grid.columns[i].format;
+    for (i=0; i<this.grid.columns.length; i++) {
+      fldSpec=this.grid.columns[i].format;
       if (!fldSpec) continue;
-      var panelIdx=fldSpec.panelIdx || 0;
+      panelIdx=fldSpec.panelIdx || 0;
       if (tables[panelIdx]) this.appendFormField(this.grid.columns[i],tables[panelIdx]);
       if (typeof fldSpec.pattern=='string') {
         switch (fldSpec.pattern) {
@@ -317,8 +344,8 @@ Rico.TableEdit.prototype = {
         } else {
           field=RicoUtil.createFormField(entry,'input','text',name,name);
         }
-        if (typeof fmt.min=='string') fmt.min=parseInt(fmt.min);
-        if (typeof fmt.max=='string') fmt.max=parseInt(fmt.max);
+        if (typeof fmt.min=='string') fmt.min=parseInt(fmt.min,10);
+        if (typeof fmt.max=='string') fmt.max=parseInt(fmt.max,10);
         this.initField(field,fmt);
         break;
       case 'F':
@@ -359,8 +386,8 @@ Rico.TableEdit.prototype = {
 
   updateSelectNew: function(SelObj) {
     var vis=(SelObj.value==this.options.TableSelectNew) ? "" : "hidden";
-    $("labelnew__" + SelObj.id).style.visibility=vis
-    $("textnew__" + SelObj.id).style.visibility=vis
+    $("labelnew__" + SelObj.id).style.visibility=vis;
+    $("textnew__" + SelObj.id).style.visibility=vis;
   },
 
   selectValuesRequest: function(elem,fldSpec) {
@@ -442,28 +469,31 @@ Rico.TableEdit.prototype = {
     var elemTitle=$('pageTitle');
     var pageTitle=elemTitle ? elemTitle.innerHTML : document.title;
     this.menu.addMenuHeading(pageTitle);
-    for (var i=0; i<this.extraMenuItems.length; i++)
+    for (var i=0; i<this.extraMenuItems.length; i++) {
       this.menu.addMenuItem(this.extraMenuItems[i].menuText,this.extraMenuItems[i].menuAction,this.extraMenuItems[i].enabled);
+    }
+    var menutxt;
     if (onBlankRow==false) {
-      var menutxt=RicoTranslate.getPhraseById("editRecord",this.options.RecordName);
+      menutxt=RicoTranslate.getPhraseById("editRecord",this.options.RecordName);
       this.menu.addMenuItem(menutxt,this.editRecord.bindAsEventListener(this),this.options.canEdit);
-      var menutxt=RicoTranslate.getPhraseById("deleteRecord",this.options.RecordName);
+      menutxt=RicoTranslate.getPhraseById("deleteRecord",this.options.RecordName);
       this.menu.addMenuItem(menutxt,this.deleteRecord.bindAsEventListener(this),this.options.canDelete);
       if (this.options.canClone) {
-        var menutxt=RicoTranslate.getPhraseById("cloneRecord",this.options.RecordName);
+        menutxt=RicoTranslate.getPhraseById("cloneRecord",this.options.RecordName);
         this.menu.addMenuItem(menutxt,this.cloneRecord.bindAsEventListener(this),this.options.canAdd && this.options.canEdit);
       }
     }
-    var menutxt=RicoTranslate.getPhraseById("addRecord",this.options.RecordName);
+    menutxt=RicoTranslate.getPhraseById("addRecord",this.options.RecordName);
     this.menu.addMenuItem(menutxt,this.addRecord.bindAsEventListener(this),this.options.canAdd);
     return true;
   },
 
   cancelEdit: function(e) {
     Event.stop(e);
-    for (var i=0; i<this.grid.columns.length; i++)
+    for (var i=0; i<this.grid.columns.length; i++) {
       if (this.grid.columns[i].format && this.grid.columns[i].format.SelectCtl)
         RicoEditControls.close(this.grid.columns[i].format.SelectCtl);
+    }
     this.makeFormInvisible();
     this.grid.highlightEnabled=true;
     this.menu.cancelmenu();
@@ -473,13 +503,14 @@ Rico.TableEdit.prototype = {
   setField: function(fldnum,fldvalue) {
     var fldSpec=this.grid.columns[fldnum].format;
     var e=$(fldSpec.FieldName);
+    var a,i,elems,fldcode,opts,txt;
     if (!e) return;
     Rico.writeDebugMsg('setField: '+fldSpec.FieldName+'='+fldvalue);
     switch (e.tagName.toUpperCase()) {
       case 'DIV':
-        var elems=e.getElementsByTagName('INPUT');
-        var fldcode=this.getLookupValue(fldvalue)[0];
-        for (var i=0; i<elems.length; i++)
+        elems=e.getElementsByTagName('INPUT');
+        fldcode=this.getLookupValue(fldvalue)[0];
+        for (i=0; i<elems.length; i++)
           elems[i].checked=(elems[i].value==fldcode);
         break;
       case 'INPUT':
@@ -487,23 +518,23 @@ Rico.TableEdit.prototype = {
           fldvalue=this.getLookupValue(fldvalue)[0];
         if (fldSpec.EntryType=='D') {
           // remove time data if it exists
-          var a=fldvalue.split(/\s|T/);
+          a=fldvalue.split(/\s|T/);
           fldvalue=a[0];
         }
         e.value=fldvalue;
         break;
       case 'SELECT':
-        var opts=e.options;
-        var fldcode=this.getLookupValue(fldvalue)[0];
+        opts=e.options;
+        fldcode=this.getLookupValue(fldvalue)[0];
         //alert('setField SELECT: id='+e.id+'\nvalue='+fldcode+'\nopt cnt='+opts.length)
-        for (var i=0; i<opts.length; i++) {
+        for (i=0; i<opts.length; i++) {
           if (opts[i].value==fldcode) {
             e.selectedIndex=i;
             break;
           }
         }
         if (fldSpec.EntryType=='N') {
-          var txt=$('textnew__'+e.id);
+          txt=$('textnew__'+e.id);
           if (!txt) alert('Warning: unable to find id "textnew__'+e.id+'"');
           txt.value=fldvalue;
           if (e.selectedIndex!=i) e.selectedIndex=opts.length-1;
@@ -712,6 +743,7 @@ Rico.TableEdit.prototype = {
     this.editDiv.style.visibility='visible';
     if (this.initialized) return;
 
+    var i, spec;
     for (i = 0; i < this.grid.columns.length; i++) {
       spec=this.grid.columns[i].format;
       if (!spec || !spec.EntryType || !spec.FieldName) continue;
@@ -760,7 +792,8 @@ Rico.TableEdit.prototype = {
         }
 				break;
 			default   :
-				desc='\"' + this.getConfirmDesc(this.rowIdx).truncate(50) + '\"'
+				desc='\"' + this.getConfirmDesc(this.rowIdx).truncate(50) + '\"';
+        break;
     }
     if (!this.options.ConfirmDelete.valueOf || confirm(RicoTranslate.getPhraseById("confirmDelete",desc))) {
       this.hideResponse(RicoTranslate.getPhraseById('deleting'));
@@ -772,14 +805,14 @@ Rico.TableEdit.prototype = {
   },
 
   getKey: function(rowIdx) {
-    var key='';
+    var keyHash=$H();
     for (var k=0; k<this.keys.length; k++) {
       var i=this.keys[k];
       var value=this.grid.columns[i].getValue(rowIdx);
       value=this.getLookupValue(value)[0];
-      key+='&_k'+i+'='+value;
+      keyHash.set('_k'+i,value);
     }
-    return key;
+    return '&'+keyHash.toQueryString();
   },
 
   validationMsg: function(elem,colnum,phraseId) {
@@ -820,10 +853,10 @@ Rico.TableEdit.prototype = {
 
       // check min/max
       switch (spec.EntryType.charAt(0)) {
-        case 'I': n=parseInt(elem.value); break;
+        case 'I': n=parseInt(elem.value,10); break;
         case 'F': n=parseFloat(elem.value); break;
         case 'D': n=new Date(); n.setISO8601(elem.value); break;
-        default:  n=NaN;
+        default:  n=NaN; break;
       }
       if (typeof spec.min!='undefined' && !isNaN(n) && n < spec.min)
         return this.validationMsg(elem,i,"formOutOfRange");
@@ -856,13 +889,12 @@ Rico.TableEdit.prototype = {
     Rico.writeDebugMsg("sendForm: "+parms);
     new Ajax.Updater(this.responseDiv, this.options.updateURL, {parameters:parms,onComplete:this.responseHandler});
   }
-}
+});
 
 
 /**
- * @singleton
- * Registers custom popup widgets to fill in a text box (e.g. ricoCalendar and ricoTree)
- *
+ * @namespace Registers custom popup widgets to fill in a text box (e.g. ricoCalendar and ricoTree)
+ * <pre>
  * Custom widget must implement:
  *   open() method (make control visible)
  *   close() method (hide control)
@@ -872,6 +904,7 @@ Rico.TableEdit.prototype = {
  * widget calls returnValue method to return a value to the caller
  *
  * this object handles clicks on the control's icon and positions the control appropriately.
+ * </pre>
  */
 var RicoEditControls = {
   widgetList : $H(),
@@ -890,7 +923,7 @@ var RicoEditControls = {
 
   applyTo: function(column,inputCtl) {
     var wInfo=this.widgetList.get(column.format.SelectCtl);
-    if (!wInfo) return null;
+    if (!wInfo) return;
     Rico.writeDebugMsg('RicoEditControls.applyTo: '+column.displayName+' : '+column.format.SelectCtl);
     var descSpan = document.createElement('span');
     var newimg = document.createElement('img');
@@ -978,6 +1011,6 @@ var RicoEditControls = {
     if (wInfo.widget.container.style.display!='none')
       wInfo.widget.close();
   }
-}
+};
 
 Rico.includeLoaded('ricoLiveGridForms.js');

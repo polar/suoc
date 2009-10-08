@@ -1,17 +1,17 @@
 /* ricoCalendar */
 
-div.ricoCalContainer, div.ricoTreeContainer {
+div.ricoCalContainer, div.ricoCalYearPrompt, div.ricoTreeContainer {
   position:absolute;
   z-index:9999;
   left:0px;
   top:0px;
 }
 
-div.ricoCalContainer *, div.ricoTreeContainer * {
+div.ricoCalContainer *, div.ricoCalYearPrompt *, div.ricoTreeContainer * {
   font-size:8pt;
 }
 
-table.ricoCalTab {
+table.ricoCalTab  {
   border:1px solid #666666;
 }
 
@@ -30,6 +30,18 @@ table.ricoCalTab thead img {
 table.ricoCalTab thead a:hover {
   border:1px solid #666666;
   cursor:pointer;
+}
+
+div.ricoCalYearPrompt {
+  border:1px solid #666666;
+  background-color: #FEE;
+  padding: 2px;
+}
+
+.ricoCalYearPrompt img {
+  border: 1px solid black;
+  margin-left: 3px;
+  vertical-align: middle;
 }
 
 table.ricoCalTab thead td {

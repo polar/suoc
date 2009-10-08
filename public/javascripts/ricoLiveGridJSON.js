@@ -1,17 +1,40 @@
+/*
+ *  Rico.Buffer.AjaxJSON
+ *
+ *  JSON handling code for the Rico Live Grid written by
+ *  Jeremy Green.  Adapted from code by Richard Cowin
+ *  and Matt Brown.
+ *
+ *  (c) 2005-2009 Richard Cowin (http://openrico.org)
+ *  (c) 2005-2009 Matt Brown (http://dowdybrown.com)
+ *  (c) 2008-2009 Jeremy Green (http://www.webEprint.com)
+ *
+ *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ *  file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the
+ *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ *  either express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
+
+
+Rico.Buffer.AjaxJSON = Class.create(
+/** @lends Rico.Buffer.AjaxJSON# */
+{
 /**
-  *  Rico.Buffer.AjaxJSON
+ * @class Implements a LiveGrid buffer that can make
+  *  AJAX calls to the server and process responses in
+  *  JSON format.  Extended from Rico.Buffer.AjaxSQL.
   *
-  *  This class is used to populate the live grid with
-  *  data retrieved as raw JavaScript objects.  The AjaxJSON
-  *  buffer translates the JSON string received from the server
-  *  into a JS data object.
-  *
+  *  @example
   *  Data format:
   *  The data consumed by this buffer should be a JavaScript
   *  hash type object.  The format closely follows the XML based
   *  data consumed by the Rico.Buffer.AjaxSQL buffer.
   *
-  *  Example:
   *  {
   *  "update_ui":true,
   *  "offset":0,
@@ -25,37 +48,18 @@
   *  The 'rows' value object of the data object is
   *  a normal JS Array with each element also being an array.
   *
-  *  Rico.Buffer.AjaxJSON - a live grid buffer that can make
-  *  an AJAX call to the server and understand a response in
-  *  JSON format.  Extended from
-  *  Rico.Buffer.AjaxSQL
   *
+  *  @example
   *  Example Usage:
   *  buffer=new Rico.Buffer.AjaxJSON(jsonUrl, bufferopts);
   *
   *  jsonUrl should return a string in the above format.  It will
   *  be parsed into JS objects.
   *
-  *  JSON handling code for the Rico Live Grid written by
-  *  Jeremy Green.  Adapted from code by Richard Cowin
-  *  and Matt Brown.
-  *
-  *  (c) 2005-2007 Richard Cowin (http://openrico.org)
-  *  (c) 2005-2007 Matt Brown (http://dowdybrown.com)
-  *  (c) 2008 Jeremy Green (http://www.webEprint.com)
-  *
-  *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
-  *  file except in compliance with the License. You may obtain a copy of the License at
-  *   http://www.apache.org/licenses/LICENSE-2.0
-  **/
-
-
-Rico.Buffer.AjaxJSON = Class.create();
-
-Rico.Buffer.AjaxJSON.prototype = {
-
+ * @extends Rico.Buffer.AjaxSQL
+ * @constructs
+ */
 initialize: function(url,options,ajaxOptions) {
-  //log('initializing AjaxJSON');
   Object.extend(this, new Rico.Buffer.AjaxSQL());
   Object.extend(this, new Rico.Buffer.AjaxJSONMethods());
   this.dataSource=url;
@@ -63,13 +67,14 @@ initialize: function(url,options,ajaxOptions) {
   Object.extend(this.ajaxOptions, ajaxOptions || {});
 }
 
-}
+});
 
 
 
 Rico.Buffer.AjaxJSONMethods = function() {};
 
 Rico.Buffer.AjaxJSONMethods.prototype = {
+/** @lends Rico.Buffer.AjaxJSON# */
 
 processResponse: function(startPos,request) {
   var json = request.responseText.evalJSON(true);
@@ -164,7 +169,7 @@ string2DOM: function(string){
     xmlDoc.loadXML(string);
   } catch(e) {
     try { //Firefox, Mozilla, Opera, etc.
-      parser=new DOMParser();
+      var parser=new DOMParser();
       xmlDoc=parser.parseFromString(string,"text/xml");
     } catch(e) {
       alert(e.message);
@@ -174,6 +179,6 @@ string2DOM: function(string){
   return el;
 }
 
-}
+};
 
 Rico.includeLoaded('ricoLiveGridJSON.js');

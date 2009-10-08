@@ -1,68 +1,73 @@
-/**
-  *
-  *  Copyright 2005 Sabre Airline Solutions
-  *
-  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
-  *  file except in compliance with the License. You may obtain a copy of the License at
-  *
-  *         http://www.apache.org/licenses/LICENSE-2.0
-  *
-  *  Unless required by applicable law or agreed to in writing, software distributed under the
-  *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-  *  either express or implied. See the License for the specific language governing permissions
-  *  and limitations under the License.
-  **/
+/*
+ *  Copyright 2005 Sabre Airline Solutions
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ *  file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the
+ *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ *  either express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
-if (typeof Rico=='undefined')
-  throw("Cannot find the Rico object");
-if (typeof Prototype=='undefined')
-  throw("Rico requires the Prototype JavaScript framework");
+if (typeof Rico=='undefined') throw("Cannot find the Rico object");
+if (typeof Prototype=='undefined') throw("Rico requires the Prototype JavaScript framework");
 Rico.prototypeVersion = parseFloat(Prototype.Version.split(".")[0] + "." + Prototype.Version.split(".")[1]);
-if (Rico.prototypeVersion < 1.3)
-  throw("Rico requires Prototype JavaScript framework version 1.3 or greater");
+if (Rico.prototypeVersion < 1.3) throw("Rico requires Prototype JavaScript framework version 1.3 or greater");
 
-/** @singleton */
+/** @namespace */
 var RicoUtil = {
 
+/**
+ * Finds all immediate children of e with tagName
+ * @param e DOM node or node id
+ * @param tagName tag name to search for (case-insensative)
+ * @returns array of matching elements
+ */
 getDirectChildrenByTag: function(e, tagName) {
-  var kids = new Array();
-  var allKids = e.childNodes;
   tagName=tagName.toLowerCase();
-  for( var i = 0 ; i < allKids.length ; i++ )
-     if ( allKids[i] && allKids[i].tagName && allKids[i].tagName.toLowerCase() == tagName )
-        kids.push(allKids[i]);
-  return kids;
+  return $(e).childElements().inject([],function(result,child) {
+    if (child.tagName && child.tagName.toLowerCase()==tagName) result.push(child);
+    return result;});
 },
 
+/**
+ * Returns a new XML document object
+ */
 createXmlDocument : function() {
   if (document.implementation && document.implementation.createDocument) {
-     var doc = document.implementation.createDocument("", "", null);
-
-     if (doc.readyState == null) {
-        doc.readyState = 1;
-        doc.addEventListener("load", function () {
-           doc.readyState = 4;
-           if (typeof doc.onreadystatechange == "function")
-              doc.onreadystatechange();
-        }, false);
-     }
+    var doc = document.implementation.createDocument("", "", null);
+    // some older versions of Moz did not support the readyState property
+    // and the onreadystate event so we patch it! 
+    if (doc.readyState == null) {
+      doc.readyState = 1;
+      doc.addEventListener("load", function () {
+        doc.readyState = 4;
+        if (typeof doc.onreadystatechange == "function") {
+          doc.onreadystatechange();
+        }
+      }, false);
+    }
 
      return doc;
   }
 
   if (window.ActiveXObject)
       return Try.these(
-        function() { return new ActiveXObject('MSXML2.DomDocument')   },
-        function() { return new ActiveXObject('Microsoft.DomDocument')},
-        function() { return new ActiveXObject('MSXML.DomDocument')    },
-        function() { return new ActiveXObject('MSXML3.DomDocument')   }
+        function() { return new ActiveXObject('MSXML2.DomDocument');   },
+        function() { return new ActiveXObject('Microsoft.DomDocument');},
+        function() { return new ActiveXObject('MSXML.DomDocument');    },
+        function() { return new ActiveXObject('MSXML3.DomDocument');   }
       ) || false;
 
   return null;
 },
 
 /**
- * return text within an html element
+ * Return text within an html element
+ * @param el DOM node
  * @param xImg true to exclude img tag info
  * @param xForm true to exclude input, select, and textarea tags
  * @param xClass exclude elements with a class name of xClass
@@ -98,7 +103,8 @@ getInnerText: function(el,xImg,xForm,xClass) {
 },
 
 /**
- * For Konqueror 3.5, isEncoded must be true
+ * Return value of a node in an XML response.
+ * For Konqueror 3.5, isEncoded must be true.
  */
 getContentAsString: function( parentNode, isEncoded ) {
   if (isEncoded) return this._getEncodedContent(parentNode);
@@ -139,12 +145,16 @@ _getContentAsStringMozilla: function(parentNode) {
    return contentStr;
 },
 
+/**
+ * @deprecated Will be removed in Rico 3
+ */
 docElement: function() {
   return (document.compatMode && document.compatMode.indexOf("CSS")!=-1) ? document.documentElement : document.getElementsByTagName("body")[0];
 },
 
 /**
- * return available height - excludes scrollbar & margin
+ * @returns available height, excluding scrollbar & margin
+ * @deprecated Use Prototype's document.viewport.getHeight instead
  */
 windowHeight: function() {
   if (document.viewport) {
@@ -156,7 +166,8 @@ windowHeight: function() {
 },
 
 /**
- * return available width - excludes scrollbar & margin
+ * @returns available width, excluding scrollbar & margin
+ * @deprecated Use Prototype's document.viewport.getWidth instead
  */
 windowWidth: function() {
   if (document.viewport) {
@@ -167,33 +178,49 @@ windowWidth: function() {
   }
 },
 
+/**
+ * @deprecated Use Prototype's document.viewport.getScrollOffsets instead
+ */
 docScrollLeft: function() {
-   if ( window.pageXOffset )
-      return window.pageXOffset;
-   else if ( document.documentElement && document.documentElement.scrollLeft )
-      return document.documentElement.scrollLeft;
-   else if ( document.body )
-      return document.body.scrollLeft;
-   else
-      return 0;
+  if ( window.pageXOffset ) {
+    return window.pageXOffset;
+  } else if ( document.documentElement && document.documentElement.scrollLeft ) {
+    return document.documentElement.scrollLeft;
+  } else if ( document.body ) {
+    return document.body.scrollLeft;
+  } else {
+    return 0;
+  }
 },
 
+/**
+ * @deprecated Use Prototype's document.viewport.getScrollOffsets instead
+ */
 docScrollTop: function() {
-   if ( window.pageYOffset )
-      return window.pageYOffset;
-   else if ( document.documentElement && document.documentElement.scrollTop )
-      return document.documentElement.scrollTop;
-   else if ( document.body )
-      return document.body.scrollTop;
-   else
-      return 0;
+  if ( window.pageYOffset ) {
+    return window.pageYOffset;
+  } else if ( document.documentElement && document.documentElement.scrollTop ) {
+    return document.documentElement.scrollTop;
+  } else if ( document.body ) {
+    return document.body.scrollTop;
+  } else {
+    return 0;
+  }
 },
 
+/**
+ * @param n a number (or a string to be converted using parseInt)
+ * @returns the integer value of n, or 0 if n is not a number
+ */
 nan2zero: function(n) {
-  if (typeof(n)=='string') n=parseInt(n);
+  if (typeof(n)=='string') n=parseInt(n,10);
   return isNaN(n) || typeof(n)=='undefined' ? 0 : n;
 },
 
+/**
+ * @param e event object
+ * @returns the key code stored in the event
+ */
 eventKey: function(e) {
   if( typeof( e.keyCode ) == 'number'  ) {
     return e.keyCode; //DOM
@@ -218,15 +245,18 @@ eventKey: function(e) {
  },
 
 /**
- * Return the parent HTML element that has the specified tagName.
+ * Return the parent of el that has the specified tagName.
+ * @param el DOM node
+ * @param tagName tag to search for
  * @param className optional
  */
 getParentByTagName: function(el,tagName,className) {
   var par=el;
   tagName=tagName.toLowerCase();
   while (par) {
-  	if (par.tagName && par.tagName.toLowerCase()==tagName)
+    if (par.tagName && par.tagName.toLowerCase()==tagName) {
       if (!className || par.className.indexOf(className)>=0) return par;
+    }
   	par=par.parentNode;
   }
   return null;
@@ -238,77 +268,107 @@ getParentByTagName: function(el,tagName,className) {
  * @param cls class name of the wrapper (optional)
  * @param id id of the wrapper (optional)
  * @param wrapperTag type of wrapper element to be created (optional, defaults to DIV)
+ * @returns new wrapper element
  */
 wrapChildren: function(el,cls,id,wrapperTag) {
   var wrapper = document.createElement(wrapperTag || 'div');
   if (id) wrapper.id=id;
   if (cls) wrapper.className=cls;
-  while (el.firstChild)
+  while (el.firstChild) {
     wrapper.appendChild(el.firstChild);
+  }
   el.appendChild(wrapper);
   return wrapper;
 },
 
 /**
- * Format a positive number
+ * Format a positive number (integer or float)
+ * @param posnum number to format
  * @param decPlaces the number of digits to display after the decimal point
  * @param thouSep the character to use as the thousands separator
  * @param decPoint the character to use as the decimal point
+ * @returns formatted string
  */
 formatPosNumber: function(posnum,decPlaces,thouSep,decPoint) {
   var a=posnum.toFixed(decPlaces).split(/\./);
   if (thouSep) {
     var rgx = /(\d+)(\d{3})/;
-    while (rgx.test(a[0]))
+    while (rgx.test(a[0])) {
       a[0]=a[0].replace(rgx, '$1'+thouSep+'$2');
+    }
   }
   return a.join(decPoint);
 },
 
 /**
  * Post condition - if childNodes[n] is refChild, than childNodes[n+1] is newChild.
+ * @deprecated Use Prototype's Element#insert instead
  */
 DOMNode_insertAfter: function(newChild,refChild) {
   var parentx=refChild.parentNode;
-  if(parentx.lastChild==refChild) { return parentx.appendChild(newChild);}
-  else {return parentx.insertBefore(newChild,refChild.nextSibling);}
+  if (parentx.lastChild==refChild) {
+    return parentx.appendChild(newChild);
+  } else {
+    return parentx.insertBefore(newChild,refChild.nextSibling);
+  }
 },
 
+/**
+ * Positions ctl over icon
+ * @param ctl (div with position:absolute)
+ * @param icon element (img, button, etc) that ctl should be displayed next to
+ */
 positionCtlOverIcon: function(ctl,icon) {
   var offsets=Position.page(icon);
   var scrTop=this.docScrollTop();
   var winHt=this.windowHeight();
   if (ctl.style.display=='none') ctl.style.display='block';
   var correction=Prototype.Browser.IE ? 1 : 2;  // based on a 1px border
-  var lpad=this.nan2zero(Element.getStyle(icon,'padding-left'))
+  var lpad=this.nan2zero(Element.getStyle(icon,'padding-left'));
   ctl.style.left = (offsets[0]+lpad+correction)+'px';
   var newTop=offsets[1] + correction + scrTop;
   var ctlht=ctl.offsetHeight;
   var iconht=icon.offsetHeight;
   var margin=10;  // account for shadow
-  if (newTop+iconht+ctlht+margin < winHt+scrTop)
+  if (newTop+iconht+ctlht+margin < winHt+scrTop) {
     newTop+=iconht;  // display below icon
-  else
+  } else {
     newTop=Math.max(newTop-ctlht,scrTop);  // display above icon
+  }
   ctl.style.top = newTop+'px';
 },
 
 /**
- * Creates a form element (input, button, select, textarea, ...)
+ * Creates a form element 
+ * @param parent new element will be appended to this node
+ * @param elemTag element to be created (input, button, select, textarea, ...)
+ * @param elemType for input tag this specifies the type (checkbox, radio, text, ...)
+ * @param id id for new element
+ * @param name name for new element, if not specified then name will be the same as the id
+ * @returns new element
  */
 createFormField: function(parent,elemTag,elemType,id,name) {
+  var field;
   if (typeof name!='string') name=id;
   if (Prototype.Browser.IE) {
     // IE cannot set NAME attribute on dynamically created elements
     var s=elemTag+' id="'+id+'"';
-    if (elemType) s+=' type="'+elemType+'"';
-    if (elemTag.match(/^(form|input|select|textarea|object|button|img)$/)) s+=' name="'+name+'"';
-    var field=document.createElement('<'+s+' />');
+    if (elemType) {
+      s+=' type="'+elemType+'"';
+    }
+    if (elemTag.match(/^(form|input|select|textarea|object|button|img)$/)) {
+      s+=' name="'+name+'"';
+    }
+    field=document.createElement('<'+s+' />');
   } else {
-    var field=document.createElement(elemTag);
-    if (elemType) field.type=elemType;
+    field=document.createElement(elemTag);
+    if (elemType) {
+      field.type=elemType;
+    }
     field.id=id;
-    if (typeof field.name=='string') field.name=name;
+    if (typeof field.name=='string') {
+      field.name=name;
+    }
   }
   parent.appendChild(field);
   return field;
@@ -316,20 +376,22 @@ createFormField: function(parent,elemTag,elemType,id,name) {
 
 /**
  * Adds a new option to the end of a select list
+ * @returns new option element
  */
 addSelectOption: function(elem,value,text) {
   var opt=document.createElement('option');
   if (typeof value=='string') opt.value=value;
   opt.text=text;
-  if (Prototype.Browser.IE)
+  if (Prototype.Browser.IE) {
     elem.add(opt);
-  else
+  } else {
     elem.add(opt,null);
+  }
   return opt;
 },
 
 /**
- * Gets the value of the specified cookie
+ * @returns the value of the specified cookie (or null if it doesn't exist)
  */
 getCookie: function(itemName) {
   var arg = itemName+'=';
@@ -340,7 +402,9 @@ getCookie: function(itemName) {
     var j = i + alen;
     if (document.cookie.substring(i, j) == arg) {
       var endstr = document.cookie.indexOf (';', j);
-      if (endstr == -1) endstr=document.cookie.length;
+      if (endstr == -1) {
+        endstr=document.cookie.length;
+      }
       return unescape(document.cookie.substring(j, endstr));
     }
     i = document.cookie.indexOf(' ', i) + 1;
@@ -350,9 +414,10 @@ getCookie: function(itemName) {
 },
 
 /**
- * Write information to cookie.
+ * Write information to a cookie.
  * For cookies to be retained for the current session only, set daysToKeep=null.
  * To erase a cookie, pass a negative daysToKeep value.
+ * @see <a href="http://www.quirksmode.org/js/cookies.html">Quirksmode article</a> for more information about cookies.
  */
 setCookie: function(itemName,itemValue,daysToKeep,cookiePath,cookieDomain) {
 	var c = itemName+"="+escape(itemValue);
@@ -361,8 +426,12 @@ setCookie: function(itemName,itemValue,daysToKeep,cookiePath,cookieDomain) {
 		date.setTime(date.getTime()+(daysToKeep*24*60*60*1000));
 		c+="; expires="+date.toGMTString();
 	}
-	if (typeof(cookiePath)=='string') c+="; path="+cookiePath;
-	if (typeof(cookieDomain)=='string') c+="; domain="+cookieDomain;
+	if (typeof(cookiePath)=='string') {
+    c+="; path="+cookiePath;
+  }
+	if (typeof(cookieDomain)=='string') {
+    c+="; domain="+cookieDomain;
+  }
   document.cookie = c;
 }
 
@@ -371,39 +440,53 @@ setCookie: function(itemName,itemValue,daysToKeep,cookiePath,cookieDomain) {
 
 if (!RicoTranslate) {
 
-// Translation helper object
-/** @singleton */
+/** @namespace Translation helper object. Values are set by loading one of the ricoLocale_xx.js files. */
 var RicoTranslate = {
   phrases : {},
   phrasesById : {},
+  /** thousands separator for number formatting */
   thouSep : ",",
+  /** decimal point for number formatting */
   decPoint: ".",
+  /** target language (2 character code) */
   langCode: "en",
   re      : /^(\W*)\b(.*)\b(\W*)$/,
+  /** date format */
   dateFmt : "mm/dd/yyyy",
+  /** time format */
   timeFmt : "hh:nn:ss a/pm",
+  /** month name array (Jan is at index 0) */
   monthNames: ['January','February','March','April','May','June',
                'July','August','September','October','November','December'],
+  /** day of week array (Sunday is at index 0) */
   dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
 
+  /** 
+   * @param monthIdx 0-11
+   * @returns 3 character abbreviation
+   */
   monthAbbr: function(monthIdx) {
     return this.monthNames[monthIdx].substr(0,3);
   },
 
+  /** 
+   * @param dayIdx 0-6 (Sunday=0)
+   * @returns 3 character day of week abbreviation
+   */
   dayAbbr: function(dayIdx) {
     return this.dayNames[dayIdx].substr(0,3);
   },
 
 /**
- * DEPRECATED
+ * @deprecated Use addPhraseId instead
  */
   addPhrase: function(fromPhrase, toPhrase) {
     this.phrases[fromPhrase]=toPhrase;
   },
 
 /**
- * DEPRECATED
- * fromPhrase may contain multiple words/phrases separated by tabs
+ * @deprecated Use getPhraseById instead
+ * @param fromPhrase may contain multiple words/phrases separated by tabs
  * and each portion will be looked up separately.
  * Punctuation & spaces at the beginning or
  * ending of a phrase are ignored.
@@ -436,17 +519,33 @@ var RicoTranslate = {
     var a=arguments;
     return phrase.replace(/(\$\d)/g,
       function($1) {
-        var idx=parseInt($1.charAt(1));
+        var idx=parseInt($1.charAt(1),10);
         return (idx < a.length) ? a[idx] : '';
       }
     );
   }
-}
+};
 
 }
 
 
 if (!Date.prototype.formatDate) {
+/**
+ * Converts a date to a string according to specs in fmt
+ * @returns formatted string
+ * @param fmt string specifying the output format, may be one of the following:<dl>
+ * <dt>locale or localeDateTime</dt>
+ *   <dd>use javascript's built-in toLocaleString() function</dd>
+ * <dt>localeDate</dt>
+ *   <dd>use javascript's built-in toLocaleDateString() function</dd>
+ * <dt>translate or translateDateTime</dt>
+ *   <dd>use the date and time format specified in the RicoTranslate object</dd>
+ * <dt>translateDate</dt>
+ *   <dd>use the date format specified in the RicoTranslate object</dd>
+ * <dt>Otherwise</dt>
+ *   <dd>Any combination of: yyyy, yy, mmmm, mmm, mm, m, hh, h, HH, H, nn, ss, a/p</dd>
+ *</dl>
+ */
   Date.prototype.formatDate = function(fmt) {
     var d=this;
     var datefmt=(typeof fmt=='string') ? fmt : 'translateDate';
@@ -466,6 +565,7 @@ if (!Date.prototype.formatDate) {
     }
     return datefmt.replace(/(yyyy|yy|mmmm|mmm|mm|dddd|ddd|dd|hh|nn|ss|a\/p)/gi,
       function($1) {
+        var h;
         switch ($1) {
         case 'yyyy': return d.getFullYear();
         case 'yy':   return d.getFullYear().toString().substr(2);
@@ -487,15 +587,16 @@ if (!Date.prototype.formatDate) {
         }
       }
     );
-  }
+  };
 }
 
 if (!Date.prototype.setISO8601) {
 /**
  * Converts a string in ISO 8601 format to a date object.
- * Returns true if string is a valid date or date-time.
- * Based on info at http://delete.me.uk/2005/03/iso8601.html
- * offset can be used to bias the conversion and must be in minutes if provided
+ * @returns true if string is a valid date or date-time.
+ * @param string value to be converted
+ * @param offset can be used to bias the conversion and must be in minutes if provided
+ * @see Based on <a href='http://delete.me.uk/2005/03/iso8601.html'>delete.me.uk article</a>
  */
   Date.prototype.setISO8601 = function (string,offset) {
     if (!string) return false;
@@ -511,20 +612,22 @@ if (!Date.prototype.setISO8601) {
     if (d[6]) { date.setSeconds(d[6]); }
     if (d[7]) { date.setMilliseconds(Number("0." + d[7]) * 1000); }
     if (d[8]) {
-        if (d[10] && d[11]) offset = (Number(d[10]) * 60) + Number(d[11]);
+        if (d[10] && d[11]) {
+          offset = (Number(d[10]) * 60) + Number(d[11]);
+        }
         offset *= ((d[9] == '-') ? 1 : -1);
         offset -= date.getTimezoneOffset();
     }
     var time = (Number(date) + (offset * 60 * 1000));
     this.setTime(Number(time));
     return true;
-  }
+  };
 }
 
 if (!Date.prototype.toISO8601String) {
 /**
  * Convert date to an ISO 8601 formatted string.
- * <p>format is an integer in the range 1-6:<dl>
+ * @param format an integer in the range 1-6 (default is 6):<dl>
  * <dt>1 (year)</dt>
  *   <dd>YYYY (eg 1997)</dd>
  * <dt>2 (year and month)</dt>
@@ -539,24 +642,24 @@ if (!Date.prototype.toISO8601String) {
  *   fraction of a second)</dt>
  *   <dd>YYYY-MM-DDThh:mm:ss.sTZD (eg 1997-07-16T19:20:30.45+01:00)</dd>
  *</dl>
- * Based on: http://www.codeproject.com/jscript/dateformat.asp
+ * @see Based on: <a href='http://www.codeproject.com/jscript/dateformat.asp'>codeproject.com article</a>
  */
   Date.prototype.toISO8601String = function (format, offset) {
-    if (!format) { var format = 6; }
+    if (!format) format=6;
+    var date;
     if (!offset) {
-        var offset = 'Z';
-        var date = this;
+        offset = 'Z';
+        date = this;
     } else {
         var d = offset.match(/([-+])([0-9]{2}):([0-9]{2})/);
         var offsetnum = (Number(d[2]) * 60) + Number(d[3]);
         offsetnum *= ((d[1] == '-') ? -1 : 1);
-        var date = new Date(Number(Number(this) + (offsetnum * 60000)));
+        date = new Date(Number(Number(this) + (offsetnum * 60000)));
     }
 
-    var zeropad = function (num) { return ((num < 10) ? '0' : '') + num; }
+    var zeropad = function (num) { return ((num < 10) ? '0' : '') + num; };
 
-    var str = "";
-    str += date.getUTCFullYear();
+    var str = date.getUTCFullYear();
     if (format > 1) { str += "-" + zeropad(date.getUTCMonth() + 1); }
     if (format > 2) { str += "-" + zeropad(date.getUTCDate()); }
     if (format > 3) {
@@ -564,39 +667,49 @@ if (!Date.prototype.toISO8601String) {
                ":" + zeropad(date.getUTCMinutes());
     }
     if (format > 5) {
-        var secs = Number(date.getUTCSeconds() + "." +
-                   ((date.getUTCMilliseconds() < 100) ? '0' : '') +
-                   zeropad(date.getUTCMilliseconds()));
-        str += ":" + zeropad(secs);
-    } else if (format > 4) { str += ":" + zeropad(date.getUTCSeconds()); }
+      var secs = Number(date.getUTCSeconds() + "." +
+                 ((date.getUTCMilliseconds() < 100) ? '0' : '') +
+                 zeropad(date.getUTCMilliseconds()));
+      str += ":" + zeropad(secs);
+    } else if (format > 4) {
+      str += ":" + zeropad(date.getUTCSeconds());
+    }
 
     if (format > 3) { str += offset; }
     return str;
-  }
+  };
 }
 
 if (!String.prototype.toISO8601Date) {
+/**
+ * Convert string in ISO 8601 format to a date
+ * @returns new date object
+ */
   String.prototype.toISO8601Date = function() {
     var d = new Date();
     return d.setISO8601(this) ? d : null;
-  }
+  };
 }
 
 if (!String.prototype.formatDate) {
+/**
+ * Format string containing a date 
+ * @see Date#formatDate
+ */
   String.prototype.formatDate = function(fmt) {
     var s=this.replace(/-/g,'/');
     var d = new Date(s);
     return isNaN(d) ? this : d.formatDate(fmt);
-  }
+  };
 }
 
 if (!Number.prototype.formatNumber) {
 /**
- * Format a number according to the specs in assoc array 'fmt'.
- * Result is a string, wrapped in a span element with a class of: negNumber, zeroNumber, posNumber
+ * Format a number according to the specs in fmt object.
+ * @returns string, wrapped in a span element with a class of: negNumber, zeroNumber, posNumber
  * These classes can be set in CSS to display negative numbers in red, for example.
  *
- * <p>fmt may contain:<dl>
+ * @param fmt may contain any of the following:<dl>
  *   <dt>multiplier </dt><dd> the original number is multiplied by this amount before formatting</dd>
  *   <dt>decPlaces  </dt><dd> number of digits to the right of the decimal point</dd>
  *   <dt>decPoint   </dt><dd> character to be used as the decimal point</dd>
@@ -630,7 +743,7 @@ if (!Number.prototype.formatNumber) {
       s=prefix+RicoUtil.formatPosNumber(n,decPlaces,thouSep,decPoint);
     }
     return "<span class='"+cls+"'>"+s+suffix+"</span>";
-  }
+  };
 }
 
 if (!String.prototype.formatNumber) {
@@ -643,19 +756,18 @@ if (!String.prototype.formatNumber) {
   String.prototype.formatNumber = function(fmt) {
     var n=parseFloat(this.replace(/,/,'.'));
     return isNaN(n) ? this : n.formatNumber(fmt);
-  }
+  };
 }
 
-/**
- * Fix select control bleed-thru on floating divs in IE.
- * Based on technique published by Joe King at:
- * http://dotnetjunkies.com/WebLog/jking/archive/2003/10/30/2975.aspx
- */
 Rico.Shim = Class.create();
-
+/** @lends Rico.Shim# */
 if (Prototype.Browser.IE) {
   Rico.Shim.prototype = {
-
+/**
+ * @class Fixes select control bleed-thru on floating divs in IE. Used by Rico.Popup.
+ * @see Based on <a href='http://www.dotnetjunkies.com/WebLog/jking/archive/2003/07/21/488.aspx'>technique published by Joe King</a>
+ * @constructs
+ */
     initialize: function(DivRef) {
       this.ifr = document.createElement('iframe');
       this.ifr.style.position="absolute";
@@ -683,26 +795,30 @@ if (Prototype.Browser.IE) {
       this.ifr.style.zIndex  = this.DivRef.currentStyle.zIndex - 1;
       this.ifr.style.display = "block";
     }
-  }
+  };
 } else {
   Rico.Shim.prototype = {
+/** @ignore */
     initialize: function() {},
+/** @ignore */
     hide: function() {},
+/** @ignore */
     move: function() {},
+/** @ignore */
     show: function() {}
-  }
+  };
 }
 
 
+Rico.Shadow = Class.create(
+/** @lends Rico.Shadow# */
+{
 /**
- * Rico.Shadow is intended for positioned elements.
+ * @class Creates a shadow for positioned elements. Used by Rico.Popup.
  * Uses blur filter in IE, and alpha-transparent png images for all other browsers.
- * Based on: http://www.positioniseverything.net/articles/dropshadows.html
+ * @see Based on <a href='http://www.positioniseverything.net/articles/dropshadows.html'>positioniseverything article</a>
+ * @constructs
  */
-Rico.Shadow = Class.create();
-
-Rico.Shadow.prototype = {
-
   initialize: function(DivRef) {
     this.div = document.createElement('div');
     this.div.style.position="absolute";
@@ -736,13 +852,13 @@ Rico.Shadow.prototype = {
     var td11=tr1.insertCell(-1);
     td11.style.width='8px';
     var td12=tr1.insertCell(-1);
-    td12.style.background="transparent url("+Rico.imgDir+"shadow_ur.png"+") no-repeat right bottom"
+    td12.style.background="transparent url("+Rico.imgDir+"shadow_ur.png"+") no-repeat right bottom";
 
     var tr2=tab.insertRow(-1);
     var td21=tr2.insertCell(-1);
-    td21.style.background="transparent url("+Rico.imgDir+"shadow_ll.png"+") no-repeat right bottom"
+    td21.style.background="transparent url("+Rico.imgDir+"shadow_ll.png"+") no-repeat right bottom";
     var td22=tr2.insertCell(-1);
-    td22.style.background="transparent url("+Rico.imgDir+"shadow.png"+") no-repeat right bottom"
+    td22.style.background="transparent url("+Rico.imgDir+"shadow.png"+") no-repeat right bottom";
 
     this.div.appendChild(tab);
   },
@@ -752,44 +868,60 @@ Rico.Shadow.prototype = {
   },
 
   move: function() {
-    this.div.style.top  = (parseInt(this.DivRef.style.top || '0')+this.offset)+'px';
-    this.div.style.left = (parseInt(this.DivRef.style.left || '0')+this.offset)+'px';
+    this.div.style.top  = (parseInt(this.DivRef.style.top || '0',10)+this.offset)+'px';
+    this.div.style.left = (parseInt(this.DivRef.style.left || '0',10)+this.offset)+'px';
   },
 
   show: function() {
     this.div.style.width = this.DivRef.offsetWidth + 'px';
     this.div.style.height= this.DivRef.offsetHeight + 'px';
     this.move();
-    this.div.style.zIndex= parseInt(Element.getStyle(this.DivRef,'z-index')) - 1;
+    this.div.style.zIndex= parseInt(Element.getStyle(this.DivRef,'z-index'),10) - 1;
     this.div.style.display = "block";
   }
-}
+});
 
 
+Rico.Popup = Class.create(
+/** @lends Rico.Popup# */
+{
 /**
- * Class to manage pop-up div windows.
+ * @class Class to manage pop-up div windows.
+ * @constructs
+ * @param options object may contain any of the following:<dl>
+ *   <dt>hideOnEscape</dt><dd> hide popup when escape key is pressed? default=true</dd>
+ *   <dt>hideOnClick </dt><dd> hide popup when mouse button is clicked? default=true</dd>
+ *   <dt>ignoreClicks</dt><dd> if true, mouse clicks within the popup are not allowed to bubble up to parent elements</dd>
+ *   <dt>position    </dt><dd> defaults to absolute</dd>
+ *   <dt>shadow      </dt><dd> display shadow with popup? default=true</dd>
+ *   <dt>margin      </dt><dd> number of pixels to allow for shadow, default=6</dd>
+ *   <dt>zIndex      </dt><dd> which layer? default=1</dd>
+ *   <dt>overflow    </dt><dd> how to handle content that overflows div? default=auto</dd>
+ *   <dt>canDragFunc </dt><dd> boolean value (or function that returns a boolean) indicating if it is ok to drag/reposition popup, default=false</dd>
+ *</dl>
+ * @param DivRef if supplied, then setDiv() is called at the end of initialization
  */
-Rico.Popup = Class.create();
-
-Rico.Popup.prototype = {
-
   initialize: function(options,DivRef,closeFunc) {
     this.options = {
       hideOnEscape  : true,
       hideOnClick   : true,
-      ignoreClicks  : false, // if true, mouse clicks within the popup are not allowed to bubble up to parent elements
+      ignoreClicks  : false,
       position      : 'absolute',
       shadow        : true,
-      margin        : 6,     // account for shadow
-      zIndex        : 1,     // which layer?
+      margin        : 6,
+      zIndex        : 1,
       overflow      : 'auto',
-      canDragFunc   : null   // function that returns true if it is ok to drag/reposition popup, or boolean
-    }
+      canDragFunc   : false
+    };
     Object.extend(this.options, options || {});
     if (DivRef) this.setDiv(DivRef,closeFunc);
   },
 
-  // apply popup behavior to a div that already exists in the DOM
+/**
+ * Apply popup behavior to a div that already exists in the DOM
+ * @param DivRef div element in the DOM
+ * @param closeFunc optional callback function when popup is closed
+ */
   setDiv: function(DivRef,closeFunc) {
     this.divPopup=$(DivRef);
     var position=this.options.position == 'auto' ? Element.getStyle(this.divPopup,'position').toLowerCase() : this.options.position;
@@ -807,7 +939,9 @@ Rico.Popup.prototype = {
     if (this.options.ignoreClicks || this.options.canDragFunc) this.ignoreClicks();
   },
 
-  // create popup div and insert content
+/**
+ * create popup div and insert content
+ */
   createPopup: function(parentElem, content, ht, wi, className, closeFunc) {
     var div = document.createElement('div');
     div.style.position=this.options.position;
@@ -825,15 +959,19 @@ Rico.Popup.prototype = {
     if (this.options.canDragFunc===true)
       this.options.canDragFunc=this.safeDragTest.bind(this); 
   },
-  
-  // Fixes problems with IE when clicking on the scrollbar
-  // Not required when calling createWindow because dragging is only applied to the title bar
+
+/**
+ * @private Fixes problems with IE when clicking on the scrollbar
+ * Not required when calling createWindow because dragging is only applied to the title bar
+ */
   safeDragTest: function(elem,event) {
     return (elem.componentFromPoint && elem.componentFromPoint(event.clientX,event.clientY)!='') ?  false : elem==this.divPopup;
   },
 
-  // create popup div with a title bar
-  // height (ht) and width (wi) parameters are required and apply to the content (title adds extra height)
+/**
+ * Create popup div with a title bar.
+ * height (ht) and width (wi) parameters are required and apply to the content (title adds extra height)
+ */
   createWindow: function(title, content, ht, wi, className) {
     var div = document.createElement('div');
     this.titleDiv = document.createElement('div');
@@ -866,6 +1004,7 @@ Rico.Popup.prototype = {
     Event.observe(img,"click", this.closePopup.bindAsEventListener(this));
   },
 
+/** @private */
   ignoreClicks: function() {
     Event.observe(this.divPopup,"click", this._ignoreClick.bindAsEventListener(this));
   },
@@ -884,6 +1023,9 @@ Rico.Popup.prototype = {
     return true;
   },
 
+/**
+ * Move popup to specified position
+ */
   move: function(left,top) {
     if (typeof left=='number') this.divPopup.style.left=left+'px';
     if (typeof top=='number') this.divPopup.style.top=top+'px';
@@ -891,6 +1033,7 @@ Rico.Popup.prototype = {
     if (this.shadow) this.shadow.move();
   },
 
+/** @private */
   startDrag : function(event){
     var elem=Event.element(event);
     var canDrag=typeof(this.options.canDragFunc)=='function' ? this.options.canDragFunc(elem,event) : this.options.canDragFunc;
@@ -898,22 +1041,24 @@ Rico.Popup.prototype = {
     this.divPopup.style.cursor='move';
     this.lastMouseX = event.clientX;
     this.lastMouseY = event.clientY;
-    this.dragHandler = this.drag.bindAsEventListener(this)
-    this.dropHandler = this.endDrag.bindAsEventListener(this)
+    this.dragHandler = this.drag.bindAsEventListener(this);
+    this.dropHandler = this.endDrag.bindAsEventListener(this);
     Event.observe(document, "mousemove", this.dragHandler);
     Event.observe(document, "mouseup", this.dropHandler);
     Event.stop(event);
   },
 
+/** @private */
   drag : function(event){
-    var newLeft = parseInt(this.divPopup.style.left) + event.clientX - this.lastMouseX;
-    var newTop = parseInt(this.divPopup.style.top) + event.clientY - this.lastMouseY;
+    var newLeft = parseInt(this.divPopup.style.left,10) + event.clientX - this.lastMouseX;
+    var newTop = parseInt(this.divPopup.style.top,10) + event.clientY - this.lastMouseY;
     this.move(newLeft, newTop);
     this.lastMouseX = event.clientX;
     this.lastMouseY = event.clientY;
     Event.stop(event);
   },
 
+/** @private */
   endDrag : function(){
     this.divPopup.style.cursor='';
     Event.stopObserving(document, "mousemove", this.dragHandler);
@@ -922,6 +1067,9 @@ Rico.Popup.prototype = {
     this.dropHandler=null;
   },
 
+/**
+ * Display popup at specified position
+ */
   openPopup: function(left,top) {
     this.divPopup.style.display="block";
     if (typeof left=='number') this.divPopup.style.left=left+'px';
@@ -930,6 +1078,9 @@ Rico.Popup.prototype = {
     if (this.shadow) this.shadow.show();
   },
 
+/**
+ * Hide popup
+ */
   closePopup: function() {
     if (this.dragHandler) this.endDrag();
     if (this.shim) this.shim.hide();
@@ -937,6 +1088,6 @@ Rico.Popup.prototype = {
     this.divPopup.style.display="none";
   }
 
-}
+});
 
 Rico.includeLoaded('ricoCommon.js');

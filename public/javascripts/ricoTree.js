@@ -15,14 +15,31 @@
 //   cells[5]=leafIcon (optional)
 
 
-Rico.TreeControl = Class.create();
-
-Rico.TreeControl.prototype = {
-
+Rico.TreeControl = Class.create(
+/** @lends Rico.TreeControl# */
+{
+/**
+ * @class Implements a pop-up tree control.
+ * @extends Rico.Popup
+ * @constructs
+ * @param id unique identifier
+ * @param url data source
+ * @param options object may contain any of the following:<dl>
+ *   <dt>nodeIdDisplay</dt><dd> first, last, tooltip, or none? default=none</dd>
+ *   <dt>showCheckBox </dt><dd> show checkbox next to each item? default=false</dd>
+ *   <dt>showFolders  </dt><dd> show folder icons? default=false</dd>
+ *   <dt>showPlusMinus</dt><dd> show +/- icons to open/close branches? default=true</dd>
+ *   <dt>showLines    </dt><dd> show vertical lines connecting each level? default=true</dd>
+ *   <dt>defaultAction</dt><dd> function to call when user clicks on an item, default is to call returnValue method</dd>
+ *   <dt>height       </dt><dd> control height? default=300px</dd>
+ *   <dt>width        </dt><dd> control width? default=300px</dd>
+ *   <dt>leafIcon     </dt><dd> url to img, default=doc.gif ('none'=no leaf icon)</dd>
+ *</dl>
+ */
   initialize: function(id,url,options) {
     Object.extend(this, new Rico.Popup({ignoreClicks:true}));
     Object.extend(this.options, {
-      nodeIdDisplay:'none',   // first, last, tooltip, or none
+      nodeIdDisplay:'none',
       showCheckBox: false,
       showFolders: false,
       showPlusMinus: true,
@@ -30,7 +47,7 @@ Rico.TreeControl.prototype = {
       defaultAction: this.nodeClick.bindAsEventListener(this),
       height: '300px',
       width: '300px',
-      leafIcon: Rico.imgDir+'doc.gif'  // 'none'=no leaf icon
+      leafIcon: Rico.imgDir+'doc.gif'
     });
     Object.extend(this.options, options || {});
     this.id=id;
@@ -40,15 +57,18 @@ Rico.TreeControl.prototype = {
 
   atLoad : function() {
     var imgsrc = ["node.gif","nodelast.gif","folderopen.gif","folderclosed.gif"];
-    for (i=0;i<imgsrc.length;i++)
-      new Image().src = Rico.imgDir+imgsrc[i];
+    // preload images
+    for (var i=0;i<imgsrc.length;i++) {
+      var img=new Image();
+      img.src = Rico.imgDir+imgsrc[i];
+    }
     this.treeDiv=document.createElement("div");
     this.treeDiv.id=this.id;
     this.treeDiv.className='ricoTree';
     this.treeDiv.style.height=this.options.height;
     this.treeDiv.style.width=this.options.width;
     this.container=document.createElement("div");
-    this.container.style.display="none"
+    this.container.style.display="none";
     this.container.className='ricoTreeContainer';
     this.container.appendChild(this.treeDiv);
     document.body.appendChild(this.container);
@@ -59,13 +79,13 @@ Rico.TreeControl.prototype = {
       if (Element.getStyle(this.container,'position')=='absolute') {
         var span=document.createElement("span");
         span.innerHTML=RicoTranslate.getPhraseById('treeSave');
-        Element.setStyle(span,{float:'left',cursor:'pointer'});
+        Element.setStyle(span,{'float':'left',cursor:'pointer'});
         this.buttonDiv.appendChild(span);
         Event.observe(span,'click',this.saveSelection.bindAsEventListener(this));
       }
       var span=document.createElement("span");
       span.innerHTML=RicoTranslate.getPhraseById('treeClear');
-      Element.setStyle(span,{float:'right',cursor:'pointer'});
+      Element.setStyle(span,{'float':'right',cursor:'pointer'});
       this.buttonDiv.appendChild(span);
       this.container.appendChild(this.buttonDiv);
       Event.observe(span,'click',this.clrCheckBoxEvent.bindAsEventListener(this));
@@ -81,14 +101,18 @@ Rico.TreeControl.prototype = {
 
   open: function() {
     this.openPopup();
-    if (this.treeDiv.childNodes.length == 0 && this.dataSource) this.loadXMLDoc();
+    if (this.treeDiv.childNodes.length == 0 && this.dataSource) {
+      this.loadXMLDoc();
+    }
   },
 
   loadXMLDoc: function(branchPin) {
     var parms="id="+this.id;
-    if (branchPin) parms+="&Parent="+branchPin;
+    if (branchPin) {
+      parms+="&Parent="+branchPin;
+    }
     Rico.writeDebugMsg('Tree loadXMLDoc:\n'+parms+'\n'+this.dataSource);
-    new Ajax.Request(this.dataSource, {parameters:parms,method:'get',onComplete:this.processResponse.bind(this)});
+    var request=new Ajax.Request(this.dataSource, {parameters:parms,method:'get',onComplete:this.processResponse.bind(this)});
   },
 
   domID: function(nodeID,part) {
@@ -106,8 +130,9 @@ Rico.TreeControl.prototype = {
       if (cells.length < 5) continue;
       var content=[];
       content[5]=this.options.leafIcon;
-      for (var j=0; j<cells.length; j++)
+      for (var j=0; j<cells.length; j++) {
         content[j]=RicoUtil.getContentAsString(cells[j],true);
+      }
       content[3] = content[3].match(/^0|L$/i) ? 0 : 1;
       content[4] = parseInt(content[4]);
       rowdata.push(content);
@@ -119,12 +144,12 @@ Rico.TreeControl.prototype = {
   },
 
   DisplayImages: function(row,arNames) {
-    var i,img,td
+    var i,img,td;
     for(i=0;i<arNames.length;i++) {
-      img = document.createElement("img")
-      img.src=Rico.imgDir+arNames[i] + ".gif"
-      td=row.insertCell(-1)
-      td.appendChild(img)
+      img = document.createElement("img");
+      img.src=Rico.imgDir+arNames[i] + ".gif";
+      td=row.insertCell(-1);
+      td.appendChild(img);
     }
   },
 
@@ -147,12 +172,14 @@ Rico.TreeControl.prototype = {
     tab.TreeFetchedChildren=this.dataSource ? false : true;
     var row=tab.insertRow(0);
     var td=[];
-    for (var i=0; i<level-1; i++)
+    for (var i=0; i<level-1; i++) {
       td[i]=row.insertCell(-1);
+    }
     if (level>1) {
-      tdParent=parentNode.getElementsByTagName('td');
-      for (var i=0; i<level-2; i++)
+      var tdParent=parentNode.getElementsByTagName('td');
+      for (var i=0; i<level-2; i++) {
         td[i].innerHTML=tdParent[i].innerHTML;
+      }
       var img = document.createElement("img");
       img.src=Rico.imgDir+(parentChildren.nextSibling && this.options.showLines ? "nodeline" : "nodeblank")+".gif";
       td[level-2].appendChild(img);
@@ -169,7 +196,7 @@ Rico.TreeControl.prototype = {
         row.insertCell(-1).appendChild(img);
       } else if (this.options.showLines) {
         var img = document.createElement("img");
-        img.src=Rico.imgDir+"node"+suffix+".gif"
+        img.src=Rico.imgDir+"node"+suffix+".gif";
         row.insertCell(-1).appendChild(img);
       }
       if (this.options.showFolders && (isContainer || (leafIcon && leafIcon!='none'))) {
@@ -228,8 +255,9 @@ Rico.TreeControl.prototype = {
   },
 
   saveSelection: function(e) {
-    if (this.returnValue)
+    if (this.returnValue) {
       this.returnValue(this.getCheckedItems());
+    }
     this.close();
   },
 
@@ -237,16 +265,20 @@ Rico.TreeControl.prototype = {
     var inp=this.treeDiv.getElementsByTagName('input');
     var vals=[];
     for (var i=0; i<inp.length; i++) {
-      if (inp[i].type=='checkbox' && inp[i].checked)
+      if (inp[i].type=='checkbox' && inp[i].checked) {
         vals.push(inp[i].value);
+      }
     }
     return vals;
   },
 
   setCheckBoxes: function(val) {
     var inp=this.treeDiv.getElementsByTagName('input');
-    for (var i=0; i<inp.length; i++)
-      if (inp[i].type=='checkbox') inp[i].checked=val
+    for (var i=0; i<inp.length; i++) {
+      if (inp[i].type=='checkbox') {
+        inp[i].checked=val;
+      }
+    }
   },
 
   clrCheckBoxEvent: function(e) {
@@ -264,19 +296,20 @@ Rico.TreeControl.prototype = {
     Element.toggle(childDiv);
     if (node.tagName=='IMG') {
       var v=Element.visible(childDiv);
-      if (node.src.match(/node(p|m)(last)?\.gif$/))
+      if (node.src.match(/node(p|m)(last)?\.gif$/)) {
         node.src=node.src.replace(/nodep|nodem/,'node'+(v ? 'm' : 'p'));
-      else if (node.src.match(/folder(open|closed)\.gif$/))
+      } else if (node.src.match(/folder(open|closed)\.gif$/)) {
         node.src=node.src.replace(/folder(open|closed)/,'folder'+(v ? 'open' : 'closed'));
-      else if (node.src.match(/\b(m|p)\.gif$/))
+      } else if (node.src.match(/\b(m|p)\.gif$/)) {
         node.src=node.src.replace(/(p|m)\.gif/,v ? 'm\.gif' : 'p\.gif');
+      }
     }
     if (!tab.TreeFetchedChildren) {
       tab.TreeFetchedChildren=1;
-      this.loadXMLDoc(node.name)
+      this.loadXMLDoc(node.name);
     }
   }
 
-}
+});
 
 Rico.includeLoaded('ricoTree.js');

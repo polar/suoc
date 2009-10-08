@@ -1,24 +1,31 @@
-/**
-  *  (c) 2005-2008 Richard Cowin (http://openrico.org)
-  *  (c) 2005-2008 Matt Brown (http://dowdybrown.com)
-  *
-  *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
-  *  file except in compliance with the License. You may obtain a copy of the License at
-  *   http://www.apache.org/licenses/LICENSE-2.0
-  **/
+/*
+ *  (c) 2005-2009 Richard Cowin (http://openrico.org)
+ *  (c) 2005-2009 Matt Brown (http://dowdybrown.com)
+ *
+ *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ *  file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the
+ *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ *  either express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
 if(typeof Rico=='undefined') throw("LiveGridAjax requires the Rico JavaScript framework");
 if(typeof RicoUtil=='undefined') throw("LiveGridAjax requires the RicoUtil object");
 if(typeof Rico.Buffer=='undefined') throw("LiveGridAjax requires the Rico.Buffer object");
 
 
+Rico.Buffer.AjaxXML = Class.create(
+/** @lends Rico.Buffer.AjaxXML# */
+{
 /**
- * Data source is a static XML file located on the server
+ * @class Implements buffer for LiveGrid. Loads data from server via a single AJAX call.
+ * @extends Rico.Buffer.Base
+ * @constructs
  */
-Rico.Buffer.AjaxXML = Class.create();
-
-Rico.Buffer.AjaxXML.prototype = {
-
   initialize: function(url,options,ajaxOptions) {
     Object.extend(this, new Rico.Buffer.Base());
     Object.extend(this, new Rico.Buffer.AjaxXMLMethods);
@@ -32,21 +39,21 @@ Rico.Buffer.AjaxXML.prototype = {
     Object.extend(this.ajaxOptions, ajaxOptions || {});
     this.requestCount=0;
     this.processingRequest=false;
-    this.pendingRequest=-1;
+    this.pendingRequest=-2;
     this.fetchData=true;
     this.sortParm={};
   }
-}
+});
 
 Rico.Buffer.AjaxXMLMethods = function() {};
 
 Rico.Buffer.AjaxXMLMethods.prototype = {
-
+/** @lends Rico.Buffer.AjaxXML# */
   fetch: function(offset) {
     if (this.fetchData) {
       this.foundRowCount=true;
       this.fetchData=false;
-      this.processingRequest=true
+      this.processingRequest=true;
       this.liveGrid.showMsg(this.options.waitMsg);
       this.timeoutHandler = setTimeout( this.handleTimedOut.bind(this), this.options.bufferTimeout);
       this.ajaxOptions.parameters = this.formQueryHashXML(0,-1);
@@ -129,10 +136,10 @@ Rico.Buffer.AjaxXMLMethods.prototype = {
     this.updateGrid(startPos);
     if (this.options.TimeOut && this.timerMsg)
       this.restartSessionTimer();
-    if (this.pendingRequest>=0) {
+    if (this.pendingRequest>=-1) {
       var offset=this.pendingRequest;
       Rico.writeDebugMsg("jsUpdate: found pending request for offset="+offset);
-      this.pendingRequest=-1;
+      this.pendingRequest=-2;
       this.fetch(offset);
     }
   },
@@ -152,10 +159,10 @@ Rico.Buffer.AjaxXMLMethods.prototype = {
     this.updateGrid(startPos);
     if (this.options.TimeOut && this.timerMsg)
       this.restartSessionTimer();
-    if (this.pendingRequest>=0) {
+    if (this.pendingRequest>=-1) {
       var offset=this.pendingRequest;
       Rico.writeDebugMsg("ajaxUpdate: found pending request for offset="+offset);
-      this.pendingRequest=-1;
+      this.pendingRequest=-2;
       this.fetch(offset);
     }
   },
@@ -176,7 +183,7 @@ Rico.Buffer.AjaxXMLMethods.prototype = {
 
     // process children of <ajax-response>
     var response = xmlDoc.getElementsByTagName("ajax-response");
-    if (response == null || response.length != 1) return;
+    if (response == null || response.length != 1) return false;
     this.rcvdRows = 0;
     this.rcvdRowCount = false;
     var ajaxResponse=response[0];
@@ -231,13 +238,14 @@ Rico.Buffer.AjaxXMLMethods.prototype = {
   // used by both XML and SQL buffers
   updateGrid: function(offset) {
     Rico.writeDebugMsg("updateGrid, size="+this.size+' rcv cnt type='+typeof(this.rowcntContent));
+    var newpos;
     if (this.rcvdRowCount==true) {
       Rico.writeDebugMsg("found row cnt: "+this.rowcntContent);
-      var eofrow=parseInt(this.rowcntContent);
+      var eofrow=parseInt(this.rowcntContent,10);
       var lastTotalRows=this.totalRows;
       if (!isNaN(eofrow) && eofrow!=lastTotalRows) {
         this.setTotalRows(eofrow);
-        var newpos=Math.min(this.liveGrid.topOfLastPage(),offset);
+        newpos=Math.min(this.liveGrid.topOfLastPage(),offset);
         Rico.writeDebugMsg("updateGrid: new rowcnt="+eofrow+" newpos="+newpos);
         if (lastTotalRows==0 && this.liveGrid.sizeTo=='data')
           this.liveGrid.adjustPageSize();
@@ -257,7 +265,7 @@ Rico.Buffer.AjaxXMLMethods.prototype = {
         this.setTotalRows(newcnt);
       }
     }
-    var newpos=this.liveGrid.pixeltorow(this.liveGrid.scrollDiv.scrollTop);
+    newpos=this.liveGrid.pixeltorow(this.liveGrid.scrollDiv.scrollTop);
     Rico.writeDebugMsg("updateGrid: newpos="+newpos);
     this.liveGrid.refreshContents(newpos);
   }
@@ -266,10 +274,14 @@ Rico.Buffer.AjaxXMLMethods.prototype = {
 
 
 
-Rico.Buffer.AjaxSQL = Class.create();
-
-Rico.Buffer.AjaxSQL.prototype = {
-
+Rico.Buffer.AjaxSQL = Class.create(
+/** @lends Rico.Buffer.AjaxSQL# */
+{
+/**
+ * @class Implements buffer for LiveGrid. Loads data from server in chunks as user scrolls through the grid.
+ * @extends Rico.Buffer.AjaxXML
+ * @constructs
+ */
   initialize: function(url,options,ajaxOptions) {
     Object.extend(this, new Rico.Buffer.AjaxXML());
     Object.extend(this, new Rico.Buffer.AjaxSQLMethods());
@@ -280,25 +292,26 @@ Rico.Buffer.AjaxSQL.prototype = {
     Object.extend(this.options, options || {});
     Object.extend(this.ajaxOptions, ajaxOptions || {});
   }
-}
+});
 
 Rico.Buffer.AjaxSQLMethods = function() {};
 
 Rico.Buffer.AjaxSQLMethods.prototype = {
+/** @lends Rico.Buffer.AjaxSQL# */
 
   registerGrid: function(liveGrid) {
     this.liveGrid = liveGrid;
     this.sessionExpired=false;
     this.timerMsg=$(liveGrid.tableId+'_timer');
     if (this.options.TimeOut && this.timerMsg) {
-      if (!this.timerMsg.title) this.timerMsg.title=RicoTranslate.getPhraseById("sessionExpireMinutes")
+      if (!this.timerMsg.title) this.timerMsg.title=RicoTranslate.getPhraseById("sessionExpireMinutes");
       this.restartSessionTimer();
     }
   },
 
   setBufferSize: function(pageSize) {
-    this.maxFetchSize = Math.max(50,parseInt(this.options.largeBufferSize * pageSize));
-    this.nearLimit = parseInt(this.options.nearLimitFactor * pageSize);
+    this.maxFetchSize = Math.max(50,parseInt(this.options.largeBufferSize * pageSize,10));
+    this.nearLimit = parseInt(this.options.nearLimitFactor * pageSize,10);
     this.maxBufferSize = this.maxFetchSize * 3;
   },
 
@@ -331,7 +344,7 @@ Rico.Buffer.AjaxSQLMethods.prototype = {
    * @param resetRowCount indicates whether the total row count should be refreshed as well
    */
   refresh: function(resetRowCount) {
-    var lastGridPos=this.liveGrid.lastRowPos
+    var lastGridPos=this.liveGrid.lastRowPos;
     this.clear();
     if (resetRowCount) {
       this.setTotalRows(0);
@@ -374,7 +387,7 @@ Rico.Buffer.AjaxSQLMethods.prototype = {
     }
     if (offset >= this.totalRows && this.foundRowCount) return;
 
-    this.processingRequest=true
+    this.processingRequest=true;
     Rico.writeDebugMsg("AjaxSQL fetch: processing offset="+offset);
     var bufferStartPos = this.getFetchOffset(offset);
     var fetchSize = this.getFetchSize(bufferStartPos);
@@ -406,7 +419,7 @@ Rico.Buffer.AjaxSQLMethods.prototype = {
       if (c.filterType == Rico.TableColumn.UNFILTERED) continue;
       var colnum=typeof(c.format.filterCol)=='number' ? c.format.filterCol : c.index;
       queryHash['f['+colnum+'][op]']=c.filterOp;
-      queryHash['f['+colnum+'][len]']=c.filterValues.length
+      queryHash['f['+colnum+'][len]']=c.filterValues.length;
       for (var i=0; i<c.filterValues.length; i++) {
         var fval=c.filterValues[i];
         if (c.filterOp=='LIKE' && fval.indexOf('*')==-1) fval='*'+fval+'*';
@@ -455,8 +468,8 @@ Rico.Buffer.AjaxSQLMethods.prototype = {
         if (this.attr) this.attr = this.attr.concat( newAttr.slice(0, newAttr.length));
         if (this.rows.length > this.maxBufferSize) {
           var fullSize = this.rows.length;
-          this.rows = this.rows.slice(this.rows.length - this.maxBufferSize, this.rows.length)
-          if (this.attr) this.attr = this.attr.slice(this.attr.length - this.maxBufferSize, this.attr.length)
+          this.rows = this.rows.slice(this.rows.length - this.maxBufferSize, this.rows.length);
+          if (this.attr) this.attr = this.attr.slice(this.attr.length - this.maxBufferSize, this.attr.length);
           this.startPos = this.startPos +  (fullSize - this.rows.length);
         }
       }
@@ -466,7 +479,7 @@ Rico.Buffer.AjaxSQLMethods.prototype = {
       } else {
         this.rows = newRows.slice(0, this.startPos).concat(this.rows);
         if (this.maxBufferSize && this.rows.length > this.maxBufferSize)
-          this.rows = this.rows.slice(0, this.maxBufferSize)
+          this.rows = this.rows.slice(0, this.maxBufferSize);
       }
       this.startPos =  start;
     }

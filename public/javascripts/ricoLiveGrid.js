@@ -1,11 +1,17 @@
-/**
-  *  (c) 2005-2008 Richard Cowin (http://openrico.org)
-  *  (c) 2005-2008 Matt Brown (http://dowdybrown.com)
-  *
-  *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
-  *  file except in compliance with the License. You may obtain a copy of the License at
-  *   http://www.apache.org/licenses/LICENSE-2.0
-  **/
+/*
+ *  (c) 2005-2009 Richard Cowin (http://openrico.org)
+ *  (c) 2005-2009 Matt Brown (http://dowdybrown.com)
+ *
+ *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ *  file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the
+ *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ *  either express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
 if(typeof Rico=='undefined') throw("LiveGrid requires the Rico JavaScript framework");
 if(typeof RicoUtil=='undefined') throw("LiveGrid requires the RicoUtil Library");
@@ -13,16 +19,18 @@ if(typeof RicoTranslate=='undefined') throw("LiveGrid requires the RicoTranslate
 if(typeof Rico.TableColumn=='undefined') throw("LiveGrid requires ricoGridCommon.js");
 
 
+/** @namespace */
 Rico.Buffer = {};
 
+Rico.Buffer.Base = Class.create(
+/** @lends Rico.Buffer.Base# */
+{
 /**
- * Loads buffer with data that already exists in the document as an HTML table (no AJAX).
+ * @class Defines the static buffer class (no AJAX).
+ * Loads buffer with data that already exists in the document as an HTML table or passed via javascript.
  * Also serves as a base class for AJAX-enabled buffers.
+ * @constructs
  */
-Rico.Buffer.Base = Class.create();
-
-Rico.Buffer.Base.prototype = {
-
   initialize: function(dataTable, options) {
     this.clear();
     this.updateInProgress = false;
@@ -37,7 +45,7 @@ Rico.Buffer.Base.prototype = {
       canFilter        : true,  // does buffer object support filtering?
       isEncoded        : true,  // is the data received via ajax html encoded?
       acceptAttr       : []     // attributes that can be copied from original/ajax data (e.g. className, style, id)
-    }
+    };
     Object.extend(this.options, options || {});
     if (dataTable) {
       this.loadRowsFromTable(dataTable,this.options.fixedHdrRows);
@@ -75,9 +83,11 @@ Rico.Buffer.Base.prototype = {
   },
 
   loadRowsFromArray: function(array2D) {
-    for ( var i=0; i < array2D.length; i++ )
-      for ( var j=0; j < array2D[i].length ; j++ )
+    for ( var i=0; i < array2D.length; i++ ) {
+      for ( var j=0; j < array2D[i].length ; j++ ) {
         array2D[i][j]=array2D[i][j].toString();
+      }
+    }
     this.loadRows(array2D);
   },
 
@@ -218,7 +228,7 @@ Rico.Buffer.Base.prototype = {
   },
 
   isInRange: function(position) {
-    var lastRow=Math.min(this.totalRows, position + this.liveGrid.pageSize)
+    var lastRow=Math.min(this.totalRows, position + this.liveGrid.pageSize);
     return (position >= this.startPos) && (lastRow <= this.endPos()); // && (this.size != 0);
   },
 
@@ -242,24 +252,36 @@ Rico.Buffer.Base.prototype = {
     finish();
   },
   
+/**
+ * @return a 2D array of buffer data representing the rows that are currently visible on the grid
+ */
   visibleRows: function() {
     return this.rows.slice(this.windowStart,this.windowEnd);
   },
 
   setWindow: function(start, count) {
-    this.windowStart = start - this.startPos;
-    this.windowEnd = Math.min(this.windowStart + count,this.size);
-    this.windowPos = start;
+    this.windowStart = start - this.startPos;                       // position in the buffer of first visible row
+    this.windowEnd = Math.min(this.windowStart + count,this.size);  // position in the buffer of last visible row containing data+1
+    this.windowPos = start;                                         // position in the dataset of first visible row
   },
 
+/**
+ * @return true if bufRow is currently visible in the grid
+ */
   isVisible: function(bufRow) {
     return bufRow < this.rows.length && bufRow >= this.windowStart && bufRow < this.windowEnd;
   },
   
+/**
+ * takes a window row index and returns the corresponding buffer row index
+ */
   bufferRow: function(windowRow) {
     return this.windowStart+windowRow;
   },
 
+/**
+ * @return buffer cell at the specified visible row/col index
+ */
   getWindowCell: function(windowRow,col) {
     var bufrow=this.bufferRow(windowRow);
     return this.isVisible(bufrow) && col < this.rows[bufrow].length ? this.rows[bufrow][col] : null;
@@ -301,16 +323,18 @@ Rico.Buffer.Base.prototype = {
     var begPos = start - this.startPos;
     var endPos = Math.min(begPos + count,this.size);
     var results = new Array();
-    for ( var i=begPos; i < endPos; i++ )
+    for ( var i=begPos; i < endPos; i++ ) {
       results.push(this.rows[i]);
-    return results
+    }
+    return results;
   },
 
   applyFilters: function() {
     var newRows=[],re=[];
+    var r,c,n,i,showRow,filtercnt;
     var cols=this.liveGrid.columns;
-    for (var n=0,filtercnt=0; n<cols.length; n++) {
-      var c=cols[n];
+    for (n=0,filtercnt=0; n<cols.length; n++) {
+      c=cols[n];
       if (c.filterType == Rico.TableColumn.UNFILTERED) continue;
       filtercnt++;
       if (c.filterOp=='LIKE') re[n]=new RegExp(c.filterValues[0],'i');
@@ -319,10 +343,10 @@ Rico.Buffer.Base.prototype = {
     if (filtercnt==0) {
       this.rows = this.baseRows;
     } else {
-      for (var r=0; r<this.baseRows.length; r++) {
-        var showRow=true;
+      for (r=0; r<this.baseRows.length; r++) {
+        showRow=true;
         for (n=0; n<cols.length && showRow; n++) {
-          var c=cols[n];
+          c=cols[n];
           if (c.filterType == Rico.TableColumn.UNFILTERED) continue;
           switch (c.filterOp) {
             case 'LIKE':
@@ -332,7 +356,7 @@ Rico.Buffer.Base.prototype = {
               showRow=this.baseRows[r][n]==c.filterValues[0];
               break;
             case 'NE':
-              for (var i=0; i<c.filterValues.length && showRow; i++)
+              for (i=0; i<c.filterValues.length && showRow; i++)
                 showRow=this.baseRows[r][n]!=c.filterValues[i];
               break;
             case 'LE':
@@ -362,15 +386,25 @@ Rico.Buffer.Base.prototype = {
     this.rowcntContent = this.size = this.rows.length;
   }
 
-};
+});
 
 
 // Rico.LiveGrid -----------------------------------------------------
 
-Rico.LiveGrid = Class.create();
-
-Rico.LiveGrid.prototype = {
-
+Rico.LiveGrid = Class.create(
+/** 
+ * @lends Rico.LiveGrid#
+ * @property tableId id string for this grid
+ * @property options the options object passed to the constructor extended with defaults
+ * @property buffer the buffer object containing the data for this grid
+ * @property columns array of {@link Rico.TableColumn} objects
+ */
+{
+/**
+ * @class Buffered LiveGrid component
+ * @extends Rico.GridCommon
+ * @constructs
+ */
   initialize: function( tableId, buffer, options ) {
     Object.extend(this, new Rico.GridCommon);
     Object.extend(this, new Rico.LiveGridMethods);
@@ -440,6 +474,7 @@ Rico.LiveGrid.prototype = {
       default:
         this.sizeTo='window';
         this.options.visibleRows=-1;
+        break;
     }
     this.highlightEnabled=this.options.highlightSection>0;
     this.pageSize=0;
@@ -448,7 +483,7 @@ Rico.LiveGrid.prototype = {
       alert('ERROR: no columns found in "'+this.tableId+'"');
       return;
     }
-    this.createColumnArray();
+    this.createColumnArray('TableColumn');
     if (this.options.headingSort=='hover')
       this.createHoverSet();
 
@@ -497,17 +532,20 @@ Rico.LiveGrid.prototype = {
     if (this.options.windowResize)
       setTimeout(this.pluginWindowResize.bind(this),100);
   }
-};
+});
 
 Rico.LiveGridMethods = function() {};
 
 Rico.LiveGridMethods.prototype = {
+/** @lends Rico.LiveGrid# */
 
   createHoverSet: function() {
     var hdrs=[];
-    for( var c=0; c < this.headerColCnt; c++ )
-      if (this.columns[c].sortable)
+    for( var c=0; c < this.headerColCnt; c++ ) {
+      if (this.columns[c].sortable) {
         hdrs.push(this.columns[c].hdrCellDiv);
+      }
+    }
     this.hoverSet = new Rico.HoverSet(hdrs);
   },
 
@@ -515,13 +553,16 @@ Rico.LiveGridMethods.prototype = {
     var s=window.location.search;
     if (s.charAt(0)=='?') s=s.substring(1);
     var pairs = s.split('&');
-    for (var i=0; i<pairs.length; i++)
+    for (var i=0; i<pairs.length; i++) {
       if (pairs[i].match(/^f\[\d+\]/)) {
         this.buffer.options.requestParameters.push(pairs[i]);
       }
+    }
   },
 
-  // set filter on a detail grid that is in a master-detail relationship
+/**
+ * set filter on a detail grid that is in a master-detail relationship
+ */
   setDetailFilter: function(colNumber,filterValue) {
     var c=this.columns[colNumber];
     c.format.ColData=filterValue;
@@ -531,12 +572,12 @@ Rico.LiveGridMethods.prototype = {
 /**
  * Create one table for frozen columns and one for scrolling columns.
  * Also create div's to contain them.
+ * @returns true on success
  */
   createTables: function() {
-    var insertloc;
-    var result = -1;
+    var insertloc,hdrSrc,i;
     var table = $(this.tableId) || $(this.tableId+'_outerDiv');
-    if (!table) return result;
+    if (!table) return false;
     if (table.tagName.toLowerCase()=='table') {
       var theads=table.getElementsByTagName("thead");
       if (theads.length == 1) {
@@ -546,10 +587,10 @@ Rico.LiveGridMethods.prototype = {
           this.insertPanelNames(r, 0, this.options.frozenColumns, 'ricoFrozen');
           this.insertPanelNames(r, this.options.frozenColumns, this.options.columnSpecs.length);
         }
-        var hdrSrc=theads[0].rows;
+        hdrSrc=theads[0].rows;
       } else {
         Rico.writeDebugMsg("createTables: using tbody section, id="+this.tableId);
-        var hdrSrc=new Array(table.rows[0]);
+        hdrSrc=new Array(table.rows[0]);
       }
       insertloc=table;
     } else if (this.options.columnSpecs.length > 0) {
@@ -557,7 +598,7 @@ Rico.LiveGridMethods.prototype = {
       Rico.writeDebugMsg("createTables: inserting at "+table.tagName+", id="+this.tableId);
     } else {
       alert("ERROR!\n\nUnable to initialize '"+this.tableId+"'\n\nLiveGrid terminated");
-      return result;
+      return false;
     }
 
     this.createDivs();
@@ -576,7 +617,7 @@ Rico.LiveGridMethods.prototype = {
           break;
         case 'menuCell':
         case 'cursorCell':
-          for (var i=0; i<2; i++) {
+          for (i=0; i<2; i++) {
             this.highlightDiv[i] = this.createDiv("highlight",i==0 ? this.frozenTabs : this.scrollTabs);
             this.highlightDiv[i].style.display="none";
             this.highlightDiv[i].id+=i;
@@ -585,7 +626,7 @@ Rico.LiveGridMethods.prototype = {
         case 'selection':
           // create one div for each side of the rectangle
           var parentDiv=this.options.highlightSection==1 ? this.frozenTabs : this.scrollTabs;
-          for (var i=0; i<4; i++) {
+          for (i=0; i<4; i++) {
             this.highlightDiv[i] = this.createDiv("highlight",parentDiv);
             this.highlightDiv[i].style.display="none";
             this.highlightDiv[i].style.overflow="hidden";
@@ -597,7 +638,7 @@ Rico.LiveGridMethods.prototype = {
     }
 
     // create new tables
-    for (var i=0; i<2; i++) {
+    for (i=0; i<2; i++) {
       this.tabs[i] = document.createElement("table");
       this.tabs[i].className = 'ricoLG_table';
       this.tabs[i].border=0;
@@ -626,13 +667,14 @@ Rico.LiveGridMethods.prototype = {
         this.insertPanelNames(this.thead[0].insertRow(0), 0, this.options.frozenColumns);
         this.insertPanelNames(this.thead[1].insertRow(0), this.options.frozenColumns, this.options.columnSpecs.length);
       }
-      for (var i=0; i<2; i++)
+      for (i=0; i<2; i++)
         this.headerColCnt = this.getColumnInfo(this.thead[i].rows);
     }
     for( var c=0; c < this.headerColCnt; c++ )
       this.tbody[c<this.options.frozenColumns ? 0 : 1].rows[0].insertCell(-1);
     if (insertloc) table.parentNode.removeChild(table);
     Rico.writeDebugMsg('createTables end');
+    return true;
   },
 
   createDataCells: function(visibleRows) {
@@ -650,12 +692,19 @@ Rico.LiveGridMethods.prototype = {
     if (s & 2) this.attachHighlightEvents(this.tbody[1]);
   },
 
-  // return id string for a filter element
+/**
+ * @param colnum column number
+ * @return id string for a filter element
+ */
   filterId: function(colnum) {
     return 'RicoFilter_'+this.tableId+'_'+colnum;
   },
 
-  // create filter elements on heading row r
+/**
+ * Create filter elements in heading
+ * Reads this.columns[].filterUI to determine type of filter element for each column (t=text box, s=select list, c=custom)
+ * @param r heading row where filter elements will be placed
+ */
   createFilters: function(r) {
     for( var c=0; c < this.headerColCnt; c++ ) {
       var col=this.columns[c];
@@ -669,10 +718,11 @@ Rico.LiveGridMethods.prototype = {
       Element.setStyle(divs[1], { textAlign: align });
       switch (fmt.filterUI.charAt(0)) {
         case 't':
+          // text field
           field=RicoUtil.createFormField(divs[1],'input','text',name,name);
           var size=fmt.filterUI.match(/\d+/);
           field.maxLength=fmt.Length || 50;
-          field.size=size ? parseInt(size) : 10;
+          field.size=size ? parseInt(size,10) : 10;
           var clrimg = document.createElement('img');
           clrimg.style.paddingLeft='4px';
           clrimg.style.cursor='pointer';
@@ -691,6 +741,7 @@ Rico.LiveGridMethods.prototype = {
           Event.observe(field,'keyup',col.filterKeypress.bindAsEventListener(col),false);
           break;
         case 's':
+          // drop-down select
           field=RicoUtil.createFormField(divs[1],'select',null,name);
           RicoUtil.addSelectOption(field,this.options.FilterAllToken,RicoTranslate.getPhraseById("filterAll"));
           var options={};
@@ -700,39 +751,51 @@ Rico.LiveGridMethods.prototype = {
           options.onComplete = this.filterValuesUpdate.bind(this,c);
           new Ajax.Request(this.buffer.dataSource, options);
           break;
+        case 'c':
+          // custom
+          if (typeof col._createFilters == 'function')
+            col._createFilters(divs[1], name);
+          break;
       }
     }
     this.initFilterImage(r);
   },
 
-  // update select list filter with values in AJAX response
+/**
+ * update select list filter with values in AJAX response
+ * @returns true on success
+ */
   filterValuesUpdate: function(colnum,request) {
     var response = request.responseXML.getElementsByTagName("ajax-response");
     Rico.writeDebugMsg("filterValuesUpdate: "+request.status);
-    if (response == null || response.length != 1) return;
+    if (response == null || response.length != 1) return false;
     response=response[0];
     var error = response.getElementsByTagName('error');
     if (error.length > 0) {
       Rico.writeDebugMsg("Data provider returned an error:\n"+RicoUtil.getContentAsString(error[0],this.buffer.isEncoded));
       alert(RicoTranslate.getPhraseById("requestError",RicoUtil.getContentAsString(error[0],this.buffer.isEncoded)));
-      return null;
+      return false;
     }
     response=response.getElementsByTagName('response')[0];
     var rowsElement = response.getElementsByTagName('rows')[0];
     //var colnum = rowsElement.getAttribute("distinct");
-    var col=this.columns[parseInt(colnum)];
+    var col=this.columns[parseInt(colnum,10)];
     var rows = this.buffer.dom2jstable(rowsElement);
-    var v, field=$(this.filterId(colnum));
+    var c0,c1,opt,v, field=$(this.filterId(colnum));
     if (col.filterType==Rico.TableColumn.USERFILTER && col.filterOp=='EQ') v=col.filterValues[0];
     Rico.writeDebugMsg('filterValuesUpdate: col='+colnum+' rows='+rows.length);
     for (var i=0; i<rows.length; i++) {
       if (rows[i].length>0) {
-        var c0=rows[i][0];
-        var opt=RicoUtil.addSelectOption(field,c0,c0 || RicoTranslate.getPhraseById("filterBlank"));
+        c0=c1=rows[i][0];
+        if (c0.match(/<span\s+class=(['"]?)ricolookup\1>(.*)<\/span>/i)) {
+          c1=RegExp.leftContext;
+        }
+        opt=RicoUtil.addSelectOption(field,c0,c1 || RicoTranslate.getPhraseById("filterBlank"));
         if (col.filterType==Rico.TableColumn.USERFILTER && c0==v) opt.selected=true;
       }
     }
     Event.observe(field,'change',col.filterChange.bindAsEventListener(col),false);
+    return true;
   },
 
   unplugHighlightEvents: function() {
@@ -741,7 +804,9 @@ Rico.LiveGridMethods.prototype = {
     if (s & 2) this.detachHighlightEvents(this.tbody[1]);
   },
 
-  // place panel names on first row of grid header (used by LiveGridForms)
+/**
+ * place panel names on first row of grid header (used by LiveGridForms)
+ */
   insertPanelNames: function(r,start,limit,cellClass) {
     Rico.writeDebugMsg('insertPanelNames: start='+start+' limit='+limit);
     r.className='ricoLG_hdg';
@@ -752,7 +817,7 @@ Rico.LiveGridMethods.prototype = {
       } else {
         if (newCell) newCell.colSpan=span;
         newCell = r.insertCell(-1);
-        if (cellClass) newCell.className=cellClass
+        if (cellClass) newCell.className=cellClass;
         span=1;
         lastIdx=this.options.columnSpecs[c].panelIdx;
         newCell.innerHTML=this.options.panels[lastIdx];
@@ -761,7 +826,9 @@ Rico.LiveGridMethods.prototype = {
     if (newCell) newCell.colSpan=span;
   },
 
-  // create grid header for table i (if none was provided)
+/**
+ * create grid header for table i (if none was provided)
+ */
   createHdr: function(i,start,limit) {
     Rico.writeDebugMsg('createHdr: i='+i+' start='+start+' limit='+limit);
     var mainRow = this.thead[i].insertRow(-1);
@@ -773,23 +840,26 @@ Rico.LiveGridMethods.prototype = {
     }
   },
 
-  // move header cells in original table to grid
+/**
+ * move header cells in original table to grid
+ */
   loadHdrSrc: function(hdrSrc) {
+    var i,h,c,r,newrow,cells;
     Rico.writeDebugMsg('loadHdrSrc start');
-    for (var i=0; i<2; i++) {
-      for (var r=0; r<hdrSrc.length; r++) {
-        var newrow = this.thead[i].insertRow(-1);
+    for (i=0; i<2; i++) {
+      for (r=0; r<hdrSrc.length; r++) {
+        newrow = this.thead[i].insertRow(-1);
         newrow.className='ricoLG_hdg '+this.tableId+'_hdg'+r;
       }
     }
     if (hdrSrc.length==1) {
-      var cells=hdrSrc[0].cells;
-      for (var c=0; cells.length > 0; c++)
+      cells=hdrSrc[0].cells;
+      for (c=0; cells.length > 0; c++)
         this.thead[c<this.options.frozenColumns ? 0 : 1].rows[0].appendChild(cells[0]);
     } else {
-      for (var r=0; r<hdrSrc.length; r++) {
-        var cells=hdrSrc[r].cells;
-        for (var c=0,h=0; cells.length > 0; c++) {
+      for (r=0; r<hdrSrc.length; r++) {
+        cells=hdrSrc[r].cells;
+        for (c=0,h=0; cells.length > 0; c++) {
           if (cells[0].className=='ricoFrozen') {
             if (r==this.headerRowIdx) this.options.frozenColumns=c+1;
           } else {
@@ -802,6 +872,9 @@ Rico.LiveGridMethods.prototype = {
     Rico.writeDebugMsg('loadHdrSrc end');
   },
 
+/**
+ * Size div elements
+ */
   sizeDivs: function() {
     Rico.writeDebugMsg('sizeDivs: '+this.tableId);
     //this.cancelMenu();
@@ -818,7 +891,7 @@ Rico.LiveGridMethods.prototype = {
     this.innerDiv.style.width=(this.scrWi-this.options.scrollBarWidth+1)+'px';
     this.resizeDiv.style.height=this.frozenTabs.style.height=this.innerDiv.style.height=(this.hdrHt+this.dataHt+1)+'px';
     Rico.writeDebugMsg('sizeDivs scrHt='+scrHt+' innerHt='+this.innerDiv.style.height+' rowHt='+this.rowHeight+' pageSize='+this.pageSize);
-    pad=(this.scrWi-this.scrTabWi < this.options.scrollBarWidth) ? 2 : 0;
+    var pad=(this.scrWi-this.scrTabWi < this.options.scrollBarWidth) ? 2 : 0;
     this.shadowDiv.style.width=(this.scrTabWi+pad)+'px';
     this.outerDiv.style.height=(this.hdrHt+scrHt)+'px';
     this.setHorizontalScroll();
@@ -830,6 +903,7 @@ Rico.LiveGridMethods.prototype = {
   },
 
   remainingHt: function() {
+    var tabHt;
     var winHt=RicoUtil.windowHeight();
     var margin=Prototype.Browser.IE ? 15 : 10;
     // if there is a horizontal scrollbar take it into account
@@ -838,12 +912,12 @@ Rico.LiveGridMethods.prototype = {
       case 'window':
       case 'data':
         var divPos=Position.page(this.outerDiv);
-        var tabHt=Math.max(this.tabs[0].offsetHeight,this.tabs[1].offsetHeight);
+        tabHt=Math.max(this.tabs[0].offsetHeight,this.tabs[1].offsetHeight);
         Rico.writeDebugMsg("remainingHt, winHt="+winHt+' tabHt='+tabHt+' gridY='+divPos[1]);
         return winHt-divPos[1]-tabHt-this.options.scrollBarWidth-margin;  // allow for scrollbar and some margin
       case 'parent':
         var offset=this.offsetFromParent(this.outerDiv);
-        var tabHt=Math.max(this.tabs[0].offsetHeight,this.tabs[1].offsetHeight);
+        tabHt=Math.max(this.tabs[0].offsetHeight,this.tabs[1].offsetHeight);
         if (Prototype.Browser.IE) Element.hide(this.outerDiv);
         var parentHt=this.outerDiv.parentNode.offsetHeight;
         if (Prototype.Browser.IE) Element.show(this.outerDiv);
@@ -860,10 +934,10 @@ Rico.LiveGridMethods.prototype = {
         Rico.writeDebugMsg("remainingHt, winHt="+winHt+' pageHt='+bodyHt+' remHt='+remHt);
         return remHt;
       default:
-        var tabHt=Math.max(this.tabs[0].offsetHeight,this.tabs[1].offsetHeight);
+        tabHt=Math.max(this.tabs[0].offsetHeight,this.tabs[1].offsetHeight);
         Rico.writeDebugMsg("remainingHt, winHt="+winHt+' tabHt='+tabHt);
         if (this.sizeTo.slice(-1)=='%') winHt*=parseFloat(this.sizeTo)/100.0;
-        else if (this.sizeTo.slice(-2)=='px') winHt=parseInt(this.sizeTo);
+        else if (this.sizeTo.slice(-2)=='px') winHt=parseInt(this.sizeTo,10);
         return winHt-tabHt-this.options.scrollBarWidth-margin;  // allow for scrollbar and some margin
     }
   },
@@ -978,7 +1052,9 @@ Rico.LiveGridMethods.prototype = {
     }
   },
 
-  // on older systems, this can be fairly slow
+/**
+ * on older systems, this can be fairly slow
+ */
   appendBlankRow: function() {
     if (this.pageSize >= this.options.maxPageRows) return;
     Rico.writeDebugMsg("appendBlankRow #"+this.pageSize);
@@ -1005,13 +1081,14 @@ Rico.LiveGridMethods.prototype = {
     if (!this.menu) return;
     this.cancelMenu();
     this.unhighlight(); // in case highlighting was invoked externally
+    var idx;
     var cell=Event.element(e);
     if (cell.className=='ricoLG_highlightDiv') {
-      var idx=this.highlightIdx;
+      idx=this.highlightIdx;
     } else {
       cell=RicoUtil.getParentByTagName(cell,'div','ricoLG_cell');
       if (!cell) return;
-      var idx=this.winCellIndex(cell);
+      idx=this.winCellIndex(cell);
       if ((this.options.highlightSection & (idx.tabIdx+1))==0) return;
     }
     this.highlight(idx);
@@ -1024,8 +1101,9 @@ Rico.LiveGridMethods.prototype = {
       var showMenu=this.menu.buildGridMenu(idx.row, idx.column, idx.tabIdx);
       if (!showMenu) return;
     }
-    if (this.options.highlightElem=='selection' && !this.isSelected(idx.cell))
+    if (this.options.highlightElem=='selection' && !this.isSelected(idx.cell)) {
       this.selectCell(idx.cell);
+    }
     this.menu.showmenu(e,this.closeMenu.bind(this));
   },
 
@@ -1043,18 +1121,18 @@ Rico.LiveGridMethods.prototype = {
   winCellIndex: function(cell) {
     var a=cell.id.split(/_/);
     var l=a.length;
-    var r=parseInt(a[l-2]);
-    var c=parseInt(a[l-1]);
+    var r=parseInt(a[l-2],10);
+    var c=parseInt(a[l-1],10);
     return {row:r, column:c, tabIdx:this.columns[c].tabIdx, cell:cell};
   },
 
 /**
- * @return index of cell within the buffer
+ * @return index of cell within the dataset
  */
-  bufCellIndex: function(cell) {
+  datasetIndex: function(cell) {
     var idx=this.winCellIndex(cell);
     idx.row+=this.buffer.windowPos;
-    if (idx.row >= this.buffer.size) idx.onBlankRow=true;
+    idx.onBlankRow=(idx.row >= this.buffer.endPos());
     return idx;
   },
 
@@ -1062,7 +1140,9 @@ Rico.LiveGridMethods.prototype = {
     switch (this.options.highlightElem) {
       case 'selection':
         Event.observe(tBody,"mousedown", this.options.mouseDownHandler, false);
+        /** @ignore */
         tBody.ondrag = function () { return false; };
+        /** @ignore */
         tBody.onselectstart = function () { return false; };
         break;
       case 'cursorRow':
@@ -1086,21 +1166,26 @@ Rico.LiveGridMethods.prototype = {
     }
   },
 
+/**
+ * @return array of objects containing row/col indexes (index values are relative to the start of the window)
+ */
   getVisibleSelection: function() {
     var cellList=[];
     if (this.SelectIdxStart && this.SelectIdxEnd) {
-      var r1=Math.max(Math.min(this.SelectIdxEnd.row,this.SelectIdxStart.row),this.buffer.windowPos);
-      var r2=Math.min(Math.max(this.SelectIdxEnd.row,this.SelectIdxStart.row),this.buffer.windowEnd-1);
+      var r1=Math.max(Math.min(this.SelectIdxEnd.row,this.SelectIdxStart.row)-this.buffer.startPos,this.buffer.windowStart);
+      var r2=Math.min(Math.max(this.SelectIdxEnd.row,this.SelectIdxStart.row)-this.buffer.startPos,this.buffer.windowEnd-1);
       var c1=Math.min(this.SelectIdxEnd.column,this.SelectIdxStart.column);
       var c2=Math.max(this.SelectIdxEnd.column,this.SelectIdxStart.column);
-      for (var r=r1; r<=r2; r++)
+      //Rico.writeDebugMsg("getVisibleSelection "+r1+','+c1+' to '+r2+','+c2+' ('+this.SelectIdxStart.row+',startPos='+this.buffer.startPos+',windowPos='+this.buffer.windowPos+',windowEnd='+this.buffer.windowEnd+')');
+      for (var r=r1; r<=r2; r++) {
         for (var c=c1; c<=c2; c++)
-          cellList.push({row:r-this.buffer.windowPos,column:c});
+          cellList.push({row:r-this.buffer.windowStart,column:c});
+      }
     }
     if (this.SelectCtrl) {
       for (var i=0; i<this.SelectCtrl.length; i++) {
-        if (this.SelectCtrl[i].row>=this.buffer.windowPos && this.SelectCtrl[i].row<this.buffer.windowEnd)
-          cellList.push({row:this.SelectCtrl[i].row-this.buffer.windowPos,column:this.SelectCtrl[i].column});
+        if (this.SelectCtrl[i].row>=this.buffer.windowStart && this.SelectCtrl[i].row<this.buffer.windowEnd)
+          cellList.push({row:this.SelectCtrl[i].row-this.buffer.windowStart,column:this.SelectCtrl[i].column});
       }
     }
     return cellList;
@@ -1136,14 +1221,16 @@ Rico.LiveGridMethods.prototype = {
       this.highlightDiv[i].style.display='';
   },
 
-  HideSelection: function(cellList) {
+  HideSelection: function() {
+    var i;
     if (this.options.highlightMethod!='class') {
-      for (var i=0; i<this.highlightDiv.length; i++)
+      for (i=0; i<this.highlightDiv.length; i++)
         this.highlightDiv[i].style.display='none';
     }
     if (this.options.highlightMethod!='outline') {
       var cellList=this.getVisibleSelection();
-      for (var i=0; i<cellList.length; i++)
+      Rico.writeDebugMsg("HideSelection "+cellList.length);
+      for (i=0; i<cellList.length; i++)
         this.unhighlightCell(this.columns[cellList[i].column].cell(cellList[i].row));
     }
   },
@@ -1159,6 +1246,7 @@ Rico.LiveGridMethods.prototype = {
   },
 
   ClearSelection: function() {
+    Rico.writeDebugMsg("ClearSelection");
     this.HideSelection();
     this.SelectIdxStart=null;
     this.SelectIdxEnd=null;
@@ -1167,12 +1255,12 @@ Rico.LiveGridMethods.prototype = {
 
   selectCell: function(cell) {
     this.ClearSelection();
-    this.SelectIdxStart=this.SelectIdxEnd=this.bufCellIndex(cell);
+    this.SelectIdxStart=this.SelectIdxEnd=this.datasetIndex(cell);
     this.ShowSelection();
   },
 
   AdjustSelection: function(cell) {
-    var newIdx=this.bufCellIndex(cell);
+    var newIdx=this.datasetIndex(cell);
     if (this.SelectIdxStart.tabIdx != newIdx.tabIdx) return;
     this.HideSelection();
     this.SelectIdxEnd=newIdx;
@@ -1181,8 +1269,9 @@ Rico.LiveGridMethods.prototype = {
 
   RefreshSelection: function() {
     var cellList=this.getVisibleSelection();
-    for (var i=0; i<cellList.length; i++)
+    for (var i=0; i<cellList.length; i++) {
       this.columns[cellList[i].column].displayValue(cellList[i].row);
+    }
   },
 
   FillSelection: function(newVal,newStyle) {
@@ -1191,32 +1280,40 @@ Rico.LiveGridMethods.prototype = {
       var r2=Math.max(this.SelectIdxEnd.row,this.SelectIdxStart.row);
       var c1=Math.min(this.SelectIdxEnd.column,this.SelectIdxStart.column);
       var c2=Math.max(this.SelectIdxEnd.column,this.SelectIdxStart.column);
-      for (var r=r1; r<=r2; r++)
-        for (var c=c1; c<=c2; c++)
+      for (var r=r1; r<=r2; r++) {
+        for (var c=c1; c<=c2; c++) {
           this.buffer.setValue(r,c,newVal,newStyle);
+        }
+      }
     }
     if (this.SelectCtrl) {
-      for (var i=0; i<this.SelectCtrl.length; i++)
+      for (var i=0; i<this.SelectCtrl.length; i++) {
         this.buffer.setValue(this.SelectCtrl[i].row,this.SelectCtrl[i].column,newVal,newStyle);
+      }
     }
     this.RefreshSelection();
   },
 
+/**
+ * Process mouse down event
+ * @param e event object
+ */
   selectMouseDown: function(e) {
     if (this.highlightEnabled==false) return true;
     this.cancelMenu();
     var cell=Event.element(e);
-    if (!Event.isLeftClick(e)) return;
+    if (!Event.isLeftClick(e)) return true;
     cell=RicoUtil.getParentByTagName(cell,'div','ricoLG_cell');
-    if (!cell) return;
+    if (!cell) return true;
     Event.stop(e);
-    var newIdx=this.bufCellIndex(cell);
-    if (newIdx.onBlankRow) return;
+    var newIdx=this.datasetIndex(cell);
+    if (newIdx.onBlankRow) return true;
+    Rico.writeDebugMsg("selectMouseDown @"+newIdx.row+','+newIdx.column);
     if (e.ctrlKey) {
-      if (!this.SelectIdxStart || this.options.highlightMethod!='class') return;
+      if (!this.SelectIdxStart || this.options.highlightMethod!='class') return true;
       if (!this.isSelected(cell)) {
         this.highlightCell(cell);
-        this.SelectCtrl.push(this.bufCellIndex(cell));
+        this.SelectCtrl.push(this.datasetIndex(cell));
       } else {
         for (var i=0; i<this.SelectCtrl.length; i++) {
           if (this.SelectCtrl[i].row==newIdx.row && this.SelectCtrl[i].column==newIdx.column) {
@@ -1227,12 +1324,13 @@ Rico.LiveGridMethods.prototype = {
         }
       }
     } else if (e.shiftKey) {
-      if (!this.SelectIdxStart) return;
+      if (!this.SelectIdxStart) return true;
       this.AdjustSelection(cell);
     } else {
       this.selectCell(cell);
       this.pluginSelect();
     }
+    return false;
   },
 
   pluginSelect: function() {
@@ -1278,7 +1376,7 @@ Rico.LiveGridMethods.prototype = {
     if (r1 > r2) return false;
     var c1=Math.min(this.SelectIdxEnd.column,this.SelectIdxStart.column);
     var c2=Math.max(this.SelectIdxEnd.column,this.SelectIdxStart.column);
-    var curIdx=this.bufCellIndex(cell);
+    var curIdx=this.datasetIndex(cell);
     return (r1<=curIdx.row && curIdx.row<=r2 && c1<=curIdx.column && curIdx.column<=c2);
   },
 
@@ -1339,17 +1437,18 @@ Rico.LiveGridMethods.prototype = {
   },
 
   cursorOutline: function(newIdx) {
+    var div;
     switch (this.options.highlightElem) {
       case 'menuCell':
       case 'cursorCell':
-        var div=this.highlightDiv[newIdx.tabIdx];
+        div=this.highlightDiv[newIdx.tabIdx];
         div.style.left=(this.columns[newIdx.column].dataCell.offsetLeft-1)+'px';
         div.style.width=this.columns[newIdx.column].colWidth;
         this.highlightDiv[1-newIdx.tabIdx].style.display='none';
         break;
       case 'menuRow':
       case 'cursorRow':
-        var div=this.highlightDiv[0];
+        div=this.highlightDiv[0];
         var s1=this.options.highlightSection & 1;
         var s2=this.options.highlightSection & 2;
         div.style.left=s1 ? '0px' : this.frozenTabs.style.width;
@@ -1366,6 +1465,7 @@ Rico.LiveGridMethods.prototype = {
     switch (this.options.highlightElem) {
       case 'menuCell':
         this.highlightIdx=this.menuIdx;
+        /*jsl:fallthru*/
       case 'cursorCell':
         if (this.highlightIdx) this.unhighlightCell(this.highlightIdx.cell);
         if (!this.highlightDiv) return;
@@ -1374,6 +1474,7 @@ Rico.LiveGridMethods.prototype = {
         break;
       case 'menuRow':
         this.highlightIdx=this.menuIdx;
+        /*jsl:fallthru*/
       case 'cursorRow':
         if (this.highlightIdx) this.unselectRow(this.highlightIdx.row);
         if (this.highlightDiv) this.highlightDiv[0].style.display='none';
@@ -1383,6 +1484,7 @@ Rico.LiveGridMethods.prototype = {
 
   resetContents: function(resetHt) {
     Rico.writeDebugMsg("resetContents("+resetHt+")");
+    this.ClearSelection();
     this.buffer.clear();
     this.clearRows();
     if (typeof resetHt=='undefined' || resetHt==true) {
@@ -1394,20 +1496,22 @@ Rico.LiveGridMethods.prototype = {
   },
 
   setImages: function() {
-    for (n=0; n<this.columns.length; n++)
+    for (var n=0; n<this.columns.length; n++)
       this.columns[n].setImage();
   },
 
   // returns column index, or -1 if there are no sorted columns
   findSortedColumn: function() {
-    for (var n=0; n<this.columns.length; n++)
+    for (var n=0; n<this.columns.length; n++) {
       if (this.columns[n].isSorted()) return n;
+    }
     return -1;
   },
 
   findColumnName: function(name) {
-    for (var n=0; n<this.columns.length; n++)
+    for (var n=0; n<this.columns.length; n++) {
       if (this.columns[n].fieldName == name) return n;
+    }
     return -1;
   },
 
@@ -1453,23 +1557,27 @@ Rico.LiveGridMethods.prototype = {
  * clear filters on all columns
  */
   clearFilters: function() {
-    for (var x=0;x<this.columns.length;x++)
+    for (var x=0;x<this.columns.length;x++) {
       this.columns[x].setUnfiltered(true);
-    if (this.options.filterHandler)
+    }
+    if (this.options.filterHandler) {
       this.options.filterHandler();
+    }
   },
 
 /**
  * returns number of columns with a user filter set
  */
   filterCount: function() {
-    for (var x=0,cnt=0;x<this.columns.length;x++)
+    for (var x=0,cnt=0;x<this.columns.length;x++) {
       if (this.columns[x].isFiltered()) cnt++;
+    }
     return cnt;
   },
 
   sortHandler: function() {
     this.cancelMenu();
+    this.ClearSelection();
     this.setImages();
     var n=this.findSortedColumn();
     if (n < 0) return;
@@ -1482,8 +1590,12 @@ Rico.LiveGridMethods.prototype = {
 
   filterHandler: function() {
     Rico.writeDebugMsg("filterHandler");
-    this.unplugScroll();
     this.cancelMenu();
+    if (this.buffer.processingRequest) {
+      this.queueFilter=true;
+      return;
+    }
+    this.unplugScroll();
     this.ClearSelection();
     this.setImages();
     this.clearBookmark();
@@ -1497,17 +1609,18 @@ Rico.LiveGridMethods.prototype = {
   },
 
   bookmarkHandler: function(firstrow,lastrow) {
+    var newhtml;
     if (isNaN(firstrow) || !this.bookmark) return;
     var totrows=this.buffer.totalRows;
     if (totrows < lastrow) lastrow=totrows;
     if (totrows<=0) {
-      var newhtml = RicoTranslate.getPhraseById('bookmarkNoMatch');
+      newhtml = RicoTranslate.getPhraseById('bookmarkNoMatch');
     } else if (lastrow<0) {
-      var newhtml = RicoTranslate.getPhraseById('bookmarkNoRec');
+      newhtml = RicoTranslate.getPhraseById('bookmarkNoRec');
     } else if (this.buffer.foundRowCount) {
-      var newhtml = RicoTranslate.getPhraseById('bookmarkExact',firstrow,lastrow,totrows);
+      newhtml = RicoTranslate.getPhraseById('bookmarkExact',firstrow,lastrow,totrows);
     } else {
-      var newhtml = RicoTranslate.getPhraseById('bookmarkAbout',firstrow,lastrow,totrows);
+      newhtml = RicoTranslate.getPhraseById('bookmarkAbout',firstrow,lastrow,totrows);
     }
     this.bookmark.innerHTML = newhtml;
   },
@@ -1516,7 +1629,6 @@ Rico.LiveGridMethods.prototype = {
     if (this.isBlank==true) return;
     for (var c=0; c < this.columns.length; c++)
       this.columns[c].clearColumn();
-    this.ClearSelection();
     this.isBlank = true;
   },
 
@@ -1525,25 +1637,30 @@ Rico.LiveGridMethods.prototype = {
     this.hideMsg();
     this.cancelMenu();
     this.unhighlight(); // in case highlighting was manually invoked
+    if (this.queueFilter) {
+      Rico.writeDebugMsg("refreshContents: cancelling refresh because filter has changed");
+      this.queueFilter=false;
+      this.filterHandler();
+      return;
+    }
     this.highlightEnabled=this.options.highlightSection!='none';
     if (startPos == this.lastRowPos && !this.isPartialBlank && !this.isBlank) return;
     this.isBlank = false;
-    var viewPrecedesBuffer = this.buffer.startPos > startPos
+    var viewPrecedesBuffer = this.buffer.startPos > startPos;
     var contentStartPos = viewPrecedesBuffer ? this.buffer.startPos: startPos;
     this.contentStartPos = contentStartPos+1;
     var contentEndPos = Math.min(this.buffer.startPos + this.buffer.size, startPos + this.pageSize);
     var onRefreshComplete = this.options.onRefreshComplete;
 
-    if ((startPos + this.pageSize < this.buffer.startPos)
-        || (this.buffer.startPos + this.buffer.size < startPos)
-        || (this.buffer.size == 0)) {
+    if ((startPos + this.pageSize < this.buffer.startPos) ||
+        (this.buffer.startPos + this.buffer.size < startPos) ||
+        (this.buffer.size == 0)) {
       this.clearRows();
       if (onRefreshComplete) onRefreshComplete(this.contentStartPos,contentEndPos);  // update bookmark
       return;
     }
 
     Rico.writeDebugMsg('refreshContents: contentStartPos='+contentStartPos+' contentEndPos='+contentEndPos+' viewPrecedesBuffer='+viewPrecedesBuffer);
-    if (this.options.highlightElem=='selection') this.HideSelection();
     var rowSize = contentEndPos - contentStartPos;
     this.buffer.setWindow(contentStartPos, rowSize );
     var blankSize = this.pageSize - rowSize;
@@ -1603,12 +1720,12 @@ Rico.LiveGridMethods.prototype = {
   pixeltorow: function(p) {
      var notdisp=this.topOfLastPage();
      if (notdisp == 0) return 0;
-     var prow=parseInt(p/this.rowHeight);
+     var prow=parseInt(p/this.rowHeight,10);
      return Math.min(notdisp,prow);
   },
 
   moveRelative: function(relOffset) {
-     newoffset=Math.max(this.scrollDiv.scrollTop+relOffset*this.rowHeight,0);
+     var newoffset=Math.max(this.scrollDiv.scrollTop+relOffset*this.rowHeight,0);
      newoffset=Math.min(newoffset,this.scrollDiv.scrollHeight);
      //Rico.writeDebugMsg("moveRelative, newoffset="+newoffset);
      this.scrollDiv.scrollTop=newoffset;
@@ -1660,6 +1777,7 @@ Rico.LiveGridMethods.prototype = {
      if (newrow == this.lastRowPos && !this.isPartialBlank && !this.isBlank) return;
      var stamp1 = new Date();
      //Rico.writeDebugMsg("handleScroll, newrow="+newrow+" scrtop="+scrtop);
+     if (this.options.highlightElem=='selection') this.HideSelection();
      this.buffer.fetch(newrow);
      if (this.options.onscroll) this.options.onscroll(this, newrow);
      this.scrollTimeout = setTimeout(this.scrollIdle.bind(this), 1200 );
@@ -1696,18 +1814,20 @@ Rico.LiveGridMethods.prototype = {
  * Send all rows to print/export window
  */
   exportBuffer: function(rows,startPos) {
+    var r,c,v,col,exportText;
     Rico.writeDebugMsg("exportBuffer: "+rows.length+" rows");
     var tdstyle=[];
     var totalcnt=startPos || 0;
-    for (var c=0; c<this.columns.length; c++)
+    for (c=0; c<this.columns.length; c++) {
       if (this.columns[c].visible) tdstyle[c]=this.exportStyle(this.columns[c].cell(0));  // assumes row 0 style applies to all rows
-    for(var r=0; r < rows.length; r++) {
-      var exportText='';
-      for (var c=0; c<this.columns.length; c++) {
+    }
+    for(r=0; r < rows.length; r++) {
+      exportText='';
+      for (c=0; c<this.columns.length; c++) {
         if (!this.columns[c].visible) continue;
-        var col=this.columns[c];
+        col=this.columns[c];
         col.expStyle=tdstyle[c];
-        var v=col._export(rows[r][c],rows[r]);
+        v=col._export(rows[r][c],rows[r]);
         if (v.match(/<span\s+class=(['"]?)ricolookup\1>(.*)<\/span>/i))
           v=RegExp.leftContext;
         if (v=='') v='&nbsp;';
@@ -1722,9 +1842,16 @@ Rico.LiveGridMethods.prototype = {
 };
 
 
-Object.extend(Rico.TableColumn.prototype, {
-
+Rico.TableColumn.prototype = 
+/** @lends Rico.TableColumn# */
+{
+/**
+ * Implements a LiveGrid column. Also contains static properties used by SimpleGrid columns.
+ * @extends Rico.TableColumnBase
+ * @constructs
+ */
 initialize: function(liveGrid,colIdx,hdrInfo,tabIdx) {
+  Object.extend(this, new Rico.TableColumnBase());
   this.baseInit(liveGrid,colIdx,hdrInfo,tabIdx);
   if (typeof this.format.type!='string') this.format.type='raw';
   if (typeof this.isNullable!='boolean') this.isNullable = /number|date/.test(this.format.type);
@@ -1733,26 +1860,38 @@ initialize: function(liveGrid,colIdx,hdrInfo,tabIdx) {
   this.fixHeaders(this.liveGrid.tableId, this.options.hdrIconsFirst);
   if (this.format.control) {
     // copy all properties/methods that start with '_'
-    if (typeof this.format.control=='string')
+    if (typeof this.format.control=='string') {
       this.format.control=eval(this.format.control);
-    for (var property in this.format.control)
+    }
+    for (var property in this.format.control) {
       if (property.charAt(0)=='_') {
         Rico.writeDebugMsg("Copying control property "+property);
         this[property] = this.format.control[property];
       }
+    }
   }
   if (this['format_'+this.format.type])
     this._format=this['format_'+this.format.type].bind(this);
 },
 
+/**
+ * Sorts the column in ascending order
+ */
 sortAsc: function() {
   this.setColumnSort(Rico.TableColumn.SORT_ASC);
 },
 
+/**
+ * Sorts the column in descending order
+ */
 sortDesc: function() {
   this.setColumnSort(Rico.TableColumn.SORT_DESC);
 },
 
+/**
+ * Sorts the column in the specified direction
+ * @param direction must be one of Rico.TableColumn.UNSORTED, .SORT_ASC, or .SORT_DESC
+ */
 setColumnSort: function(direction) {
   this.liveGrid.clearSort();
   this.setSorted(direction);
@@ -1762,18 +1901,30 @@ setColumnSort: function(direction) {
     this.options.sortHandler();
 },
 
+/**
+ * @returns true if this column is allowed to be sorted
+ */
 isSortable: function() {
   return this.sortable;
 },
 
+/**
+ * @returns true if this column is currently sorted
+ */
 isSorted: function() {
   return this.currentSort != Rico.TableColumn.UNSORTED;
 },
 
+/**
+ * @returns Rico.TableColumn.UNSORTED, .SORT_ASC, or .SORT_DESC
+ */
 getSortDirection: function() {
   return this.currentSort;
 },
 
+/**
+ * toggle the sort sequence for this column
+ */
 toggleSort: function() {
   if (this.liveGrid.buffer && this.liveGrid.buffer.totalRows==0) return;
   if (this.currentSort == Rico.TableColumn.SORT_ASC)
@@ -1782,21 +1933,31 @@ toggleSort: function() {
     this.sortAsc();
 },
 
+/**
+ * Flags that this column is not sorted
+ */
 setUnsorted: function() {
   this.setSorted(Rico.TableColumn.UNSORTED);
 },
 
 /**
- * direction must be one of Rico.TableColumn.UNSORTED, .SORT_ASC, or .SORT_DESC
+ * Flags that this column is sorted, but doesn't actually carry out the sort
+ * @param direction must be one of Rico.TableColumn.UNSORTED, .SORT_ASC, or .SORT_DESC
  */
 setSorted: function(direction) {
   this.currentSort = direction;
 },
 
+/**
+ * @returns true if this column is allowed to be filtered
+ */
 canFilter: function() {
   return this.filterable;
 },
 
+/**
+ * @returns a textual representation of how this column is filtered
+ */
 getFilterText: function() {
   var vals=[];
   for (var i=0; i<this.filterValues.length; i++) {
@@ -1816,15 +1977,22 @@ getFilterText: function() {
   return '?';
 },
 
+/**
+ * @returns returns the query string representation of the filter
+ */
 getFilterQueryParm: function() {
   if (this.filterType == Rico.TableColumn.UNFILTERED) return '';
   var retval='&f['+this.index+'][op]='+this.filterOp;
-  retval+='&f['+this.index+'][len]='+this.filterValues.length
-  for (var i=0; i<this.filterValues.length; i++)
+  retval+='&f['+this.index+'][len]='+this.filterValues.length;
+  for (var i=0; i<this.filterValues.length; i++) {
     retval+='&f['+this.index+']['+i+']='+escape(this.filterValues[i]);
+  }
   return retval;
 },
 
+/**
+ * removes the filter from this column
+ */
 setUnfiltered: function(skipHandler) {
   this.filterType = Rico.TableColumn.UNFILTERED;
   if (this.liveGrid.options.saveColumnInfo.filter)
@@ -1850,12 +2018,11 @@ addFilterNE: function() {
 },
 setFilterGE: function() { this.setUserFilter('GE'); },
 setFilterLE: function() { this.setUserFilter('LE'); },
-setFilterKW: function() {
-  var keyword=prompt(RicoTranslate.getPhraseById("keywordPrompt"),'');
+setFilterKW: function(keyword) {
   if (keyword!='' && keyword!=null) {
     this.setFilter('LIKE',keyword,Rico.TableColumn.USERFILTER);
   } else {
-    this.liveGrid.cancelMenu();
+    this.setUnfiltered(false);
   }
 },
 
@@ -1965,7 +2132,7 @@ fixHeaders: function(prefix, iconsfirst) {
   if (this.sortable) {
     switch (this.options.headingSort) {
       case 'link':
-        var a=RicoUtil.wrapChildren(this.hdrCellDiv,'ricoSort',undefined,'a')
+        var a=RicoUtil.wrapChildren(this.hdrCellDiv,'ricoSort',undefined,'a');
         a.href = "javascript:void(0)";
         a.onclick = this.toggleSort.bindAsEventListener(this);
         break;
@@ -1988,6 +2155,15 @@ fixHeaders: function(prefix, iconsfirst) {
   } else {
     this.hdrCellDiv.appendChild(this.imgFilter);
     this.hdrCellDiv.appendChild(this.imgSort);
+  }
+  if (!this.format.filterUI) {
+    Event.observe(this.imgFilter, 'click', this.filterClick.bindAsEventListener(this), false);
+  }
+},
+
+filterClick: function(e) {
+  if (this.filterType==Rico.TableColumn.USERFILTER && this.filterOp=='LIKE') {
+    this.liveGrid.openKeyword(this.index);
   }
 },
 
@@ -2032,7 +2208,7 @@ displayValue: function(windowRow) {
   var bufAttr=this.getBufferAttr(windowRow);
   if (bufAttr==null) return;
   for (var k=0; k<acceptAttr.length; k++) {
-    var bufAttr=bufAttr['_'+acceptAttr[k]] || '';
+    bufAttr=bufAttr['_'+acceptAttr[k]] || '';
     switch (acceptAttr[k]) {
       case 'style': gridCell.style.cssText=bufAttr; break;
       case 'class': gridCell.className=bufAttr; break;
@@ -2041,6 +2217,6 @@ displayValue: function(windowRow) {
   }
 }
 
-});
+};
 
 Rico.includeLoaded('ricoLiveGrid.js');

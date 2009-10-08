@@ -1,9 +1,8 @@
-//-------------------- ricoAjaxEngine.js
-//
 // This file is provided for backward compatibility with Rico 1.1.
-// It is not used by any other module in Rico 2.0. Furthermore, it is 
+// It is not used by any other module in Rico 2.x. Furthermore, it is 
 // recommended that you call Prototype's AJAX functions directly
-// instead of using these functions.
+// instead of using these functions. It will likely be removed in a
+// future release.
 
 Rico.AjaxEngine = Class.create();
 

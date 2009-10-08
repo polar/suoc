@@ -101,6 +101,26 @@ div.ricoLG_messageDiv {
   padding:4px;
 }
 
+div.ricoLG_keywordDiv {
+  position:absolute;
+  z-index:200;
+  border:1px solid black;
+  background-color : #cedebd;
+  color:black;
+  text-align:center;
+  padding:4px;
+}
+
+div.ricoLG_keywordDiv p.keywordTitle {
+  font-weight: bold;
+}
+
+div.ricoLG_keywordDiv img {
+  border: 1px solid black;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
 p.ricoBookmark {
   margin-bottom: 3px;
   font-size: 10pt;

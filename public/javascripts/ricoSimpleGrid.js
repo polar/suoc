@@ -1,25 +1,33 @@
-/**
-  *  (c) 2005-2007 Richard Cowin (http://openrico.org)
-  *  (c) 2005-2007 Matt Brown (http://dowdybrown.com)
-  *
-  *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
-  *  file except in compliance with the License. You may obtain a copy of the License at
-  *   http://www.apache.org/licenses/LICENSE-2.0
-  **/
+/*
+ *  (c) 2005-2009 Richard Cowin (http://openrico.org)
+ *  (c) 2005-2009 Matt Brown (http://dowdybrown.com)
+ *
+ *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ *  file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the
+ *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ *  either express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
 
 if(typeof Rico=='undefined') throw("SimpleGrid requires the Rico JavaScript framework");
 if(typeof RicoUtil=='undefined') throw("SimpleGrid requires the RicoUtil Library");
 if(typeof RicoTranslate=='undefined') throw("SimpleGrid requires the RicoTranslate Library");
 
+
+Rico.SimpleGrid = Class.create(
+/** @lends Rico.SimpleGrid# */
+{
 /**
- * Create & manage an unbuffered grid.
- * Supports: frozen columns & headings, resizable columns
+ * @class Create & manage an unbuffered grid.
+ * Supports: frozen columns & headings, resizable columns.
+ * @extends Rico.GridCommon
+ * @constructs
  */
-Rico.SimpleGrid = Class.create();
-
-Rico.SimpleGrid.prototype = {
-
   initialize: function( tableId, options ) {
     Object.extend(this, new Rico.GridCommon);
     this.baseInit();
@@ -34,7 +42,8 @@ Rico.SimpleGrid.prototype = {
   },
 
   simpleGridInit: function() {
-    for (var i=0; i<2; i++) {
+    var i;
+    for (i=0; i<2; i++) {
       Rico.writeDebugMsg("simpleGridInit "+i);
       this.tabs[i]=$(this.tableId+'_tab'+i);
       if (!this.tabs[i]) return;
@@ -55,9 +64,10 @@ Rico.SimpleGrid.prototype = {
       return;
     }
     this.hdrHt=Math.max(RicoUtil.nan2zero(this.hdrTabs[0].offsetHeight),this.hdrTabs[1].offsetHeight);
-    for (var i=0; i<2; i++)
+    for (i=0; i<2; i++) {
       if (i==0) this.tabs[i].style.top=this.hdrHt+'px';
-    this.createColumnArray();
+    }
+    this.createColumnArray('SimpleGridColumn');
     this.pageSize=this.columns[0].dataColDiv.childNodes.length;
     this.sizeDivs();
     if (typeof(this.options.FilterLocation)=='number')
@@ -92,7 +102,7 @@ Rico.SimpleGrid.prototype = {
           field=RicoUtil.createFormField(divs[1],'input','text',name,name);
           var size=fmt.filterUI.match(/\d+/);
           field.maxLength=fmt.Length || 50;
-          field.size=size ? parseInt(size) : 10;
+          field.size=size ? parseInt(size,10) : 10;
           Event.observe(field,'keyup',col.filterKeypress.bindAsEventListener(col),false);
           break;
         case 's':
@@ -139,11 +149,12 @@ Rico.SimpleGrid.prototype = {
     }
     for (var r=0; r<this.pageSize; r++) {
       var showflag=true;
-      for (var j=0; j<fcols.length; j++)
+      for (var j=0; j<fcols.length; j++) {
         if (fcols[j].indexOf(r)==-1) {
           showflag=false;
           break;
         }
+      }
       if (showflag)
         this.showRow(r);
       else
@@ -291,7 +302,7 @@ Rico.SimpleGrid.prototype = {
     return elem;
   }
 
-};
+});
 
 if (Rico.Menu) {
 Object.extend(Rico.Menu.prototype, {
@@ -313,8 +324,8 @@ showSimpleSubMenu: function(a,submenu) {
   this.openSubMenu=submenu;
   this.openMenuAnchor=a;
   if (a.className=='ricoSubMenu') a.className='ricoSubMenuOpen';
-  var top=parseInt(this.div.style.top);
-  var left=parseInt(this.div.style.left);
+  var top=parseInt(this.div.style.top,10);
+  var left=parseInt(this.div.style.left,10);
   submenu.openPopup(left+a.offsetWidth,top+a.offsetTop);
   submenu.div.style.visibility ="visible";
 }
@@ -322,9 +333,17 @@ showSimpleSubMenu: function(a,submenu) {
 });
 }
 
-Object.extend(Rico.TableColumn.prototype, {
 
+Rico.SimpleGridColumn = Class.create(
+/** @lends Rico.SimpleGridColumn# */
+{
+/**
+ * @class Implements a SimpleGrid column
+ * @extends Rico.TableColumnBase
+ * @constructs
+ */
 initialize: function(grid,colIdx,hdrInfo,tabIdx) {
+  Object.extend(this, new Rico.TableColumnBase());
   this.baseInit(grid,colIdx,hdrInfo,tabIdx);
 },
 

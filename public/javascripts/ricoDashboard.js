@@ -1,3 +1,6 @@
+// This file is provided for backward compatibility with Rico 1.1.
+// It is not used by any other module in Rico 2.x. It will likely
+// be removed in a future release.
 
 Rico.Dashboard = Class.create();
 Rico.Dashboard.prototype = {

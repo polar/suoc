@@ -54,7 +54,7 @@ buildGridMenu: function(r,c) {
     if (column.filterType == Rico.TableColumn.USERFILTER) {
       this.filtermenu.addMenuItemId("gridmenuRemoveFilter", column.setUnfiltered.bind(column,false), true);
       if (column.filterOp=='LIKE')
-        this.filtermenu.addMenuItemId("gridmenuChgKeyword", column.setFilterKW.bind(column), true);
+        this.filtermenu.addMenuItemId("gridmenuChgKeyword", this.liveGrid.openKeyword.bind(this.liveGrid,c), true);
       if (column.filterOp=='NE' && !onBlankRow)
         this.filtermenu.addMenuItemId("gridmenuExcludeAlso", column.addFilterNE.bind(column), true);
     } else if (!onBlankRow) {
@@ -62,7 +62,7 @@ buildGridMenu: function(r,c) {
       this.filtermenu.addMenuItemId("gridmenuGreaterThan", column.setFilterGE.bind(column), column.userFilter!='');
       this.filtermenu.addMenuItemId("gridmenuLessThan", column.setFilterLE.bind(column), column.userFilter!='');
       if (column.isText)
-        this.filtermenu.addMenuItemId("gridmenuContains", column.setFilterKW.bind(column), true);
+        this.filtermenu.addMenuItemId("gridmenuContains", this.liveGrid.openKeyword.bind(this.liveGrid,c), true);
       this.filtermenu.addMenuItemId("gridmenuExclude", column.setFilterNE.bind(column), true);
     }
     if (this.liveGrid.filterCount() > 0) {
@@ -89,8 +89,9 @@ buildGridMenu: function(r,c) {
 
   // menu items for hide/unhide
   var hiddenCols=this.liveGrid.listInvisible();
-  for (var showableCnt=0,x=0; x<hiddenCols.length; x++)
+  for (var showableCnt=0,x=0; x<hiddenCols.length; x++) {
     if (hiddenCols[x].canHideShow()) showableCnt++;
+  }
   if (showableCnt > 0 || column.canHideShow()) {
     this.hideshowmenu.clearMenu();
     this.addSubMenuItem(RicoTranslate.getPhraseById('gridmenuHideShow'),this.hideshowmenu,false);

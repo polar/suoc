@@ -1,22 +1,24 @@
+/*
+ *  Copyright 2005 Sabre Airline Solutions
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ *  file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the
+ *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ *  either express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
+
+Rico.DragAndDrop = Class.create(
+/** @lends Rico.DragAndDrop# */
+{
 /**
-  *
-  *  Copyright 2005 Sabre Airline Solutions
-  *
-  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
-  *  file except in compliance with the License. You may obtain a copy of the License at
-  *
-  *         http://www.apache.org/licenses/LICENSE-2.0
-  *
-  *  Unless required by applicable law or agreed to in writing, software distributed under the
-  *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-  *  either express or implied. See the License for the specific language governing permissions
-  *  and limitations under the License.
-  **/
-//-------------------- ricoDragAndDrop.js
-Rico.DragAndDrop = Class.create();
-
-Rico.DragAndDrop.prototype = {
-
+ * @class Implements drag-n-drop manager. Used by {@link dndMgr}.
+ * @constructs
+ */
    initialize: function() {
       this.dropZones                = new Array();
       this.draggables               = new Array();
@@ -67,11 +69,8 @@ Rico.DragAndDrop.prototype = {
 
    setStartDragFromElement: function( e, mouseDownElement ) {
       this.origPos = RicoUtil.toDocumentPosition(mouseDownElement);
-      this.startx = e.screenX - this.origPos.x
-      this.starty = e.screenY - this.origPos.y
-      //this.startComponentX = e.layerX ? e.layerX : e.offsetX;
-      //this.startComponentY = e.layerY ? e.layerY : e.offsetY;
-      //this.adjustedForDraggableSize = false;
+      this.startx = e.screenX - this.origPos.x;
+      this.starty = e.screenY - this.origPos.y;
 
       this.interestedInMotionEvents = this.hasSelection();
       this._terminateEvent(e);
@@ -97,6 +96,7 @@ Rico.DragAndDrop.prototype = {
    },
 
    _mouseDownHandler: function(e) {
+      //Rico.writeDebugMsg("_mouseDownHandler");
       if ( arguments.length == 0 )
          e = event;
 
@@ -106,12 +106,12 @@ Rico.DragAndDrop.prototype = {
          return;
 
       var eventTarget      = e.target ? e.target : e.srcElement;
-      var draggableObject  = eventTarget.draggable;
+      var draggableObject  = eventTarget.ricoDraggable;
 
       var candidate = eventTarget;
       while (draggableObject == null && candidate.parentNode) {
          candidate = candidate.parentNode;
-         draggableObject = candidate.draggable;
+         draggableObject = candidate.ricoDraggable;
       }
    
       if ( draggableObject == null )
@@ -120,10 +120,10 @@ Rico.DragAndDrop.prototype = {
       this.updateSelection( draggableObject, e.ctrlKey );
 
       // clear the drop zones postion cache...
-      if ( this.hasSelection() )
+      if ( this.hasSelection() ) {
          for ( var i = 0 ; i < this.dropZones.length ; i++ )
             this.dropZones[i].clearPositionCache();
-
+      }
       this.setStartDragFromElement( e, draggableObject.getMouseDownHTMLElement() );
    },
 
@@ -177,28 +177,28 @@ Rico.DragAndDrop.prototype = {
    },
 
    _leftOffset: function(e) {
-	   return e.offsetX ? document.body.scrollLeft : 0
+	   return e.offsetX ? document.body.scrollLeft : 0;
 	},
 
    _topOffset: function(e) {
-	   return e.offsetY ? document.body.scrollTop:0
+	   return e.offsetY ? document.body.scrollTop : 0;
 	},
 
 		
    _updateDraggableLocation: function(e) {
       var dragObjectStyle = this.dragElement.style;
-      dragObjectStyle.left = (e.screenX + this._leftOffset(e) - this.startx) + "px"
+      dragObjectStyle.left = (e.screenX + this._leftOffset(e) - this.startx) + "px";
       dragObjectStyle.top  = (e.screenY + this._topOffset(e) - this.starty) + "px";
    },
 
    _updateDropZonesHover: function(e) {
-      var n = this.dropZones.length;
-      for ( var i = 0 ; i < n ; i++ ) {
+      var i,n = this.dropZones.length;
+      for ( i = 0 ; i < n ; i++ ) {
          if ( ! this._mousePointInDropZone( e, this.dropZones[i] ) )
             this.dropZones[i].hideHover();
       }
 
-      for ( var i = 0 ; i < n ; i++ ) {
+      for ( i = 0 ; i < n ; i++ ) {
          if ( this._mousePointInDropZone( e, this.dropZones[i] ) ) {
             if ( this.dropZones[i].canAccept(this.currentDragObjects) )
                this.dropZones[i].showHover();
@@ -214,8 +214,8 @@ Rico.DragAndDrop.prototype = {
    },
 
    _mouseUpHandler: function(e) {
-      if ( ! this.hasSelection() )
-         return;
+      //Rico.writeDebugMsg("_mouseUpHandler");
+      if ( ! this.hasSelection() ) return;
 
       var nsEvent = e.which != undefined;
       if ( (nsEvent && e.which != 1) || (!nsEvent && e.button != 1))
@@ -223,14 +223,9 @@ Rico.DragAndDrop.prototype = {
 
       this.interestedInMotionEvents = false;
 
-      if ( this.dragElement == null ) {
-         this._terminateEvent(e);
-         return;
-      }
-
       if ( this._placeDraggableInDropZone(e) )
          this._completeDropOperation(e);
-      else {
+      else if (this.dragElement != null) {
          this._terminateEvent(e);
          Rico.animate(new Rico.Effect.Position( this.dragElement, this.origPos.x, this.origPos.y),
                       {duration: 200,
@@ -312,9 +307,9 @@ Rico.DragAndDrop.prototype = {
 
    _addMouseDownHandler: function( aDraggable )
    {
-       htmlElement  = aDraggable.getMouseDownHTMLElement();
+      var htmlElement  = aDraggable.getMouseDownHTMLElement();
       if ( htmlElement  != null ) { 
-         htmlElement.draggable = aDraggable;
+         htmlElement.ricoDraggable = aDraggable;
          Event.observe(htmlElement , "mousedown", this._onmousedown.bindAsEventListener(this));
          Event.observe(htmlElement, "mousedown", this._mouseDown);
       }
@@ -339,20 +334,13 @@ Rico.DragAndDrop.prototype = {
    },
 
    _onmousedown: function () {
+     //Rico.writeDebugMsg("_onmousedown (attaching events)");
      Event.observe(document.body, "mousemove", this._mouseMove);
      Event.observe(document.body, "mouseup",  this._mouseUp);
    },
 
    _terminateEvent: function(e) {
-      if ( e.stopPropagation != undefined )
-         e.stopPropagation();
-      else if ( e.cancelBubble != undefined )
-         e.cancelBubble = true;
-
-      if ( e.preventDefault != undefined )
-         e.preventDefault();
-      else
-         e.returnValue = false;
+      Event.stop(e);
    },
 
 
@@ -369,17 +357,20 @@ Rico.DragAndDrop.prototype = {
 	         document.attachEvent( "onmousemove", this._mouseMoveHandler.bindAsEventListener(this) );
 	      }
 	   }
-	}
-
-	var dndMgr = new Rico.DragAndDrop();
-	dndMgr.initializeEventHandlers();
+	});
 
 
-//-------------------- ricoDraggable.js
-Rico.Draggable = Class.create();
+/** @namespace Instance of {@link Rico.DragAndDrop} that manages the interaction of draggables to drop zones */
+var dndMgr = new Rico.DragAndDrop();
 
-Rico.Draggable.prototype = {
 
+Rico.Draggable = Class.create(
+/** @lends Rico.Draggable# */
+{
+/**
+ * @class Implements behavior for a draggable element
+ * @constructs
+ */
    initialize: function( type, htmlElement ) {
       this.type          = type;
       this.htmlElement   = $(htmlElement);
@@ -389,7 +380,6 @@ Rico.Draggable.prototype = {
    /**
     *   Returns the HTML element that should have a mouse down event
     *   added to it in order to initiate a drag operation
-    *
     **/
    getMouseDownHTMLElement: function() {
       return this.htmlElement;
@@ -448,12 +438,18 @@ Rico.Draggable.prototype = {
       return this.type + ":" + this.htmlElement + ":";
    }
 
-}
+});
 
 
 Rico.LiveGridDraggable = Class.create();
-
+/** @lends Rico.LiveGridDraggable# */
 Rico.LiveGridDraggable.prototype = Object.extend(new Rico.Draggable(), {
+/**
+ * @class Enables draggable behavior for LiveGrid cells.
+ * Called by LiveGrid#appendBlankRow for columns where canDrag is true.
+ * @extends Rico.Draggable
+ * @constructs
+ */
   initialize: function( grid, rownum, colnum) {
     this.type        = 'RicoCell';
     this.htmlElement = grid.cell(rownum,colnum);
@@ -477,17 +473,19 @@ Rico.LiveGridDraggable.prototype = Object.extend(new Rico.Draggable(), {
     var div = document.createElement("div");
     div.className = 'LiveGridDraggable';
     div.style.width = (this.htmlElement.offsetWidth - 10) + "px";
-    new Insertion.Top( div, this.htmlElement.innerHTML );
+    Element.insert(div,this.htmlElement.innerHTML);
     return div;
   }
 });
 
 
-//-------------------- ricoDropzone.js
-Rico.Dropzone = Class.create();
-
-Rico.Dropzone.prototype = {
-
+Rico.Dropzone = Class.create(
+/** @lends Rico.Dropzone# */
+{
+/**
+ * @class Implements behavior for a drop zone
+ * @constructs
+ */
    initialize: function( htmlElement ) {
       this.htmlElement  = $(htmlElement);
       this.absoluteRect = null;
@@ -580,7 +578,7 @@ Rico.Dropzone.prototype = {
       if ( htmlElement == null )
          return;
 
-      n = draggableObjects.length;
+      var n = draggableObjects.length;
       for ( var i = 0 ; i < n ; i++ )
       {
          var theGUI = draggableObjects[i].getDroppedGUI();
@@ -594,9 +592,14 @@ Rico.Dropzone.prototype = {
          htmlElement.appendChild(theGUI);
       }
    }
-}
+});
 
-RicoUtil = Object.extend(RicoUtil, {
+RicoUtil = Object.extend(RicoUtil, 
+/** @lends RicoUtil# */
+{
+/**
+ * @deprecated Use Prototype's Element#getStyle instead
+ */
    getElementsComputedStyle: function ( htmlElement, cssProperty, mozillaEquivalentCSS) {
       if ( arguments.length == 2 )
          mozillaEquivalentCSS = cssProperty;
@@ -608,10 +611,16 @@ RicoUtil = Object.extend(RicoUtil, {
          return document.defaultView.getComputedStyle(el, null).getPropertyValue(mozillaEquivalentCSS);
    },
 
-   toViewportPosition: function(element) {
+ /**
+ * @deprecated Use Prototype's Element#viewportOffset instead
+ */
+  toViewportPosition: function(element) {
       return this._toAbsolute(element,true);
    },
 
+ /**
+ * @deprecated Use Prototype's Element#cumulativeOffset instead
+ */
    toDocumentPosition: function(element) {
       return this._toAbsolute(element,false);
    },
@@ -639,8 +648,8 @@ RicoUtil = Object.extend(RicoUtil, {
          var borderXOffset = 0;
          var borderYOffset = 0;
          if ( parent != element ) {
-            var borderXOffset = parseInt(this.getElementsComputedStyle(parent, "borderLeftWidth" ));
-            var borderYOffset = parseInt(this.getElementsComputedStyle(parent, "borderTopWidth" ));
+            borderXOffset = parseInt(this.getElementsComputedStyle(parent, "borderLeftWidth" ),10);
+            borderYOffset = parseInt(this.getElementsComputedStyle(parent, "borderTopWidth" ),10);
             borderXOffset = isNaN(borderXOffset) ? 0 : borderXOffset;
             borderYOffset = isNaN(borderYOffset) ? 0 : borderYOffset;
          }

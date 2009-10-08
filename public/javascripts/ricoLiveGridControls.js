@@ -1,11 +1,17 @@
-/**
-  *  (c) 2005-2008 Richard Cowin (http://openrico.org)
-  *  (c) 2005-2008 Matt Brown (http://dowdybrown.com)
-  *
-  *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
-  *  file except in compliance with the License. You may obtain a copy of the License at
-  *   http://www.apache.org/licenses/LICENSE-2.0
-  **/
+/*
+ *  (c) 2005-2009 Richard Cowin (http://openrico.org)
+ *  (c) 2005-2009 Matt Brown (http://dowdybrown.com)
+ *
+ *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ *  file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the
+ *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ *  either express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
 // -----------------------------------------------------
 //
@@ -16,13 +22,16 @@
 // -----------------------------------------------------
 
 
-// Display unique key column as: <checkbox> <key value>
-// and keep track of which keys the user selects
-// Key values should not contain <, >, or &
-Rico.TableColumn.checkboxKey = Class.create();
-
-Rico.TableColumn.checkboxKey.prototype = {
-
+Rico.TableColumn.checkboxKey = Class.create(
+/** @lends Rico.TableColumn.checkboxKey# */
+{
+/**
+ * @class Custom formatting for a LiveGrid column.
+ * Display unique key column as: &lt;checkbox&gt; &lt;key value&gt;
+ * and keep track of which keys the user selects
+ * Key values should not contain &lt;, &gt;, or &amp;
+ * @constructs
+ */
   initialize: function(showKey) {
     this._checkboxes=[];
     this._spans=[];
@@ -39,7 +48,7 @@ Rico.TableColumn.checkboxKey.prototype = {
 
   _onclick: function(e) {
     var elem=Event.element(e);
-    var windowRow=parseInt(elem.id.split(/_/).pop());
+    var windowRow=parseInt(elem.id.split(/_/).pop(),10);
     var v=this.getValue(windowRow);
     if (elem.checked)
       this._addChecked(v);
@@ -72,13 +81,16 @@ Rico.TableColumn.checkboxKey.prototype = {
   _remChecked: function(k){
     this._KeyHash.unset(k);
   }
-}
+});
 
-// display checkboxes for two-valued column (e.g. yes/no)
-Rico.TableColumn.checkbox = Class.create();
 
-Rico.TableColumn.checkbox.prototype = {
-
+Rico.TableColumn.checkbox = Class.create(
+/** @lends Rico.TableColumn.checkbox# */
+{
+/**
+ * @class display checkboxes for two-valued column (e.g. yes/no)
+ * @constructs
+ */
   initialize: function(checkedValue, uncheckedValue, defaultValue, readOnly) {
     this._checkedValue=checkedValue;
     this._uncheckedValue=uncheckedValue;
@@ -98,7 +110,7 @@ Rico.TableColumn.checkbox.prototype = {
 
   _onclick: function(e) {
     var elem=Event.element(e);
-    var windowRow=parseInt(elem.id.split(/_/).pop());
+    var windowRow=parseInt(elem.id.split(/_/).pop(),10);
     var newval=elem.checked ? this._checkedValue : this._uncheckedValue;
     this.setValue(windowRow,newval);
   },
@@ -115,13 +127,16 @@ Rico.TableColumn.checkbox.prototype = {
     box.checked=(v==this._checkedValue);
   }
 
-}
+});
 
-// display value in a text box
-Rico.TableColumn.textbox = Class.create();
 
-Rico.TableColumn.textbox.prototype = {
-
+Rico.TableColumn.textbox = Class.create(
+/** @lends Rico.TableColumn.textbox# */
+{
+/**
+ * @class display value in a text box
+ * @constructs
+ */
   initialize: function(boxSize, boxMaxLen, readOnly) {
     this._boxSize=boxSize;
     this._boxMaxLen=boxMaxLen;
@@ -133,7 +148,7 @@ Rico.TableColumn.textbox.prototype = {
     var box=RicoUtil.createFormField(gridCell,'input','text',this.liveGrid.tableId+'_txtbox_'+this.index+'_'+windowRow);
     box.size=this._boxSize;
     box.maxLength=this._boxMaxLen;
-    this._textboxes[windowRow]=box
+    this._textboxes[windowRow]=box;
     this._clear(gridCell,windowRow);
     if (this._readOnly)
       box.disabled=true;
@@ -143,7 +158,7 @@ Rico.TableColumn.textbox.prototype = {
 
   _onchange: function(e) {
     var elem=Event.element(e);
-    var windowRow=parseInt(elem.id.split(/_/).pop());
+    var windowRow=parseInt(elem.id.split(/_/).pop(),10);
     this.setValue(windowRow,elem.value);
   },
 
@@ -159,15 +174,20 @@ Rico.TableColumn.textbox.prototype = {
     box.value=v;
   }
 
-}
+});
 
-// highlight a grid cell when a particular value is present in the specified column
-Rico.TableColumn.HighlightCell = Class.create();
 
-Rico.TableColumn.HighlightCell.prototype = {
-  initialize: function(chkcol,chkval,highlightColor,highlightBackground) {
+Rico.TableColumn.HighlightCell = Class.create(
+/** @lends Rico.TableColumn.HighlightCell# */
+{
+/**
+ * @class highlight a grid cell when a particular value is present in the specified column
+ * @constructs
+ */
+  initialize: function(chkcol,chkval,highlightColor,highlightBackground,chkop) {
     this._chkcol=chkcol;
     this._chkval=chkval;
+    this._chkop=chkop;
     this._highlightColor=highlightColor;
     this._highlightBackground=highlightBackground;
   },
@@ -180,18 +200,41 @@ Rico.TableColumn.HighlightCell.prototype = {
 
   _display: function(v,gridCell,windowRow) {
     var gridval=this.liveGrid.buffer.getWindowValue(windowRow,this._chkcol);
-    var match=(gridval==this._chkval);
+    var match;
+    switch(this._chkop){
+        case '!=':
+          match=(gridval!=this._chkval);
+          break;
+        case '>':
+          match=(gridval>this._chkval);
+          break;
+        case '<':
+          match=(gridval<this._chkval);
+          break;
+        case '>=':
+          match=(gridval>=this._chkval);
+          break;
+        case '<=':
+          match=(gridval<=this._chkval);
+          break;
+        default:
+          match=(gridval==this._chkval);
+          break;
+    }
     gridCell.style.color=match ? this._highlightColor : '';
     gridCell.style.backgroundColor=match ? this._highlightBackground : '';
     gridCell.innerHTML=this._format(v);
   }
-}
+});
 
-// database value contains a css color name/value
-Rico.TableColumn.bgColor = Class.create();
 
-Rico.TableColumn.bgColor.prototype = {
-
+Rico.TableColumn.bgColor = Class.create(
+/** @lends Rico.TableColumn.bgColor# */
+{
+/**
+ * @class database value contains a css color name/value
+ * @constructs
+ */
   initialize: function() {
   },
 
@@ -203,13 +246,16 @@ Rico.TableColumn.bgColor.prototype = {
     gridCell.style.backgroundColor=v;
   }
 
-}
+});
 
-// database value contains a url to another page
-Rico.TableColumn.link = Class.create();
 
-Rico.TableColumn.link.prototype = {
-
+Rico.TableColumn.link = Class.create(
+/** @lends Rico.TableColumn.link# */
+{
+/**
+ * @class database value contains a url to another page
+ * @constructs
+ */
   initialize: function(href,target) {
     this._href=href;
     this._target=target;
@@ -232,19 +278,22 @@ Rico.TableColumn.link.prototype = {
     var getWindowValue=this.liveGrid.buffer.getWindowValue.bind(this.liveGrid.buffer);
     this._anchors[windowRow].href=this._href.replace(/\{\d+\}/g,
       function ($1) {
-        var colIdx=parseInt($1.substr(1));
+        var colIdx=parseInt($1.substr(1),10);
         return getWindowValue(windowRow,colIdx);
       }
     );
   }
 
-}
+});
 
-// database value contains a url to an image
-Rico.TableColumn.image = Class.create();
 
-Rico.TableColumn.image.prototype = {
-
+Rico.TableColumn.image = Class.create(
+/** @lends Rico.TableColumn.image# */
+{
+/**
+ * @class database value contains a url to an image
+ * @constructs
+ */
   initialize: function() {
     this._img=[];
   },
@@ -266,13 +315,16 @@ Rico.TableColumn.image.prototype = {
     img.style.display='';
   }
 
-}
+});
 
-// map a database value to a display value
-Rico.TableColumn.lookup = Class.create();
 
-Rico.TableColumn.lookup.prototype = {
-
+Rico.TableColumn.lookup = Class.create(
+/** @lends Rico.TableColumn.lookup# */
+{
+/**
+ * @class map a database value to a display value
+ * @constructs
+ */
   initialize: function(map, defaultCode, defaultDesc) {
     this._map=map;
     this._defaultCode=defaultCode || '';
@@ -311,14 +363,17 @@ Rico.TableColumn.lookup.prototype = {
     this._descriptions[windowRow].innerHTML=this._getdesc(v);
   }
 
-}
+});
 
 
-// Fix issues with multiline content in IE
-Rico.TableColumn.MultiLine = Class.create();
 
-Rico.TableColumn.MultiLine.prototype = {
-
+Rico.TableColumn.MultiLine = Class.create(
+/** @lends Rico.TableColumn.MultiLine# */
+{
+/**
+ * @class Fix issues with multiline content in IE
+ * @constructs
+ */
   initialize: function() {
   },
 
@@ -332,6 +387,6 @@ Rico.TableColumn.MultiLine.prototype = {
       gridCell.appendChild(newdiv);
   }
 
-}
+});
 
 Rico.includeLoaded('ricoLiveGridControls.js');

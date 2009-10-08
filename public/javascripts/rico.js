@@ -16,8 +16,11 @@
 
 // This module does NOT depend on prototype.js
 
+/**
+ * @namespace Main Rico object
+ */
 var Rico = {
-  Version: '2.0',
+  Version: '2.1',
   loadRequested: 1,
   loadComplete: 2,
   init : function() {
@@ -30,18 +33,19 @@ var Rico = {
     this.loadedFiles={};
     this.windowIsLoaded=false;
     this.onLoadCallbacks=[];
+    var filename,ricoFilename;
     for (var i=0; i<elements.length; i++) {
       if (!elements[i].src) continue;
       var src = elements[i].src;
       var slashIdx = src.lastIndexOf('/');
       var path = src.substring(0, slashIdx+1);
-      var filename = src.substring(slashIdx+1);
-      this.loadedFiles[filename]=this.loadComplete;
+      filename = src.substring(slashIdx+1);
       var parmPos  = filename.indexOf('?');
-      if (parmPos > 0)
-        filename = filename.substring(0, parmPos)
-      if (filename == 'rico.js') {
-        var isRailsPath = (path.indexOf("/javascripts") > 0)
+      if (parmPos > 0) filename = filename.substring(0, parmPos);
+      this.loadedFiles[filename]=this.loadComplete;
+      if (filename == 'rico.js' || filename == 'min.rico.js') {
+        ricoFilename=filename;
+        var isRailsPath = (path.indexOf("/javascripts") >= 0);
         if (isRailsPath){
           this.jsDir = "/javascripts/";
           this.cssDir = "/stylesheets/";
@@ -57,15 +61,17 @@ var Rico = {
         }
       }
     }
+    if (!ricoFilename) throw('unable to locate rico.js or min.rico.js script element');
     if (typeof Prototype=='undefined') {
       if (typeof(google)=='object' && google.load)
         google.load('prototype', '1.6');
       else
         this.include('prototype.js');
     }
-    this.include('ricoCommon.js');
-    this.languageInclude('en');   // in case a phrase is missing from a translation
-    this.acceptLanguage(navigator.language || navigator.userLanguage);
+    if (ricoFilename == 'rico.js') {
+      this.include('ricoCommon.js');
+      this.languageInclude('en');   // in case a phrase is missing from a translation
+    }
     var onloadAction=function() { Rico.windowLoaded(); };
     if (window.addEventListener)
       window.addEventListener('load', onloadAction, false);
@@ -130,11 +136,13 @@ var Rico = {
       var name=arguments[a];
       var dep=this.moduleDependencies[name];
       if (dep) {
-        for (var i=0; i<dep.length; i++)
-          if (dep[i].substring(0,1)=='+')
+        for (var i=0; i<dep.length; i++) {
+          if (dep[i].substring(0,1)=='+') {
             this.loadModule(dep[i].slice(1));
-          else
+          } else {
             this.include(dep[i]);
+          }
+        }
       } else {
         this.include(name);
       }
@@ -153,7 +161,7 @@ var Rico = {
       case 'css':
         var el = document.createElement('link');
         el.type = 'text/css';
-        el.rel = 'stylesheet'
+        el.rel = 'stylesheet';
         el.href = this.cssDir+filename;
         this.loadedFiles[filename]=this.loadComplete;
         document.getElementsByTagName('head')[0].appendChild(el);
@@ -226,9 +234,14 @@ var Rico = {
     if (this.debugArea) {
       if (resetFlag) this.debugArea.value='';
       this.debugArea.value+=this.timeStamp()+msg+"\n";
+    } else if (window.console) {
+      if (window.console.firebug)
+        window.console.log(this.timeStamp(),msg);
+      else
+        window.console.log(this.timeStamp()+msg);
+    } else if (window.opera) {
+      window.opera.postError(this.timeStamp()+msg);
     }
-    else if (window.console) window.console.log(this.timeStamp()+msg);
-    else if (window.opera) window.opera.postError(this.timeStamp()+msg);
   }
 
 }

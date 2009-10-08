@@ -35,22 +35,23 @@ createCells: function() {
   s+="<tr class='' id='"+this.tableId+"_tab0h_main'><td><div class='ricoLG_col'><div class='ricoLG_cell'> </div></div></td></tr></thead></table>";
   s+="<table id='"+this.tableId+"_tab0' class='ricoLG_table ricoLG_bottom ricoLG_left' cellspacing='0' cellpadding='0'>";
   s+="<tr><td><div class='ricoLG_col'>";
-  for (var i=1; i<=this.options.numRows; i++)
+  var i,r,c;
+  for (i=1; i<=this.options.numRows; i++)
     s+="<div class='ricoLG_cell'>"+i+"</div>";
   s+="</div></td></tr></table>";
   this.frozenTabs.innerHTML=s;
 
   s="<table id='"+this.tableId+"_tab1h' class='ricoLG_table ricoLG_top ricoLG_right' cellspacing='0' cellpadding='0'>";
   s+="<thead><tr class='' id='"+this.tableId+"_tab1h_main'>";
-  for (var i=0; i<this.options.numColumns; i++)
+  for (i=0; i<this.options.numColumns; i++)
     s+="<td><div class='ricoLG_col'><div class='ricoLG_cell'>"+String.fromCharCode(65+i)+"</div></div></td>";
   s+="</tr></thead></table>";
   this.innerDiv.innerHTML=s;
 
   s="<table id='"+this.tableId+"_tab1' class='ricoLG_table ricoLG_bottom ricoLG_right' cellspacing='0' cellpadding='0'><tr>";
-  for (var c=1; c<=this.options.numColumns; c++) {
+  for (c=1; c<=this.options.numColumns; c++) {
     s+="<td><div class='ricoLG_col'>";
-    for (var r=0; r<this.options.numRows; r++)
+    for (r=0; r<this.options.numRows; r++)
       s+="<div id='"+this.tableId+"_cell_"+r+"_"+c+"' class='ricoLG_cell'></div>";
     s+="</div></td>";
   }
@@ -60,24 +61,25 @@ createCells: function() {
 
 initSheet: function() {
   this.highlightDiv=[];
-  for (var i=0; i<4; i++) {
+  var i,r,c,col,cell;
+  for (i=0; i<4; i++) {
     this.highlightDiv[i] = this.createDiv("highlight",this.scrollDiv);
     this.highlightDiv[i].style.display="none";
     this.highlightDiv[i].id+=i;
     this.highlightDiv[i].style[i % 2==0 ? 'height' : 'width']="0px";
   }
-  for (var c=1; c<this.columns.length; c++) {
-    var col=this.columns[c];
+  for (c=1; c<this.columns.length; c++) {
+    col=this.columns[c];
     Event.observe(col.hdrCellDiv,'click',this.selectCol.bindAsEventListener(this,c),false);
-    for (var r=0; r<col.numRows(); r++) {
-      var cell=col.cell(r);
+    for (r=0; r<col.numRows(); r++) {
+      cell=col.cell(r);
       cell.RicoRow=r+1;
       cell.RicoCol=c;
       cell.RicoValue=null;
     }
   }
   var numrows=this.columns[0].numRows();
-  for (var r=0; r<numrows; r++)
+  for (r=0; r<numrows; r++)
     Event.observe(this.cell(r,0),'click',this.selectRow.bindAsEventListener(this,r),false);
   Event.observe(this.columns[0].hdrCellDiv,'click',this.selectAll.bindAsEventListener(this),false);
   if (this.menu) {
@@ -156,8 +158,8 @@ disableEvent: function(e) {
 cellIndex: function(cell) {
   var a=cell.id.split(/_/);
   var l=a.length;
-  var r=parseInt(a[l-2]);
-  var c=parseInt(a[l-1]);
+  var r=parseInt(a[l-2],10);
+  var c=parseInt(a[l-1],10);
   return {row:r, column:c, tabIdx:this.columns[c].tabIdx, cell:cell};
 },
 
@@ -321,9 +323,9 @@ moveSelection: function(dr,dc,adjFlag,e) {
 formatCell: function(cell) {
   // TO DO: add currency/date formatting here
   var v=cell.RicoValue;
-  if (v==null)
+  if (v==null) {
     v='';
-  else if (typeof(v)=='number')
+  } else if (typeof(v)=='number') {
     if (isNaN(v)) {
       v = '#VALUE';
     } else {
@@ -333,16 +335,18 @@ formatCell: function(cell) {
           break;
         case 'string':
           // assume v represents a date
-          d=new Date((v-25569)*1000*86400);
+          var d=new Date((v-25569)*1000*86400);
           d.setTime(d.getTime()+d.getTimezoneOffset()*60*1000);
           v=d.formatDate(cell.RicoFormat);
           break;
         default:
           v=v.formatNumber(cell.RicoFormat);
+          break;
       }
     }
-  else if (typeof v!='string')
+  } else if (typeof v!='string') {
     v=v.toString();
+  }
   v=v.replace(/^(\s*)/, '');
   cell.style.paddingLeft=(RegExp.$1.length/2)+'em';
   cell.innerHTML = v;
@@ -415,7 +419,7 @@ closeInputArea: function(dr,dc,e) {
   var d = new Date(newVal);
   if (!this.options.noFormulas && newVal.charAt(0) == '=') {
     // parse formula
-    cell.RicoFormula = new Rico.Formula(grid,cell);
+    cell.RicoFormula = new Rico.Formula(this,cell);
     cell.RicoFormula.parse(newVal);
     cell.RicoValue = cell.RicoFormula.eval();
     this.updateDependencies(cell,'add');
@@ -595,10 +599,14 @@ handleCtrlKey: function(e) {
       break;
 
     // home
-    case 36: this.selectCellRC(0,1); Event.stop(e); break;
+    case 36:
+      this.selectCellRC(0,1);
+      Event.stop(e);
+      break;
 
     default:
       window.status=e.keyCode;
+      break;
   }
 },
 
@@ -730,8 +738,9 @@ showHelp: function(e) {
     msg+="<li>Formulas may refer to cells using 'A1' notation (and 'A1:B2' for ranges).";
     msg+="<li>The following functions are supported in formulas:";
     var funclist=[];
-    for (var funcname in Rico.Formula.prototype)
+    for (var funcname in Rico.Formula.prototype) {
       if (funcname.substring(0,5)=='eval_') funclist.push(funcname.substring(5));
+    }
     funclist.sort();
     msg+="<br>"+funclist.join(', ');
     msg+="</ul>";
@@ -749,7 +758,7 @@ showHelp: function(e) {
 },
 
 createFormatNumber: function() {
-  div = this.createDiv("fmtnum",this.outerDiv);
+  var div = this.createDiv("fmtnum",this.outerDiv);
   div.innerHTML="<table border='0'>"+
   "<tr><td title='Number of places to the right of the decimal point'>Decimal Places</td>"+
   "<td><select id='decPlaces'>"+
@@ -835,8 +844,8 @@ setNumberFormat: function() {
   var newFormat={type:'number'};
   selects.each(function(e) { newFormat[e.id]=$F(e.id); });
   inputs.each(function(e) { newFormat[e.id]=$F(e.id); });
-  if (newFormat.multiplier.match(/^\d+$/)) newFormat.multiplier=parseInt(newFormat.multiplier);
-  if (newFormat.decPlaces.match(/^\d+$/)) newFormat.decPlaces=parseInt(newFormat.decPlaces);
+  if (newFormat.multiplier.match(/^\d+$/)) newFormat.multiplier=parseInt(newFormat.multiplier,10);
+  if (newFormat.decPlaces.match(/^\d+$/)) newFormat.decPlaces=parseInt(newFormat.decPlaces,10);
   this.formatSelection(newFormat);
   this.fmtNumberObj.closePopup();
 },
@@ -863,7 +872,7 @@ checkKey: function(e) {
      e.cancelBubble = true;
 }
 
-}
+};
 
 
 Rico.Formula = Class.create();
@@ -974,7 +983,7 @@ parseCellRef: function(refString) {
     if (!abscol) c-=this.cell.RicoCol;
   }
   if (RegExp.$4) {
-    r=parseInt(RegExp.$4);
+    r=parseInt(RegExp.$4,10);
     if (!absrow) r-=this.cell.RicoRow;
   }
   //alert('parseCellRef: '+refString+"\n"+'r='+r+' c='+c+' absrow='+absrow+' abscol='+abscol);
@@ -1055,16 +1064,18 @@ getRanges: function() {
 eval_sum: function() {
   var result=0;
   for (var i=0; i<arguments.length; i++) {
-    arg=arguments[i];
+    var arg=arguments[i];
     if (arg==null) continue;
     switch (typeof arg) {
       case 'number':
         result+=arg;
         break;
       case 'object':
-        for (var r=0; r<arg.length; r++)
-          for (var c=0; c<arg[r].length; c++)
+        for (var r=0; r<arg.length; r++) {
+          for (var c=0; c<arg[r].length; c++) {
             if (typeof arg[r][c]=='number') result+=arg[r][c];
+          }
+        }
         break;
     }
   }
@@ -1075,13 +1086,15 @@ eval_sum: function() {
 eval_count: function() {
   var result=0;
   for (var i=0; i<arguments.length; i++) {
-    arg=arguments[i];
+    var arg=arguments[i];
     if (arg==null) continue;
     switch (typeof arg) {
       case 'object':
-        for (var r=0; r<arg.length; r++)
-          for (var c=0; c<arg[r].length; c++)
+        for (var r=0; r<arg.length; r++) {
+          for (var c=0; c<arg[r].length; c++) {
             if (arg[r][c] || typeof arg[r][c]=='number') result++;
+          }
+        }
         break;
       default:
         if (arg || typeof arg=='number') result++;
@@ -1180,21 +1193,22 @@ eval_or: function() {
 
 
 or_and: function() {
-  var result;
+  var i,r,c,v,arg,result;
   var func=arguments[0];
-  for (var i=1; i<arguments.length; i++) {
+  for (i=1; i<arguments.length; i++) {
     arg=arguments[i];
     if (arg==null) continue;
     switch (typeof arg) {
       case 'object':
-        for (var r=0; r<arg.length; r++)
-          for (var c=0; c<arg[r].length; c++) {
-            var v=this.argBool(arg[r][c])
+        for (r=0; r<arg.length; r++) {
+          for (c=0; c<arg[r].length; c++) {
+            v=this.argBool(arg[r][c]);
             if (v!=null) result=(typeof result=='undefined') ? v : func(result,v);
           }
+        }
         break;
       default:
-        var v=this.argBool(arg)
+        v=this.argBool(arg);
         if (v!=null) result=(typeof result=='undefined') ? v : func(result,v);
         break;
     }
@@ -1307,7 +1321,7 @@ eval: function() {
   this.lastEval=evalstr;
   //window.status=evalstr;
   try {
-    var result=eval(evalstr)
+    var result=eval(evalstr);
     return result;
   } catch(e) { alert(e.message); return '#ERROR'; }
 },
@@ -1341,6 +1355,7 @@ toEditString: function() {
         break;
       default:
         s+=token.value;
+        break;
     }
   }
   return s;
@@ -1712,17 +1727,18 @@ parse: function(formula) {
     }
 
     if ((token.type == Rico.Formula.TOK_TYPE_OPERAND) && (token.subtype.length == 0)) {
-      if (isNaN(parseFloat(token.value)))
-        if ((token.value == 'TRUE') || (token.value == 'FALSE'))
+      if (isNaN(parseFloat(token.value))) {
+        if ((token.value == 'TRUE') || (token.value == 'FALSE')) {
           token.subtype = Rico.Formula.TOK_SUBTYPE_LOGICAL;
-        else {
+        } else {
           token.subtype = Rico.Formula.TOK_SUBTYPE_RANGE;
           var a=token.value.split(':');
           token.rangeStart=this.parseCellRef(a[0]);
           token.rangeEnd=a.length>1 ? this.parseCellRef(a[1]) : token.rangeStart;
         }
-      else
+      } else {
         token.subtype = Rico.Formula.TOK_SUBTYPE_NUMBER;
+      }
       continue;
     }
 
@@ -1746,7 +1762,7 @@ parse: function(formula) {
   }
 }
 
-}
+};
 
 
 Rico.Formula.f_token = Class.create();
@@ -1756,7 +1772,7 @@ Rico.Formula.f_token.prototype = {
     this.type = type;
     this.subtype = subtype;
   }
-}
+};
 
 
 Rico.Formula.f_tokens = Class.create();
@@ -1804,7 +1820,7 @@ Rico.Formula.f_tokens.prototype = {
   previous: function() {
     if (this.index < 1) return null; return (this.items[this.index - 1]);
   }
-}
+};
 
 
 Rico.Formula.f_tokenStack = Class.create();
@@ -1837,7 +1853,7 @@ Rico.Formula.f_tokenStack.prototype = {
   subtype: function() {
     return ((this.token()) ? this.token().subtype : "");
   }
-}
+};
 
 
 Rico.Formula.f_dependencies = Class.create();
@@ -1861,7 +1877,7 @@ Rico.Formula.f_dependencies.prototype = {
   clear: function() {
     this.items.clear();
   }
-}
+};
 
 
 Object.extend(Rico.Menu.prototype, {

@@ -1,7 +1,25 @@
-Rico.Menu = Class.create();
+/*
+ *  (c) 2005-2009 Matt Brown (http://dowdybrown.com)
+ *
+ *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ *  file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the
+ *  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ *  either express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
-Rico.Menu.prototype = {
-
+Rico.Menu = Class.create(
+/** @lends Rico.Menu# */
+{
+/**
+ * @class Implements popup menus and submenus
+ * @extends Rico.Popup
+ * @constructs
+ */
   initialize: function(options) {
     Object.extend(this, new Rico.Popup());
     Object.extend(this.options, {
@@ -27,7 +45,7 @@ Rico.Menu.prototype = {
     this.div.style.width=this.options.width;
     if (!parentNode) parentNode = document.getElementsByTagName("body")[0];
     parentNode.appendChild(this.div);
-    this.width=this.div.offsetWidth
+    this.width=this.div.offsetWidth;
     this.setDiv(this.div,this.cancelmenu.bindAsEventListener(this));
     this.direction=Element.getStyle(this.div,'direction') || 'ltr';
     this.direction=this.direction.toLowerCase();  // ltr or rtl
@@ -71,7 +89,7 @@ Rico.Menu.prototype = {
   },
 
   addMenuHeading: function(hdg) {
-    var el=document.createElement('div')
+    var el=document.createElement('div');
     el.innerHTML=hdg;
     el.className='ricoMenuHeading';
     this.div.appendChild(el);
@@ -144,7 +162,7 @@ Rico.Menu.prototype = {
         case 'string'  : 
           a.href = action; 
           if (target) a.target = target; 
-          break
+          break;
       }
       a.className = 'enabled';
       if (this.defaultAction==null) this.defaultAction=action;
@@ -199,6 +217,6 @@ Rico.Menu.prototype = {
     this.closePopup();
   }
 
-};
+});
 
 Rico.includeLoaded('ricoMenu.js');

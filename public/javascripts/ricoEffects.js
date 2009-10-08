@@ -1,28 +1,36 @@
- /**
-   *  (c) 2005-2007 Richard Cowin (http://openrico.org)
-   *
-   *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
-   *  file except in compliance with the License. You may obtain a copy of the License at
-   *   http://www.apache.org/licenses/LICENSE-2.0
-   **/
+ /*
+  *  (c) 2005-2007 Richard Cowin (http://openrico.org)
+  *
+  *  Rico is licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+  *  file except in compliance with the License. You may obtain a copy of the License at
+  *   http://www.apache.org/licenses/LICENSE-2.0
+  */
 
 Rico.animate = function(effect){
   new Rico.Effect.Animator().play(effect, arguments[1]);
-}
+};
 
-Rico.Effect = {}
+/** @namespace */
+Rico.Effect = {};
 Rico.Effect.easeIn = function(step){
-  return Math.sqrt(step)
-}
+  return Math.sqrt(step);
+};
 Rico.Effect.easeOut = function(step){
-  return step*step
-}
-Rico.Stepping = {}
+  return step*step;
+};
+
+/** @namespace */
+Rico.Stepping = {};
 Rico.Stepping.easeIn = Rico.Effect.easeIn;
 Rico.Stepping.easeOut = Rico.Effect.easeOut;
 
-Rico.Effect.Animator = Class.create();
-Rico.Effect.Animator.prototype = {
+Rico.Effect.Animator = Class.create(
+/** @lends Rico.Effect.Animator# */
+{
+/**
+ * @class Class to animate effects.
+ * @constructs
+ */
   initialize : function(effect) {
     this.animateMethod = this.animate.bind(this);
     this.options = arguments[1] || {};
@@ -41,19 +49,20 @@ Rico.Effect.Animator.prototype = {
       steps: 10,
       duration: 200,
       rate: function(steps){ return steps;}
-    }, options|| {});
+    }, options || {});
   },
   play: function(effect) {
-    this.setOptions(arguments[1])
-    if (effect)
-      if (effect.step)
+    this.setOptions(arguments[1]);
+    if (effect) {
+      if (effect.step) {
         this.reset(effect, arguments[1]);
-      else{
+      } else {
         $H(effect).keys().each((function(e){
           var effectClass = {fadeOut:Rico.Effect.FadeOut}[e];
           this.reset(new effectClass(effect[e]));
-        }).bind(this))
+        }).bind(this));
       }
+    }
     this.animate();
   },
   stop: function() {
@@ -90,30 +99,45 @@ Rico.Effect.Animator.prototype = {
   isPlaying: function(){
     return this.stepsLeft != 0 && !this.interupt;
   }
-}
+});
 
-Rico.Effect.Group = Class.create();
-Rico.Effect.Group.prototype = {
+Rico.Effect.Group = Class.create(
+/** @lends Rico.Effect.Group# */
+{
+/**
+ * @class Class to assist in applying an effect to a group of objects.
+ * @constructs
+ */
   initialize: function(effects){
     this.effects = effects;
   },
   step: function(stepsToGo){
-    this.effects.each(function(e){e.step(stepsToGo)});
+    this.effects.each(function(e){e.step(stepsToGo);});
   },
   finish: function(){
-    this.effects.each(function(e){if (e.finish) e.finish()});
+    this.effects.each(function(e){if (e.finish) e.finish();});
   }
-}
+});
 
-Rico.Effect.SizeAndPosition = Class.create();
-Rico.Effect.SizeAndPosition.prototype = {
+Rico.Effect.SizeAndPosition = Class.create(
+/** @lends Rico.Effect.SizeAndPosition# */
+{
+/**
+ * @class Animate size and position
+ * @constructs
+ */
   initialize: function(element, x, y, w, h) {
     Object.extend(this, new Rico.Effect.SizeAndPositionFade(element, x, y, w, h));
   }
-}
+});
 
-Rico.Effect.SizeAndPositionFade = Class.create();
-Rico.Effect.SizeAndPositionFade.prototype = {
+Rico.Effect.SizeAndPositionFade = Class.create(
+/** @lends Rico.Effect.SizeAndPositionFade# */
+{
+/**
+ * @class
+ * @constructs
+ */
   initialize: function(element, x, y, w, h, value) {
     this.element = $(element);
     this.x = typeof(x)=='number' ? x : this.element.offsetLeft;
@@ -146,10 +170,15 @@ Rico.Effect.SizeAndPositionFade.prototype = {
     style.width = width + "px";
     style.height = height + "px";
   }
-}
+});
 
-Rico.AccordionEffect = Class.create();
-Rico.AccordionEffect.prototype = {
+Rico.AccordionEffect = Class.create(
+/** @lends Rico.Effect.AccordionEffect# */
+{
+/**
+ * @class
+ * @constructs
+ */
   initialize: function(toClose, toOpen, height) {
     this.toClose   = toClose;
     this.toOpen    = toOpen;
@@ -161,24 +190,29 @@ Rico.AccordionEffect.prototype = {
     this.endHeight = height;
   },
   step: function(framesLeft) {
-    var cHeight = Math.max(1,this.toClose.offsetHeight - parseInt((parseInt(this.toClose.offsetHeight))/framesLeft));
+    var cHeight = Math.max(1,this.toClose.offsetHeight - parseInt((parseInt(this.toClose.offsetHeight,10))/framesLeft,10));
     var closeHeight = cHeight + "px";
-    var openHeight = (this.endHeight - cHeight) + "px"
+    var openHeight = (this.endHeight - cHeight) + "px";
     this.toClose.style.height = closeHeight;
     this.toOpen.style.height = openHeight;
   },
   finish: function(){
-    Element.hide(this.toClose)
+    Element.hide(this.toClose);
     this.toOpen.style.height = this.endHeight + "px";
     this.toClose.style.height = "0px";
     Element.undoClipping(this.toOpen);
     Element.undoClipping(this.toClose);
     Rico.Controls.enableNativeControls(this.toOpen);
   }
-};
+});
 
-Rico.Effect.SizeFromBottom = Class.create()
-Rico.Effect.SizeFromBottom.prototype = {
+Rico.Effect.SizeFromBottom = Class.create(
+/** @lends Rico.Effect.SizeFromBottom# */
+{
+/**
+ * @class
+ * @constructs
+ */
   initialize: function(element, y, h) {
     this.element = $(element);
     this.y = typeof(y)=='number' ? y : this.element.offsetTop;
@@ -186,32 +220,42 @@ Rico.Effect.SizeFromBottom.prototype = {
     this.options  = arguments[3] || {};
   },
   step: function(framesToGo) {
-    var top = this.element.offsetTop + ((this.y - this.element.offsetTop)/framesToGo) + "px"
-    var height = this.element.offsetHeight + ((this.h - this.element.offsetHeight)/framesToGo) + "px"
+    var top = this.element.offsetTop + ((this.y - this.element.offsetTop)/framesToGo) + "px";
+    var height = this.element.offsetHeight + ((this.h - this.element.offsetHeight)/framesToGo) + "px";
     var style = this.element.style;
     style.height = height;
     style.top = top;
   }
-}
+});
 
-Rico.Effect.Position = Class.create();
-Rico.Effect.Position.prototype = {
+Rico.Effect.Position = Class.create(
+/** @lends Rico.Effect.Position# */
+{
+/**
+ * @class
+ * @constructs
+ */
   initialize: function(element, x, y) {
     this.element = $(element);
     this.x = typeof(x)=='number' ? x : this.element.offsetLeft;
     this.destTop = typeof(y)=='number' ? y : this.element.offsetTop;
   },
   step: function(stepsToGo) {
-    var left = this.element.offsetLeft + ((this.x - this.element.offsetLeft)/stepsToGo) + "px"
-    var top = this.element.offsetTop + ((this.destTop - this.element.offsetTop)/stepsToGo) + "px"
+    var left = this.element.offsetLeft + ((this.x - this.element.offsetLeft)/stepsToGo) + "px";
+    var top = this.element.offsetTop + ((this.destTop - this.element.offsetTop)/stepsToGo) + "px";
     var style = this.element.style;
     style.left = left;
     style.top = top;
   }
-}
+});
 
-Rico.Effect.FadeTo = Class.create()
-Rico.Effect.FadeTo.prototype = {
+Rico.Effect.FadeTo = Class.create(
+/** @lends Rico.Effect.FadeTo# */
+{
+/**
+ * @class
+ * @constructs
+ */
   initialize: function(element, value){
     this.element = element;
     this.opacity = Element.getStyle(this.element, 'opacity') || 1.0;
@@ -219,33 +263,43 @@ Rico.Effect.FadeTo.prototype = {
   },
   step: function(framesLeft) {
     var curOpacity = Element.getStyle(this.element, 'opacity');
-    var newOpacity = curOpacity + (this.target - curOpacity)/framesLeft
+    var newOpacity = curOpacity + (this.target - curOpacity)/framesLeft;
     Rico.Effect.setOpacity(this.element, Math.min(Math.max(0,newOpacity),1.0));
   }
-}
+});
 
-Rico.Effect.FadeOut = Class.create()
-Rico.Effect.FadeOut.prototype = {
+Rico.Effect.FadeOut = Class.create(
+/** @lends Rico.Effect.FadeOut# */
+{
+/**
+ * @class
+ * @constructs
+ */
   initialize: function(element){
-    this.effect = new Rico.Effect.FadeTo(element, 0.0)
+    this.effect = new Rico.Effect.FadeTo(element, 0.0);
   },
   step: function(framesLeft) {
     this.effect.step(framesLeft);
   }
-}
+});
 
-Rico.Effect.FadeIn = Class.create()
-Rico.Effect.FadeIn.prototype = {
+Rico.Effect.FadeIn = Class.create(
+/** @lends Rico.Effect.FadeIn# */
+{
+/**
+ * @class
+ * @constructs
+ */
   initialize: function(element){
-    var options = arguments[1] || {}
-    var startValue = options.startValue || 0
+    var options = arguments[1] || {};
+    var startValue = options.startValue || 0;
     Rico.Effect.setOpacity(element, startValue);
-    this.effect = new Rico.Effect.FadeTo(element, 1.0)
+    this.effect = new Rico.Effect.FadeTo(element, 1.0);
   },
   step: function(framesLeft) {
     this.effect.step(framesLeft);
   }
-}
+});
 
 Rico.Effect.setOpacity= function(element, value) {
   if (element.setOpacity) {
@@ -256,56 +310,75 @@ Rico.Effect.setOpacity= function(element, value) {
   }
 }
 
-Rico.Effect.SizeFromTop = Class.create()
-Rico.Effect.SizeFromTop.prototype = {
+Rico.Effect.SizeFromTop = Class.create(
+/** @lends Rico.Effect.SizeFromTop# */
+{
+/**
+ * @class
+ * @constructs
+ */
   initialize: function(element, scrollElement, y, h) {
      this.element = $(element);
      this.h = typeof(h)=='number' ? h : this.element.offsetHeight;
   //   element.style.top = y;
      this.scrollElement = scrollElement;
      this.options  = arguments[4] || {};
-     this.baseHeight = this.options.baseHeight ||  Math.max(this.h, this.element.offsetHeight)
+     this.baseHeight = this.options.baseHeight ||  Math.max(this.h, this.element.offsetHeight);
   },
   step: function(framesToGo) {
     var rawHeight = this.element.offsetHeight + ((this.h - this.element.offsetHeight)/framesToGo);
-    var height = rawHeight + "px"
+    var height = rawHeight + "px";
     var scroll = (rawHeight - this.baseHeight) + "px";
     this.scrollElement.style.top = scroll;
     this.element.style.height = height;
   }
-}
+});
 
 
-Rico.Effect.Height = Class.create()
-Rico.Effect.Height.prototype = {
+Rico.Effect.Height = Class.create(
+/** @lends Rico.Effect.Height# */
+{
+/**
+ * @class
+ * @constructs
+ */
   initialize: function(element, endHeight) {
-    this.element = element
-    this.endHeight = endHeight
+    this.element = element;
+    this.endHeight = endHeight;
   },
   step: function(stepsLeft) {
+    var height;
     if (this.element.constructor != Array){
-      var height = this.element.offsetHeight + ((this.endHeight - this.element.offsetHeight)/stepsLeft) + "px"
+      height = this.element.offsetHeight + ((this.endHeight - this.element.offsetHeight)/stepsLeft) + "px";
       this.element.style.height = height;
     } else {
-      var height = this.element[0].offsetHeight + ((this.endHeight - this.element[0].offsetHeight)/stepsLeft) + "px"
-      this.element.each(function(e){e.style.height = height})
+      height = this.element[0].offsetHeight + ((this.endHeight - this.element[0].offsetHeight)/stepsLeft) + "px";
+      this.element.each(function(e){e.style.height = height;});
     }
   }
-}
+});
 
-Rico.Effect.SizeWidth = Class.create();
-Rico.Effect.SizeWidth.prototype = {
-    initialize: function(element, endWidth) {
-      this.element = element
-      this.endWidth = endWidth
-    },
-    step: function(stepsLeft) {
-       delta = Math.abs(this.endWidth - parseInt(this.element.offsetWidth))/(stepsLeft);
-       this.element.style.width = (this.element.offsetWidth - delta) + "px";
-    }
-}
+Rico.Effect.SizeWidth = Class.create(
+/** @lends Rico.Effect.SizeWidth# */
+{
+/**
+ * @class
+ * @constructs
+ */
+  initialize: function(element, endWidth) {
+    this.element = element;
+    this.endWidth = endWidth;
+  },
+  step: function(stepsLeft) {
+     var delta = Math.abs(this.endWidth - parseInt(this.element.offsetWidth,10))/(stepsLeft);
+     this.element.style.width = (this.element.offsetWidth - delta) + "px";
+  }
+});
 
-//these are to support non Safari browsers and keep controls from bleeding through on absolute positioned element.
+/**
+ * @namespace
+ * these are to support non Safari browsers and keep controls from bleeding through on absolute positioned element.
+ */
 Rico.Controls = {
   editors: [],
   scrollSelectors: [],
@@ -317,20 +390,25 @@ Rico.Controls = {
     Rico.Controls.defaultDisabler.enableNative(element);
   },
   prepareForSizing: function(element){
-    Element.makeClipping(element)
-    Rico.Controls.disableNativeControls(element)
+    Element.makeClipping(element);
+    Rico.Controls.disableNativeControls(element);
   },
   resetSizing: function(element){
-    Element.undoClipping(element)
-    Rico.Controls.enableNativeControls(element)
+    Element.undoClipping(element);
+    Rico.Controls.enableNativeControls(element);
   },
   registerScrollSelectors: function(selectorSet) {
-    selectorSet.each(function(s){Rico.Controls.scrollSelectors.push(Rico.selector(s))});
+    selectorSet.each(function(s){Rico.Controls.scrollSelectors.push(Rico.selector(s));});
   }
-}
+};
 
-Rico.Controls.Disabler = Class.create();
-Rico.Controls.Disabler.prototype = {
+Rico.Controls.Disabler = Class.create(
+/** @lends Rico.Controls.Disabler# */
+{
+/**
+ * @class
+ * @constructs
+ */
   initialize: function(){
     this.options = Object.extend({
       excludeSet: [],
@@ -340,44 +418,49 @@ Rico.Controls.Disabler.prototype = {
   disableNative: function(element) {
     if (!(/Konqueror|Safari|KHTML/.test(navigator.userAgent))){
       if (!navigator.appVersion.match(/\bMSIE\b/))
-        this.blockControls(element).each(function(e){Element.makeClipping(e)});
+        this.blockControls(element).each(function(e){Element.makeClipping(e);});
       else
-        this.hidableControls(element).each(function(e){e.disable()});
+        this.hidableControls(element).each(function(e){e.disable();});
     }
   },
   enableNative: function(element){
     if (!(/Konqueror|Safari|KHTML/.test(navigator.userAgent))){
       if (!navigator.appVersion.match(/\bMSIE\b/))
-        this.blockControls(element).each(function(e){Element.undoClipping(e)});
+        this.blockControls(element).each(function(e){Element.undoClipping(e);});
       else
-        this.hidableControls(element).each(function(e){e.enable()});
+        this.hidableControls(element).each(function(e){e.enable();});
     }
   },
   blockControls: function(element){
     try{
-    var includes = [];
-    if (this.options.includeSet)
-      includes = this.options.includeSet;
-    else{
-      var selectors = this.options.includeSelectors || Rico.Controls.scrollSelectors;
-      includes = selectors.map(function(s){return s.findAll(element)}).flatten();
-    }
-    return includes.select(function(e){return (Element.getStyle(e, 'display') != 'none') && !this.options.excludeSet.include(e)}.bind(this));
-  }catch(e) { return []}
+      var includes = [];
+      if (this.options.includeSet)
+        includes = this.options.includeSet;
+      else{
+        var selectors = this.options.includeSelectors || Rico.Controls.scrollSelectors;
+        includes = selectors.map(function(s){return s.findAll(element);}).flatten();
+      }
+      return includes.select(function(e){return (Element.getStyle(e, 'display') != 'none') && !this.options.excludeSet.include(e);}.bind(this));
+    } catch(e) { return []; }
   },
   hidableControls: function(element){
     if (element)
-      return this.options.hidables.select(function(e){return Element.childOf(e, element)});
+      return this.options.hidables.select(function(e){return Element.childOf(e, element);});
     else
       return this.options.hidables;
   }
-}
+});
 
 Rico.Controls.defaultDisabler = new Rico.Controls.Disabler();
 Rico.Controls.blankDisabler = new Rico.Controls.Disabler({includeSet:[],hidables:[]});
 
-Rico.Controls.HidableInput = Class.create();
-Rico.Controls.HidableInput.prototype = {
+Rico.Controls.HidableInput = Class.create(
+/** @lends Rico.Controls.HidableInput# */
+{
+/**
+ * @class
+ * @constructs
+ */
   initialize: function(field, view){
     this.field = field;
     this.view = view;
@@ -391,18 +474,19 @@ Rico.Controls.HidableInput.prototype = {
   disable: function(){
     this.view.value = $F(this.field);
     if (this.field.offsetWidth > 1) {
-      this.view.style.width =  parseInt(this.field.offsetWidth)  + "px";
+      this.view.style.width =  parseInt(this.field.offsetWidth,10)  + "px";
       Element.hide(this.field);
       Element.show(this.view);
     }
   }
-}
+});
 
 
 
+/** @ignore */
 Element.forceRefresh = function(item) {
   try {
-    var n = document.createTextNode(' ')
+    var n = document.createTextNode(' ');
     item.appendChild(n); item.removeChild(n);
   } catch(e) { }
 };

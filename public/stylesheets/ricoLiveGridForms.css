@@ -15,10 +15,13 @@ div.ricoLG_editDiv, div.ricoLG_editResponseDiv {
   padding:8px;
   border: 1px solid navy;
   position:absolute;
-  font-size: 10pt;
   z-index:300;
   top:0px;
   left:0px;
+}
+
+div.ricoLG_editDiv *, div.ricoLG_editResponseDiv {
+  font-size: 10pt;
 }
 
 form .ricoEditLabel, form .ricoEditLabelWithHelp {

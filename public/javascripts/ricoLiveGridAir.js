@@ -15,7 +15,7 @@ if(typeof window.runtime=='undefined') throw("LiveGridAir requires the Adobe AIR
 
 Rico.writeDebugMsg = function(msg) {
   window.runtime.trace(this.timeStamp()+msg);
-}
+};
 
 
 /**
@@ -37,7 +37,7 @@ initialize: function(dbConn, fromClause, options) {
   this.options.sortParmFmt='index';
 }
 
-}
+};
 
 Rico.Buffer.AirSQLMethods = function() {};
 
@@ -53,7 +53,7 @@ allColumnsSql: function() {
   for (var i=0; i<this.colnames.length; i++) {
     if (i>0) s+=',';
     s+=this.colsql[i];
-    if (this.colnames[i]) s+=" AS '"+this.colnames[i]+"'"
+    if (this.colnames[i]) s+=" AS '"+this.colnames[i]+"'";
   }
   return s;
 },
@@ -68,7 +68,7 @@ formQueryHashSQL: function(startPos,fetchSize) {
   for (var n=0; n<this.liveGrid.columns.length; n++) {
     var c=this.liveGrid.columns[n];
     if (c.filterType == Rico.TableColumn.UNFILTERED) continue;
-    var colnum=c.format.filterUI && c.format.filterUI.length > 1 ? parseInt(c.format.filterUI.substr(1)) : c.index;
+    var colnum=c.format.filterUI && c.format.filterUI.length > 1 ? parseInt(c.format.filterUI.substr(1),10) : c.index;
     var f={};
     f.columnIndex=colnum;
     f.op=c.filterOp;
@@ -87,6 +87,7 @@ addCondition: function(whereClause,colnum,op,value) {
 
 airFetch: function(options) {
   Rico.writeDebugMsg("airFetch");
+  var i,j,stmt;
   var sqlwhere='';
   var parms=options.parameters;
   var sqlparms=[];
@@ -109,7 +110,7 @@ airFetch: function(options) {
         break;
       case "NE":
         var ne="(";
-        for (var i=0; i<f.values.length; i++) {
+        for (i=0; i<f.values.length; i++) {
           if (i>0) ne+=",";
           ne+='?';
           sqlparms.push(f.values[i]);
@@ -125,30 +126,30 @@ airFetch: function(options) {
     }
   }
   if (typeof(this.sqltotalrows)=='undefined' || options.parameters.get_total=='true') {
-    var stmt = new this.SQLStatement();
+    stmt = new this.SQLStatement();
     stmt.sqlConnection = this.dbConn;
     stmt.text = "select count(*) as cnt"+this.fromClause+sqlwhere;
-    for (var i=0; i<sqlparms.length; i++) stmt.parameters[i]=sqlparms[i];
+    for (i=0; i<sqlparms.length; i++) stmt.parameters[i]=sqlparms[i];
     stmt.execute();
     this.sqltotalrows=stmt.getResult().data[0].cnt;
   }
-  var stmt = new this.SQLStatement();
+  stmt = new this.SQLStatement();
   stmt.sqlConnection = this.dbConn;
   var newRows=[];
   var offset=options.parameters.offset;
-  var limit=Math.min(this.sqltotalrows-offset,options.parameters.page_size)
+  var limit=Math.min(this.sqltotalrows-offset,options.parameters.page_size);
   stmt.text = "select "+this.allColumnsSql()+this.fromClause+sqlwhere+sqlorder+" LIMIT "+limit+" OFFSET "+offset;
-  for (var i=0; i<sqlparms.length; i++) stmt.parameters[i]=sqlparms[i];
+  for (i=0; i<sqlparms.length; i++) stmt.parameters[i]=sqlparms[i];
   Rico.writeDebugMsg(stmt.text);
   stmt.execute();
   var result = stmt.getResult();
   if( result.data == null ) {
     Rico.writeDebugMsg('no data');
   } else {
-    for (var i = 0; i < result.data.length; i++) {
+    for (i = 0; i < result.data.length; i++) {
       var dataRow = result.data[i];
       var newRow=[];
-      for (var j=0; j<this.colnames.length; j++)
+      for (j=0; j<this.colnames.length; j++)
         newRow.push(dataRow[this.colnames[j]]);
       newRows.push(newRow);
     }
