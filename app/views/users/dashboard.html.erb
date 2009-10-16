@@ -10,8 +10,15 @@
         <% if @user.is_slacker? %>
           <%= render :partial => "member_slacker" %>
         <% end %>
+        <h3>Trip Registration</h3>
+        <% if @user.is_current_leader? %>
+          Want to register for a trip, create or edit a trip registration?
+        <% else %>
+          Want to register for a trip?
+        <% end %> 
+        Click <%= link_to "here", :controller => :club_trip_registrations, :action => :index %>.
         <% if @messages && !@messages.empty? %>
-          <h2>Messages from the Master</h2>
+          <h3>Messages from the Master</h3>
           <p>
           <table class="login_messages">
             <%= render :partial => "club_login_messages/club_login_message",
@@ -40,7 +47,7 @@
             <%= link_to 'Update your profile and tag yourself'.l(:update_profile_and_tag_yourself),
                         edit_user_path(current_user) %>
             <%= "to start getting recommended content on your dashboard.".l
-                 :to_get_recommended_content_on_your_dashboard %>
+                 "to_get_recommended_content_on_your_dashboard".l %>
         <% end %>
 
         <% unless @network_activity.empty? %>

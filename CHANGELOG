@@ -26,3 +26,6 @@ Added a listing for submitted Trip Registrations.
 Changed user profile to display only pending trip registrations.
 
 Upgraded to Rico 2.1 javascripts for compatibility problems with Firefox 3.5
+
+Added Trip Registrations link to the dashboard when logging in so it's
+more readily available to general members and leaders.

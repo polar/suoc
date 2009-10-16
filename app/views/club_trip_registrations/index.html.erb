@@ -1,15 +1,14 @@
 <h3>Club Trip Registrations</h3>
 <p>
-Select a trip registration from below to examine the details and whos going.
+Select a trip registration from below to examine the details and who is registered for the trip.
 If you are not the leader you can add or remove yourself from the trip registration.
 <p>
+<% if @show_create %>
 Leaders, use "Create New Trip Registration" link below to create a new pending trip registration.
-Also, if you want to update the trip details, click the "Edit Trip Registration" link 
-at the bottom of the page showing the Trip Registration 
-(i.e. click on the specific trip registration link), and then 
-remember to press the "UPDATE" button or your changes will not get saved.
+If you want to update the trip details of your trip or change the members going, click the "Edit" button.
 <p>
 Important! You must submit the trip before the trip leaves. Once you submit the trip, it will no longer be shown on this page.
+<% end %>
 <h3>Pending Trip Registrations</h3>
 <table class="tripstats">
   <tr class="tripstats">

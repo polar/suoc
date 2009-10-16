@@ -27,6 +27,10 @@ This trip registration is PENDING.
   <p>
   This trip registration has been submitted!
 <% end %>
+    <% if !@member_slackers.empty? %>
+      <h3 class="alert">Membership Alert!</h3>
+        <%= "There are #{@member_slackers.size} members registered for this trip who need to update their membership." %>
+    <% end %>
 <div class="yui-g">
   <div class="yui-u first">
     <h3>Details</h3>

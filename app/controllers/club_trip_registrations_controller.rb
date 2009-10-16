@@ -27,6 +27,7 @@ class ClubTripRegistrationsController < BaseController
   def show
     @club_trip_registration = ClubTripRegistration.find(params[:id])
     @members_going = @club_trip_registration.club_members.sort {|x,y| x.name <=> y.name }
+    @member_slackers = @club_trip_registration.club_members.select {|x| x.is_slacker?}
     @show_addme =
       current_user != @club_trip_registration.leader &&
         !@club_trip_registration.club_members.include?(current_user)

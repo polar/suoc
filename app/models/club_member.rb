@@ -197,6 +197,11 @@ class ClubMember < User
 	memberships.size < 4
   end
   
+  def is_current_leader?
+    [ClubMemberStatus[:Active], ClubMemberStatus[:Life]].include?(club_member_status) &&
+    !current_leaders.empty?
+  end
+  
   def has_current_status?
       [ClubMemberStatus[:Active],
        ClubMemberStatus[:Life]].include?(club_member_status)
