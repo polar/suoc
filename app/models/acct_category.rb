@@ -3,7 +3,7 @@ class AcctCategory < ActiveRecord::Base
 
   validates_uniqueness_of :name
 
-  def balance(account_type)
-    AcctEntry.category_balance(account_type, self)
+  def account_type_balance(account, start_date = nil, end_date = nil)
+    AcctEntry.account_type_category_balance(account, self, start_date, end_date)
   end
 end

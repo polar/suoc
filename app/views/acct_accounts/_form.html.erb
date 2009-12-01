@@ -5,6 +5,8 @@
     <%= f.text_field "name" %>
     <%= f.label "Account Type" %>
     <%= f.collection_select :account_type_id, @types, :id, :name %>
+    <%= f.label "Reports" %>
+    <%= f.check_box :reports %> 
     <%= f.label "Description" %>
     <%= f.text_area "description",
          {:size => "86x5", :class => "rich_text_editor"} %>

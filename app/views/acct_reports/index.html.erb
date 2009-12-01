@@ -1,0 +1,155 @@
+<h3>Reports</h3>
+<h2>Profit and Loss </h2>
+    <% form_tag url_for(:action => :index), :method => :get do %>
+    From <%= text_field_tag "start_date", @start_date.strftime("%m/%d/%Y") %>
+    to <%= text_field_tag "end_date", @end_date.strftime("%m/%d/%Y") %>
+   <%= submit_tag "GO" %>
+   <% end %>
+<table>
+<tr>
+ <th></th>
+ <th>Account</th>
+ <th>Category</th>
+ <th>Cat Total</th>
+ <th>SubTotal</th>
+ <th>Total</th>
+ <th>Grand Total</th>
+</tr>
+<tr>
+ <th>Income</th>
+</tr>
+<% for a in @income[:accounts] %>
+  <tr>
+    <td></td>
+    <td><%= a[:account].name %></td> 
+    <td></td>
+    <td></td>
+    <td class="decimal"><%= sprintf("%10.2f", a[:balance]) %></td>
+  <tr>
+  <% for c in a[:category_balances] do %>
+    <% if c[:balance] != 0 %>
+    <tr>
+      <td></td>
+      <td></td>
+      <td><%= c[:category].name %></td>
+      <td class="decimal"><%= sprintf("%10.2f", c[:balance]) %></td>
+      <td></td>
+    </tr>
+  <% end %>
+  <% end %>
+<% end %>
+  <tr>
+  <td></td>
+  <td>Total Income</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td class="decimal"><%= sprintf("%10.2f", @income[:balance]) %></td>
+  </tr>
+<tr>
+ <th>Expense</th>
+</tr>
+<% for a in @expense[:accounts] %>
+  <tr>
+    <td></td>
+    <td><%= a[:account].name %></td> 
+    <td></td>
+    <td></td>
+    <td class="decimal"><%= sprintf("%10.2f", a[:balance]) %></td>
+  <tr>
+  <% for c in a[:category_balances] do %>
+    <% if c[:balance] != 0 %>
+    <tr>
+      <td></td>
+      <td></td>
+      <td><%= c[:category].name %></td>
+      <td class="decimal"><%= sprintf("%10.2f", c[:balance]) %></td>
+      <td></td>
+    </tr>
+  <% end %>
+  <% end %>
+<% end %>
+  <tr>
+  <td></td>
+  <td>Total Expense</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td class="decimal"><%= sprintf("%10.2f", @expense[:balance]) %></td>
+  </tr>
+<tr>
+  <th>Profit(Loss)</th>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td class="decimal"><%= sprintf("%10.2f", @profit_loss) %></td>
+</tr>
+</table>
+
+<hr>
+<h2>Balance Sheet to <%= @end_date.strftime("%m/%d/%Y") %></h2>
+
+<table>
+<tr>
+ <th></th>
+ <th>Account</th>
+ <th>Sub Total</th>
+ <th>Total</th>
+ <th>Grand Total</th>
+</tr>
+<tr>
+ <th>Asset</th>
+</tr>
+<% for a in @asset[:accounts] %>
+  <tr>
+    <td></td>
+    <td><%= a[:account].name %></td> 
+    <td class="decimal"><%= sprintf("%10.2f", a[:balance]) %></td>
+  <tr>
+<% end %>
+  <tr>
+  <td></td>
+  <td>Total Asset</td>
+  <td></td>
+  <td class="decimal"><%= sprintf("%10.2f", @asset[:balance]) %></td>
+  </tr>
+<tr>
+ <th>Liability</th>
+</tr>
+<% for a in @liability[:accounts] %>
+  <tr>
+    <td></td>
+    <td><%= a[:account].name %></td> 
+    <td class="decimal"><%= sprintf("%10.2f", a[:balance]) %></td>
+  <tr>
+<% end %>
+  <tr>
+  <td></td>
+  <td>Total Liability</td>
+  <td></td>
+  <td class="decimal"><%= sprintf("%10.2f", @liability[:balance]) %></td>
+  </tr>
+<tr>
+  <th>Net Worth</th>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td class="decimal"><%= @net_worth %></td>
+</tr>
+</table>
+<br />
+
+<p>
+<%= link_to "Accounts", acct_accounts_path %>
+|
+<%= link_to "Account Types", acct_account_types_path %>
+|
+<%= link_to "Account Categories", acct_categories_path %>
+|
+<%= link_to "Account Actions", acct_actions_path %>
+|
+<%= link_to "Action Types", acct_action_types_path %>
+|
+<%= link_to "Action Sets", acct_action_sets_path %>

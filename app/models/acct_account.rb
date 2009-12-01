@@ -23,8 +23,12 @@ class AcctAccount < ActiveRecord::Base
 
   validates_uniqueness_of :name
 
-  def balance
-    AcctEntry.balance(self)
+  def balance(start_date = nil, end_date = nil)
+    AcctEntry.balance(self, start_date, end_date)
+  end
+  
+  def category_balance(category, start_date = nil, end_date = nil)
+    AcctEntry.category_balance(self, category, start_date, end_date)
   end
 
 end

@@ -1,7 +1,7 @@
 class AcctCategoriesController < BaseController
   layout "club_operations"
 
-  PER_PAGE = 10
+  PER_PAGE = "10"
   ENTRIES_PER_PAGE  = 10
 
   filter_access_to :all
@@ -10,21 +10,23 @@ class AcctCategoriesController < BaseController
   uses_tiny_mce(:options => AppConfig.default_mce_options.merge({:editor_selector => "rich_text_editor"}),
     :only => [:new, :create, :update, :edit])
 
-
   def index
+    @page = params[:page]
+    @per_page = params[:per_page] ? params[:per_page] : PER_PAGE
     @categories = AcctCategory.paginate(:all,
-        :page => params[:page], :per_page => PER_PAGE)
-
-    @categories = @categories.map do |c|
+        :page => @page, :per_page => @per_page)
+    @start_date = Date.parse(params[:start_date] ? params[:start_date] : fiscal_year_start_date)
+    @end_date = Date.parse(params[:end_date] ? params[:end_date] : fiscal_year_end_date)
+    @categories.replace(@categories.map do |c|
       r = {}
       r["category"] = c
       r["name"] = c.name
       r["description"] = c.description
-      r["income_balance"] = c.balance(AcctAccountType[:Income])
-      r["expense_balance"] = c.balance(AcctAccountType[:Expense])
+      r["income_balance"] = c.account_type_balance(AcctAccountType[:Income], @start_date, @end_date)
+      r["expense_balance"] = c.account_type_balance(AcctAccountType[:Expense], @start_date, @end_date)
       r["balance"] = r.income_balance + r.expense_balance
       r
-    end
+    end)
   end
 
   def show

@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :acct_action_sets
+  map.resources :acct_reports
 
   map.resources :club_memberships, :collection => {
     :submit_list => :post }

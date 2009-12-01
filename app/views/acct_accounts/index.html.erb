@@ -5,10 +5,27 @@
 %>
 
 <h3>Chart of Accounts</h3>
-
-<%= will_paginate @accounts,
-    :params => { :action => :index } %></td>
-
+  <tr colspan="5">  
+    <% form_tag url_for(:action => :index), :method => :get do %>
+    From <%= text_field_tag "start_date", @start_date.strftime("%m/%d/%Y") %>
+    to <%= text_field_tag "end_date", @end_date.strftime("%m/%d/%Y") %>
+    Per Page
+   <%= radio_button_tag "per_page", "5", @per_page.nil?  || @per_page == "5" %>5
+   <%= radio_button_tag "per_page", "10", @per_page == "10" %>10
+   <%= radio_button_tag "per_page", "20", @per_page == "20" %>20
+   <%= radio_button_tag "per_page", "30", @per_page == "30" %>30
+   <%= radio_button_tag "per_page", "40", @per_page == "40" %>40
+   <%= radio_button_tag "per_page", "50", @per_page == "50" %>50
+   <%= submit_tag "GO" %>
+  <% end %>
+  </tr> 
+  <tr class="pagnation">
+    <td colspan="4">
+        <%= will_paginate @accounts,
+        :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
+        :params => { :action => :index } %></td>
+    </td>
+  </tr>
 <table>
   <tr>
     <th>Account</th>
@@ -18,7 +35,7 @@
 
 <% for account in @accounts %>
   <tr>
-    <td><%= link_to account.name, :action => :show, :id => account %></td>
+    <td><%= link_to account.name, :action => :show, :id => account.account %></td>
     <td><%= account.account_type.name %></td>
     <td class="decimal"><%= sprintf("%0.2f",account.balance) %></td>
   </tr>
@@ -31,6 +48,8 @@
 <br />
 
 <p>
+<%= link_to "Account Reports", acct_reports_path %>
+|
 <%= link_to "Account Types", acct_account_types_path %>
 |
 <%= link_to "Account Categories", acct_categories_path %>

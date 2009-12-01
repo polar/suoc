@@ -19,6 +19,15 @@ class BaseController < ApplicationController
   def club_member_offering_url(a,b,args={}); user_offering_url(a,b,args);end
   def club_member_favorite_url(a,b,args={}); user_favorite_url(a,b,args);end
   def club_member_comment_url(a,b,args={}); user_comment_url(a,b,args);end
+  
+  # Fiscal Year for the Club is defined here.
+  def fiscal_year_start_date
+    Date.today.month < 7 ? "07/01/#{Date.today.year - 1}" : "07/01/#{Date.today.year}"
+  end
+  def fiscal_year_end_date
+    Date.today.month < 7 ? "06/30/#{Date.today.year}" : "06/30/#{Date.today.year+1}"
+  end
+  
   #
   # This function gets called if the declarative authorization
   # filter functions deny access.

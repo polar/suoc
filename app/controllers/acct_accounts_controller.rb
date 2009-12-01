@@ -3,8 +3,8 @@ class AcctAccountsController < BaseController
 
   filter_access_to :all
 
-  ACCOUNTS_PER_PAGE = 10
-  ENTRIES_PER_PAGE  = 10
+  ACCOUNTS_PER_PAGE = "10"
+  ENTRIES_PER_PAGE  = "10"
 
   include Viewable
   uses_tiny_mce(:options => AppConfig.default_mce_options.merge({:editor_selector => "rich_text_editor"}),
@@ -12,17 +12,56 @@ class AcctAccountsController < BaseController
 
 
   def index
+    @page = params[:page]
+    @per_page = params[:per_page] ? params[:per_page] : ACCOUNTS_PER_PAGE
+    @start_date = Date.parse (params[:start_date] ? params[:start_date] : fiscal_year_start_date)
+    @end_date = Date.parse (params[:end_date] ? params[:end_date] : fiscal_year_end_date)
     @accounts = AcctAccount.paginate(:all,
-        :page => params[:page], :per_page => ACCOUNTS_PER_PAGE)
-
+        :page => @page, :per_page => @per_page)
+    @accounts.replace( @accounts.map do |a|
+        r = {}
+        r["account"] = a
+        r["name"] = a.name
+        r["account_type"] = a.account_type
+        r["balance"] = a.balance(@start_date,@end_date)
+        r
+     end)
   end
 
   def show
+    @page = params[:page]
+    @per_page = params[:per_page] ? params[:per_page] : ENTRIES_PER_PAGE
+    @start_date = Date.parse (params[:start_date] ? params[:start_date] : fiscal_year_start_date)
+    @end_date = Date.parse (params[:end_date] ? params[:end_date] : fiscal_year_end_date)
+    
+    @category = !params[:category].nil? && !params[:category].empty? ? 
+                     AcctCategory.find(params[:category]) : 
+		     nil
+    @category_name = @category ? @category.name : ""
+    @categories = AcctCategory.all
+    
     @account = AcctAccount.find(params[:id])
-    @balance = @account.balance
+    @balance = @account.balance(@start_date, @end_date)
 
+    dates = ""
+    if @category
+      dates << " AND  category_id = :category_id"
+    end
+    if @start_date != nil
+      dates << " AND :start_date <= date"
+    end
+    if @end_date != nil
+      dates << " AND date <= :end_date"
+    end
     @entries = @account.entries.paginate(:all,
-        :page => params[:page], :per_page => ENTRIES_PER_PAGE)
+        :page => @page, :per_page => @per_page,
+              :conditions => [ "TRUE #{dates}",
+                               { :category_id => @category,
+                                 :start_date => @start_date,
+                                 :end_date => @end_date}])
+    @shown_balance = 0
+    @entries.each {|e| @shown_balance += e.credit - e.debit }
+
   end
 
   def new

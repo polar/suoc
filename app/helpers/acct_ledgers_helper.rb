@@ -1,5 +1,6 @@
 module AcctLedgersHelper
-
+  include AcctHelper
+  
   def options_for_showing_action_sets(action_sets, selected_action_set_name)
     if RAILS_GEM_VERSION <= "2.2.2"
        selected = ""
@@ -31,7 +32,7 @@ module AcctLedgersHelper
                         :disabled => disabled)
     end
   end
-  
+
   #
   # We return the list of uses with the avatar, birthday, and internal id
   # The controller will parse this out.

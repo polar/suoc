@@ -14,13 +14,35 @@
 <p>
 <h2>Register</h2>
 <p>
-Balance: <%= @account.balance %>
 <p>
 <%= will_paginate @entries,
     :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
     :params => { :action => :show } %>
 <p>
 <table>
+  <tr colspan="5">  
+    <% form_tag url_for(:action => :show), :method => :get do %>
+    Show <%= select_tag 'category', 
+              options_for_showing(@categories, @category_name) %><br/>
+    From <%= text_field_tag "start_date", @start_date.strftime("%m/%d/%Y") %>
+    to <%= text_field_tag "end_date", @end_date.strftime("%m/%d/%Y") %>
+    Per Page
+   <%= radio_button_tag "per_page", "5", @per_page.nil?  || @per_page == "5" %>5
+   <%= radio_button_tag "per_page", "10", @per_page == "10" %>10
+   <%= radio_button_tag "per_page", "20", @per_page == "20" %>20
+   <%= radio_button_tag "per_page", "30", @per_page == "30" %>30
+   <%= radio_button_tag "per_page", "40", @per_page == "40" %>40
+   <%= radio_button_tag "per_page", "50", @per_page == "50" %>50
+   <%= submit_tag "GO" %>
+  <% end %>
+  </tr> 
+  <tr class="pagnation">
+    <td colspan="4">
+        <%= will_paginate @entries,
+        :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
+        :params => { :action => :show } %></td>
+    </td>
+  </tr>
   <tr>
     <th>Date</th>
     <th>Category</th>
@@ -28,22 +50,33 @@ Balance: <%= @account.balance %>
     <th>Debit</th>
     <th>Credit</th>
     <th>Rcrd'By</th>
+    <th>Ledger</th>
     <th>Trans #</th>
   </tr>
   <% for t in @entries.reverse %>
   <tr>
     <td><%= t.date.strftime("%D") %></td>
     <td><%= t.category.name %></td>
-    <td><%= t.description %></td>
+    <td><%= t.acct_transaction.description %></td>
     <td class="decimal"><%= t.debit %></td>
     <td class="decimal"><%= t.credit %></td>
     <td><%= t.recorded_by.name %></td>
+    <td><%= t.acct_transaction.target_account.name %></td>
     <td class="decimal">
       <%= link_to t.acct_transaction.id,
                   :controller => :acct_transactions,
+                  :action => :show,
                   :id => t.acct_transaction %></td>
   </tr>
   <% end %>
+</table>
+<table>
+  <tr colspan="5">  
+    <td>Shown Balance:</td><td class="decimal"><%= @shown_balance %></td>
+  </tr>
+  <tr colspan="5">  
+    <td>Entire Dated Balance:</td><td class="decimal"><%= @balance %></td>
+  </tr>
 </table>
 <p>
 <%= will_paginate @entries,
