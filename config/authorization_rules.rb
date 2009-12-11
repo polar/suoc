@@ -108,6 +108,13 @@ authorization do
   end
 
   #
+  # Reports
+  #
+  role :report_analyzer do
+    has_permission_on :acct_reports, :to => [:read]
+  end
+
+  #
   # This role is given to people who have privileges over operations.
   #
   role :ops_admin do
@@ -115,6 +122,7 @@ authorization do
     includes :announcement_admin
     includes :pages_admin
     includes :ledger_transactor
+    includes :report_analyzer
   end
   #
   # Basically, Current Officers, Chairs, and Leaders
