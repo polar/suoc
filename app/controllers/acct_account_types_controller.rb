@@ -1,5 +1,7 @@
 class AcctAccountTypesController < BaseController
 
+  layout "club_operations"
+  
   filter_access_to :all
 
   ACCOUNT_TYPES_PER_PAGE = 10
