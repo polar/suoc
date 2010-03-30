@@ -20,9 +20,9 @@
 #    default_year    The Default Year for the membership form.
 %>
 <table class="transactions">
-  <tr colspan="5">  
+  <tr colspan="5">
     <% form_tag url_for(ledger), :method => :get do %>
-    Show <%= select_tag 'action_set', 
+    Show <%= select_tag 'action_set',
               options_for_showing_action_sets(@action_sets, @action_set_name)
     %> Per Page
    <%= radio_button_tag "per_page", "5", per_page.nil? || per_page.empty? || per_page == "5" %>5
@@ -33,7 +33,7 @@
    <%= radio_button_tag "per_page", "50", per_page == "50" %>50
    <%= submit_tag "GO" %>
   <% end %>
-  </tr> 
+  </tr>
   <tr class="pagnation">
     <td colspan="4">
         <%= will_paginate transactions,
@@ -92,7 +92,7 @@
   <tr>
   <td colspan="4" class="pagnation"><%= will_paginate transactions,
     :previous_label => "&laquo; Newer", :next_label => "Older &raquo;",
-    :params => { :action => :index } %></td>
+    :params => { :action => :show } %></td>
   </tr>
  </table>
 <% permitted_to? :manage_transactions, @ledger do %>
