@@ -4,14 +4,10 @@
 class ClubOfficersController < BaseController
   layout "club_operations"
 
-  #
-  # We do not need a log in for show.
-  #
-  before_filter :login_required,
-                :only =>  [:edit, :update, :destroy,
-                           :add_club_officer, :my_index,
-                           :delete_officer]
-  before_filter :admin_required, :only =>  [:update, :destroy]
+  filter_access_to :all
+  filter_access_to :add_club_officer, :require => :create
+  filter_access_to :my_index, :require => :read
+  filter_access_to :delete_officer, :require => :delete
 
   def index
     @club_officers = ClubOfficer.paginate(

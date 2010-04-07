@@ -48,6 +48,7 @@ authorization do
     has_permission_on :club_login_messages, :to => :manage
 
     has_permission_on :club_leaderships, :to => :manage
+    includes :officer
   end
 
   #
@@ -132,7 +133,10 @@ authorization do
   role :officer do
     includes :ops_admin
     has_permission_on :club_memberships, :to => [:manage]
+    has_permission_on :club_offices, :to => [:manage]
+    has_permission_on :club_officers, :to => [:manage]
   end
+
   role :chair do
     includes :ops_admin
   end
@@ -177,6 +181,7 @@ authorization do
     has_permission_on :club_leaders, :to => [:create,:update,:delete] do
       if_attribute :member_id => is {user.id}
     end
+    has_permission_on :club_offices, :to => [:read]
     has_permission_on :club_officers, :to => [:read]
     has_permission_on :club_officers, :to => [:create,:update,:delete] do
       if_attribute :member_id => is {user.id}
