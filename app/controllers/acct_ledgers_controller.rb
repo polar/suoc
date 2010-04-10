@@ -118,6 +118,15 @@ class AcctLedgersController < BaseController
     @default_year = Time.now.month <= 8 ? Time.now.year : Time.now.year + 1 
     @params = params
   end
+  
+  def delete
+    @ledger = AcctLedger.find_by_id_or_slug params[:id]
+    if @ledger.action_sets.empty? && @ledger.accounts.empty?
+      @ledger.destroy
+    end
+    redirect_to acct_ledgers_url
+  end
+    
 
   def delete_transaction
     @ledger = AcctLedger.find_by_id_or_slug params[:id]
