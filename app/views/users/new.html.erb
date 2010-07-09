@@ -41,13 +41,15 @@
 
         <label for="user_club_affiliation">
           <%= "Your Affiliation".l %>
+          <em><%= "(If you are no longer a student, please choose Alumni)".l %></em>
         </label>
         <%= f.collection_select :club_affiliation_id,
                                 ClubAffiliation.find(:all), :id, :name,
                                 {}, {:tabindex => 4} %>
 
         <label for="user_club_member_status">
-          <%= "Your member status".l %>
+          <%= "Your current member status".l %>
+          <em><%= "(Please choose the one furthest down the list that applies)".l %></em>
         </label>
         <%= f.select :club_member_status_id,
                ClubMemberStatus.find(:all).collect {|s| [ "#{s.name}: #{s.description}", s.id]},
