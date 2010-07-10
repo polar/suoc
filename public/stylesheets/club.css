@@ -566,6 +566,27 @@ TABLE.login_messages TR TH {
 }
 
 /*
+ * Reunion Page
+ */
+TABLE.reunion_charges {
+  border: 1px solid #ccc;
+  border-style: hidden;
+}
+TABLE.reunion_charges TR TD {
+  border: 1px solid #ccc;
+}
+TABLE.paypal_button {
+  border-style: hidden;
+}
+
+TABLE.paypal_button TR TD {
+  border: 0px hidden none;
+  border-style: hidden;
+}
+
+
+
+/*
  * Override the CE location chooser that is explicitly
  * setting the size in the view.
  */

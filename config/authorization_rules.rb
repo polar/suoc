@@ -196,6 +196,7 @@ authorization do
       if_attribute :member_id => is {user.id}
     end
 
+    has_permission_on :reunion, :to => [:read]
   end
 
   #

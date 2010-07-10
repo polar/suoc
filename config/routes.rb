@@ -1,4 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :payments
+    
+  map.resource  :reunion, :controller => "reunion"
   map.resources :acct_action_sets
   map.resources :acct_reports
 
