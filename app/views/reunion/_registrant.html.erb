@@ -1,0 +1,7 @@
+<tr>
+<td><%= registrant.name %></td>
+<td colspan="5">Items</td>
+<td class="decimal"><%= registrant.amount_paid %></td>
+<td class="decimal"><%= registrant.fee %></td>
+</tr>
+  <%= render :partial => "item", :collection => registrant.items %>

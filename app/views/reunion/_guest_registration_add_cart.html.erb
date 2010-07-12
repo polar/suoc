@@ -1,0 +1,47 @@
+<%if RAILS_ENV == "production" %>
+<% else %>
+
+<form target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="XDR27AX7NZ7X8">
+<input type="hidden" name="currency_code" value="USD">
+<input type="hidden" name="on3" value="memberid">
+ <%= "<input type='hidden' name='os3' value='#{@current_user.id}'>" %>
+
+<tr>
+<td></td>
+<td valign="top">
+<input type="hidden" name="on0" value="Type">
+<select name="os0">
+	<option value="Adult" selected="true">Adult - $99.00</option>
+	<option value="Kid over 10">Kid over 10 - $99.00</option>
+	<option value="Kid under 10">Kid under 10 - Free</option>
+</select>
+<br>
+<br>
+<input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_cart_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</td>
+<td valign="top">
+<label>Full Name:</label>
+<input type="hidden" name="on1" value="Full Name">
+<input type="text" name="os1" maxlength="60">
+</td>
+<td valign="top">
+<input type="hidden" name="on2" value="T-Shirt">
+<label>T-Shirt:</label>
+<select name="os2">
+	<option value="Small">Small</option>
+	<option value="Medium" selected="true">Medium</option>
+	<option value="Large">Large</option>
+	<option value="X-Large">X-Large</option>
+</select>
+</td>
+</tr>
+<tr>
+<td></td>
+<td colspan="3">Do this for each guest.</td>
+</tr>
+
+</form>
+<% end %>

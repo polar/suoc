@@ -46,6 +46,10 @@
   <th>Member Status:</th>
   <td><%= member.club_member_status.name unless !member.club_member_status %></td>
 </tr>
+<tr>
+  <th>MClass of </th>
+  <td><%= member.club_grad_year.strftime("%Y") unless !member.club_grad_year %></td>
+</tr>
 </table>
 
 </div>

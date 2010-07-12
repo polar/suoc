@@ -57,6 +57,12 @@
                                 ClubMemberStatus.find(:all), :id, :name %>
     </td>
   </tr>
+  <tr>
+    <th>Class of YYY:</th>
+    <td><%= f.text_field :club_grad_year,
+            :value => fmt_date(member.club_grad_year) %>
+    </td>
+  </tr>
 
   </table>
   <p>

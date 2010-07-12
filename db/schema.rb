@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091125000739) do
+ActiveRecord::Schema.define(:version => 20100712143825) do
 
   create_table "acct_account_types", :force => true do |t|
     t.string   "name"
@@ -567,6 +567,13 @@ ActiveRecord::Schema.define(:version => 20091125000739) do
     t.datetime "updated_at"
   end
 
+  create_table "paypal_reunion_payments", :force => true do |t|
+    t.integer  "member_id"
+    t.text     "ipn_data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "photos", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -728,6 +735,7 @@ ActiveRecord::Schema.define(:version => 20091125000739) do
     t.integer  "club_member_status_id"
     t.string   "club_contact"
     t.integer  "club_affiliation_id"
+    t.date     "club_grad_year"
   end
 
   add_index "users", ["activated_at"], :name => "index_users_on_activated_at"

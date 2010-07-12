@@ -2,6 +2,7 @@
   <div class="box">
     <h3><%= "Why Sign up?".l %></h3>
     <ul class="list checks">
+      <li><b>You are attending the SUOC 75th Reunion!</b></li>
       <li>Required if you are a student member of SUOC.</li>
       <li>You are an alumni member of SUOC for fun</li>
     </ul>
@@ -16,6 +17,9 @@
 <div id="yui-main">
   <div class="yui-b">
     <div class="box">
+      <h3>Note to 75th SUOC Alumni Reunion Goers!</h3>
+      <p>Please sign up here so we have your email contact information and you can pay form_for the reunion.</p>
+      <p>If you are no long active in SUOC at the univeristy please select "Retired"</p>
       <h3><%= "Sign up!".l %></h3>
       <%= error_messages_for :user %>
       <% form_for :user, :url => users_path, :html => {:class => 'MainForm'} do |f| %>
@@ -67,6 +71,13 @@
         </label>
         <%=  f.text_field :club_start_date, :tabindex => 7, :value => (@user.club_start_date.strftime("%m-%d-%Y") if @user.club_start_date) %>
 
+
+        <label for="user_club_grad_year">
+          <%="Class of ".l %>:
+          <em><%= "(YYYY)".l + " Please tell us when you graduated or are expected to graduate."%></em>
+        </label>
+        <%=  f.text_field :club_grad_year, :tabindex => 8, :value => (@user.club_grad_year.strftime("%Y") if @user.club_grad_year) %>
+
         <% if AppConfig.require_captcha_on_signup %>
           <div class="right" style='margin-top:2em;'>
             <%= recaptcha_tags %>
@@ -76,11 +87,11 @@
         <label for="user_password">
           <%= "Type your password:".l %>
         </label>
-        <%= f.password_field :password, :tabindex => 8 %>
+        <%= f.password_field :password, :tabindex => 9 %>
         <label for="user_password_confirmation">
           <%= "Re-type your password to confirm:".l %>
         </label>
-        <%= f.password_field :password_confirmation, :tabindex => 9 %>
+        <%= f.password_field :password_confirmation, :tabindex => 10 %>
         <%= hidden_field_tag :inviter_id, params[:inviter_id] %>
         <%= hidden_field_tag :inviter_code, params[:inviter_code] %>
         <p><%= submit_tag 'Sign up'.l %>

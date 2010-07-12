@@ -1,52 +1,31 @@
-<h3>
-75th SUOC Reunion Registration Page
-</h3>
-<p>
-You will be adding to a PayPal shopping cart, which may be somewhat combersome.
-After you hit, "Add to Cart" it will bring you to your PayPal shopping cart page. Then hit 
-"Continue Shopping" to bring you back to this page. Keep doing that until you are ready to check
-out and pay. We can accept any credit cards that PayPal accepts.
-<table class="reunion_charges">
+<h3>75th SUOC Reunion Registration</h3>
+<strong fontsize="+3">Register for the Event of the Century</strong>
+<table>
 <tr>
-  <td>
-  <b>75th Reunion Registration</b>
-  <p><strong>This one is required!</strong> You must hit "Add to Cart" to register yourself for the 75th Reunion.</p>
-  <p>This registration is for <%= @current_user.name %></b> who is registered 
-  as a <%= @current_user.club_member_status.name %> member on the suoc.syr.edu website.
-  </td>
-  <td>
-   <%= render :partial => "registration_add_cart" %>
-  </td>
+<td><img alt="Step 1" src="/images/Step1.gif"></td>
+<td colspan="4">Register Yourself. Please select T-Shirt Size.</td>
+</tr>
+<%= render :partial => "self_registration_add_cart" %>
+<tr>
+<td colspan="5">
+<hr/>
+</td>
 </tr>
 <tr>
-  <td>
-    <b>75th Reunion Registration for Guest.</b><p>Please add one 
-    for each guest you will be paying for, and bringing to the event.
-    <p>Please state his/her full name and whether they are/were
-    SUOC members.
-    <p>This applies to any kids over the age of 10.
-  </td>
-  <td>
-   <%= render :partial => "guest_add_cart" %>
-  </td>
+<td><img alt="Step 2" src="/images/Step2.gif"></td>
+<td colspan="4">Register any kids and guests you will be paying for.</td>
+</tr>
+<%= render :partial => "guest_registration_add_cart" %>
+<tr>
+<td colspan="5">
+<hr/>
+</td>
 </tr>
 <tr>
-  <td>
-   <b>75th Reunion T-Shirt. Please select size.</b>
-   <p>If you want more than one of the same size, just change the quanty on the PayPal cart page.
-   <p>If you want more than one, but different sizes, use "Add to Cart" for each size.
-  </td>
-  <td>
-   <%= render :partial => "tshirt_add_cart" %>
-  </td>
+<td><img alt="Step 3" src="/images/Step3.gif"></td>
+<td colspan="4">Review your shopping cart and checkout, if you haven't already.<br/>
+Please make sure that you did Step 1.
+</td>
 </tr>
-<tr>
-  <td>
-   Quanties and totals will be found on the PayPal cart. 
-   <p>Please press View Cart to make sure you have the right items and quanties.
-  </td>
-  <td>
-    <%= render :partial => "view_cart" %>
-  </td>
-</tr>
+<%= render :partial => "view_cart" %>
 </table>

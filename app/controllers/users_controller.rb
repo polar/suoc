@@ -63,13 +63,20 @@ class UsersController #< BaseController
   def create
     #@user       = User.new(params[:user])
     params[:user][:club_start_date] =
-        normalize_date_string(params[:user][:club_start_date])
+	normalize_date_string(params[:user][:club_start_date])
+    params[:user][:club_grad_year] =
+	normalize_grad_year_string(params[:user][:club_grad_year])
     @user       = ClubMember.new(params[:user])
     @user.role  = Role[:member]
 
     if (!AppConfig.require_captcha_on_signup || verify_recaptcha(@user)) && @user.save
       create_friendship_with_inviter(@user, params)
       flash[:notice] = :email_signup_thanks.l_with_args(:email => @user.email)
+      if RAILS_ENV == "development"
+	@user.activate
+	@user.add_role(:member)
+	@user.save
+      end
       redirect_to signup_completed_user_path(@user)
     else
       render :action => 'new'
@@ -112,6 +119,8 @@ class UsersController #< BaseController
     if permitted_to? :write, member
       params[:club_member][:club_start_date] =
           normalize_date_string(params[:club_member][:club_start_date])
+      params[:club_member][:club_grad_year] =
+          normalize_grad_year_string(params[:club_member][:club_grad_year])
       if member.update_attributes(params[:club_member])
         can_edit_info = current_user.admin? || current_user == member
         render_club_member_info(member, can_edit_info)
@@ -254,6 +263,16 @@ class UsersController #< BaseController
       end
     else
       stdate = "01-01-#{Date.today.year}"
+    end
+  end
+  
+  def normalize_grad_year_string(stdate)
+    if stdate
+      if stdate =~ /^\s*[0-9][0-9][0-9][0-9]\s*$/
+        stdate = "05-10-#{stdate}"
+      else
+        stdate
+      end
     end
   end
 end

@@ -25,7 +25,6 @@ class PayPalNotification
 	    "https://www.paypal.com/cgi-bin/webscr"
 	  elsif RAILS_ENV == "development"
 	    "https://www.sandbox.paypal.com/cgi-bin/webscr"
-	    "https://www.paypal.com/cgi-bin/webscr"
 	  else # test
 	    "https://www.sandbox.paypal.com/cgi-bin/webscr"
 	  end
@@ -124,7 +123,7 @@ class PayPalNotification
 	def initialize(hash, i)
 	  @name = hash["item_name#{i}"]
 	  @number =  hash["item_number#{i}"]
-	  @quanity =  hash["quantity#{i}"]
+	  @quantity =  hash["quantity#{i}"]
 	  @tax =  hash["tax#{i}"]
 	  @mc_handling =  hash["mc_handling#{i}"]
 	  @mc_gross =  hash["mc_gross_#{i}"]
@@ -153,17 +152,21 @@ class PayPalNotification
 	def to_s
 	  to_h.dump
 	end
+	
+	def self.items(params)
+	  # If no num_cart_items, assume 1?
+	  count = params["num_cart_items"]
+	  count = count ? count.to_i : 1
+	  its = Array.new
+	  for i in 1..count do
+	    its[i] = self.new(params,i)
+	  end
+	  return its
+	end
       end
 
       def items
-	# If no num_cart_items, assume 1?
-	count = params["num_cart_items"]
-	count = count ? count.to_i : 1
-	its = Array.new
-	for i in 1..count do
-	  its[i] = Item.new(params,i)
-	end
-	return its
+	Item.items(params)
       end
 
       # This is the invoice which you passed to paypal 
@@ -201,16 +204,6 @@ class PayPalNotification
 	empty!
 	parse(post)
       end
-
-      # the money amount we received in X.2 decimal.
-      def gross
-	raise NotImplementedError, "Must implement this method in the subclass"
-      end
-
-      def gross_cents
-	(gross.to_f * 100.0).round
-      end
-
       # reset the notification. 
       def empty!
 	@params  = Hash.new
