@@ -75,8 +75,10 @@ class ClubLeadershipsController < BaseController
   def auto_complete_for_club_member_login
   
     # split by spaces, downcase and create query for each.
-    conditions = params[:club_member][:login].downcase.split.map { 
-                      |w| "LOWER(login) LIKE '%" + w +"%'" }
+    # Remember to Sanitize the SQL
+    conditions = params[:club_member][:login].downcase.split.map {
+		    #             Sanitize       ***********************************
+		    |w| "LOWER(login) LIKE '%" + (w.gsub(/\\/, '\&\&').gsub(/'/, "''")) +"%'" }   # AND the queries.
 
     # AND the queries.
     find_options = { 
@@ -199,8 +201,10 @@ class ClubLeadershipsController < BaseController
     # If we have a typed in name, then find the new leader
     #
     if params[:club_member] && params[:club_member][:login]
+      # Remember to Sanitize the SQL
       conditions = params[:club_member][:login].downcase.split.map {
-                      |w| "LOWER(login) LIKE '%" + w +"%'" }   # AND the queries.
+	              #             Sanitize       ***********************************
+                      |w| "LOWER(login) LIKE '%" + (w.gsub(/\\/, '\&\&').gsub(/'/, "''")) +"%'" }   # AND the queries.
       find_options = {
         :conditions => conditions.join(" AND "),
         :order => "login ASC",

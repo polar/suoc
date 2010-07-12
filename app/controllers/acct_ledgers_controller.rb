@@ -32,8 +32,10 @@ class AcctLedgersController < BaseController
   def auto_complete_for_club_member_login
 
     # split by spaces, downcase and create query for each.
+    # Remember to Sanitize the SQL
     conditions = params[:club_member][:login].downcase.split.map {
-                      |w| "LOWER(login) LIKE '%" + w +"%'" }
+		    #             Sanitize       ***********************************
+		    |w| "LOWER(login) LIKE '%" + (w.gsub(/\\/, '\&\&').gsub(/'/, "''")) +"%'" }   # AND the queries.
 
     # AND the queries.
     find_options = {
