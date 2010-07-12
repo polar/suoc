@@ -9,10 +9,21 @@ class ReunionController < BaseController
   filter_access_to :steps, :require => :read
   filter_access_to :thanks, :require => :read
   
+  def get_registrants
+    @registrants = PaypalReunionPayment.all(:conditions => { :member_id => @current_user.id }).map {|p| Registrant.new(p)}
+    @self_registered = false
+    @registrants.each do |r|
+      if r
+	@self_registered ||= r.self_registered?
+      end
+    end
+  end
   def index
+    get_registrants
   end
 #   
   def show
+    get_registrants
     render :action => "index"
   end
   
@@ -66,6 +77,15 @@ class ReunionController < BaseController
     def fee
       @params["mc_fee"]
     end
+    
+    def self_registered?
+      items.each do |item|
+	if item && item.number == "100"
+	  return true
+	end
+      end
+    end
+	
   end
     
   def registrants

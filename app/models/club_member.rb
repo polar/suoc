@@ -58,7 +58,7 @@ class ClubMember < User
   # Make sure the Class of Date set to 4 years after the date
   # they joined, if they didn't set it themselves.
   def sure_up_grad_year
-    if !club_grad_year
+    if !club_grad_year && club_start_date
       self.club_grad_year = club_start_date + 4.years
     end
   end

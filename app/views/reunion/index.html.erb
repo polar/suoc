@@ -1,11 +1,60 @@
 <h3>75th SUOC Reunion Registration</h3>
-<strong fontsize="+3">Register for the Event of the Century</strong>
+<p>
+Welcome to the registration page for the SUOC 75th Reunion.<br/>This page is only for signing up and paying. 
+Please go to reunion site
+<a href="http://suocoldtimers.org">http://suocoldtimers.org</a> for continuing updates.
+<br>
 <table>
+
+<% if @self_registered %>
+<tr>
+<td colspan="5">
+<h2>Congratulations! <%= current_user.name %> is registered for the 75th Reunion!</h2>
+We have you on record as registering for the SUOC 75th Reunion.
+You may still register other people you may be bringing.
+</td>
+</tr>
+<% end %>
+
+<% if @registrants %>
+<tr>
+<td colspan="5">
+You have the following current registrants under your name:
+<% @registrants.each do |r| %>
+<%= render :partial => "item", :collection => r.items %>
+<% end %>
+</td>
+</tr>
+<% end %>
+
+<% if @registrants %>
+<tr>
+<td colspan="5">
+<hr/>
+</td>
+</tr>
+<tr>
+<% end %>
+
+<% if ! @self_registered %>
+<tr>
+<td colspan="5">
+<h2>Register for the Event of the Century!</h2>
+</td>
+</tr>
+<% end %>
+
 <tr>
 <td><img alt="Step 1" src="/images/Step1.gif"></td>
-<td colspan="4">Register Yourself. Please select T-Shirt Size.</td>
+<% if ! @self_registered %>
+<td colspan="5">Register Yourself. Please select T-Shirt Size.</td>
 </tr>
 <%= render :partial => "self_registration_add_cart" %>
+<% else %>
+<td colspan="5">You're already registered!!.</td>
+</tr>
+<% end %>
+
 <tr>
 <td colspan="5">
 <hr/>
@@ -21,6 +70,7 @@
 <hr/>
 </td>
 </tr>
+
 <tr>
 <td><img alt="Step 3" src="/images/Step3.gif"></td>
 <td colspan="4">Review your shopping cart and checkout, if you haven't already.<br/>
@@ -28,4 +78,5 @@ Please make sure that you did Step 1.
 </td>
 </tr>
 <%= render :partial => "view_cart" %>
+
 </table>
