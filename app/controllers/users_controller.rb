@@ -190,6 +190,31 @@ class UsersController #< BaseController
     leader.destroy
     redirect_to :action => "show", :id => params[:id]
   end
+  
+  #
+  # Override
+  #  This should come with an Email. It's in the new version
+  #  of CommunityEngine, but something still isnt' right
+  #  The signup_completed view states a link with "id=#{@user.to_param}"
+  # which is defined to be the login_slug. This doesn't make sense anyway.
+  
+  def resend_activation
+    return unless request.post?       
+
+    if params[:email]
+      @user = User.find_by_email(params[:email])
+    else
+      @user = User.find(params[:id])
+    end
+    
+    if @user && !@user.active?
+      flash[:notice] = :activation_email_resent_message.l
+      UserNotifier.deliver_signup_notification(@user)    
+      redirect_to login_path and return
+    else
+      flash[:notice] = :activation_email_not_sent_message.l
+    end
+  end
 
   protected
 
