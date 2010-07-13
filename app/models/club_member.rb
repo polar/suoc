@@ -47,21 +47,11 @@ class ClubMember < User
 
   # Make sure the SUID is just nine digits
   before_validation :normalize_club_memberid
-  # After a start date has been validated
-  # make sure the expected grad year is set.
-  after_validation :sure_up_grad_year
   
   def validate
     validate_club_member_status
   end
 
-  # Make sure the Class of Date set to 4 years after the date
-  # they joined, if they didn't set it themselves.
-  def sure_up_grad_year
-    if !club_grad_year && club_start_date
-      self.club_grad_year = club_start_date + 4.years
-    end
-  end
   
   #
   # Inorder to be a life member, you have to have a member since date of at

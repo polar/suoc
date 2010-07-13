@@ -64,7 +64,7 @@
           <%="Birthday".l %>:
           <em><%= "(Required: MM-DD-YYYY)".l %></em>
         </label>
-        <%=  f.text_field :birthday, :tabindex => 6, :value => @user.birthday.strftime("%m-%d-%Y") if @user.birthday %>
+        <%=  f.text_field :birthday, :tabindex => 6, :value => (@user.birthday.strftime("%m-%d-%Y") if @user.birthday) %>
 
         <label for="user_club_start_date">
           <%="Member in SUOC since".l %>:

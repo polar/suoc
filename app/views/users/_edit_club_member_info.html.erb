@@ -40,9 +40,8 @@
   </tr>
   <tr>
     <th>Affiliation:</th>
-    <td><%= f.select :club_affiliation_id,
-                ClubAffiliation.find(:all).collect {|s| [ "#{s.name}: #{s.description}", s.id]},
-                {:prompt => "Please Select"} %>
+    <td><%= f.collection_select :club_affiliation_id,
+                ClubAffiliation.find(:all), :id, :name %>
     </td>
   </tr>
   <tr>
@@ -58,7 +57,7 @@
     </td>
   </tr>
   <tr>
-    <th>Class of YYY:</th>
+    <th>Class of YYYY:</th>
     <td><%= f.text_field :club_grad_year,
             :value => fmt_date(member.club_grad_year) %>
     </td>
