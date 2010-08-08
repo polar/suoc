@@ -1,9 +1,47 @@
-<%if RAILS_ENV == "production" %>
-<% else %>
+<script type='text/javascript'>
 
-<form target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+function formValidator(){
+    // Make quick references to our fields
+    var fullname = document.getElementById('fullname');
+    var nonempty = nonEmptyValidator(fullname, "You must enter the full name of the person.");
+    if (nonempty) {
+      validName = nameValidator(fullname, "Full name at least First and Last name with capitals. It should look nice, e.g. Rosie O'Grady 3rd");
+      if (validName) {
+	return true;
+      }
+    }
+    return false;
+}
+
+function nonEmptyValidator(elem, helperMsg){
+	if(elem.value.length == 0){
+		alert(helperMsg);
+		elem.focus(); // set the focus to this input
+		return false;
+	}
+	return true;
+}
+
+function nameValidator(elem, helperMsg){
+	var alphaExp = /^[A-Z][A-Za-z\'\-]+(((\s[A-Z\'\-])(\s*[A-Z][A-Za-z\'\-]+)(\s*[A-Z0-9][A-Za-z0-9\'\-]+)*)|((\s*[A-Z\'][A-Za-z\'\-]+)(\s*[A-Z0-9][A-Za-z0-9\'\-]+)*))$/;
+	if(elem.value.match(alphaExp)){
+		return true;
+	}else{
+		alert(helperMsg);
+		elem.focus();
+		return false;
+	}
+}
+</script>
+<%if RAILS_ENV == "production" %>
+<form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" onsubmit="return formValidator()">
 <input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="XDR27AX7NZ7X8">
+<input type="hidden" name="hosted_button_id" value="QKQU2RKFTE9WG">
+<% else %>
+<form target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" onsubmit="return formValidator()">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="C6T3XS4WKYEKW">
+<% end %>
 <input type="hidden" name="currency_code" value="USD">
 <input type="hidden" name="on3" value="memberid">
  <%= "<input type='hidden' name='os3' value='#{@current_user.id}'>" %>
@@ -13,18 +51,19 @@
 <td valign="top">
 <input type="hidden" name="on0" value="Type">
 <select name="os0">
-	<option value="Adult" selected="true">Adult - $99.00</option>
-	<option value="Kid over 10">Kid over 10 - $99.00</option>
+        <option value="Adult 16+">Adult&nbsp;16+&nbsp;&nbsp;-&nbsp;$99.00</option>
+	<option value="Kid 10-15">Kid&nbsp;10-15&nbsp;&nbsp;-&nbsp;$50.00</option>
+	<option value="Kid 5-10">Kid&nbsp;&nbsp;5-10&nbsp;&nbsp;&nbsp;-&nbsp;$35.00</option>
 </select>
 <br>
 <br>
-<input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_cart_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_cart_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </td>
 <td valign="top">
 <label>Full Name:</label>
 <input type="hidden" name="on1" value="Full Name">
-<input type="text" name="os1" maxlength="60">
+<input id="fullname" type="text" name="os1" maxlength="60">
 </td>
 <td valign="top">
 <input type="hidden" name="on2" value="T-Shirt">
@@ -43,4 +82,3 @@
 </tr>
 
 </form>
-<% end %>
