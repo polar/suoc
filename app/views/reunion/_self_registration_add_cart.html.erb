@@ -14,8 +14,8 @@
 <tr>
 <td></td>
 <td valign="top">
-<input type="hidden" name="on1" value="Type">
-<select name="os1">
+<input type="hidden" name="on0" value="Type">
+<select name="os0">
 	<option value="Adult">Adult - $99.00</option>
 </select>
 <br>
@@ -25,13 +25,13 @@
 </td>
 <td valign="top">
 <label>Full Name:</label>
-<input type="hidden" name="on0" value="Full Name">
- <%= "<input type='text' name='os0' readonly='true' value='#{@current_user.name}'>" %>
+<input type="hidden" name="on2" value="Full Name">
+ <%= "<input type='text' name='os2' readonly='true' value='#{@current_user.name}'>" %>
 </td>
 <td valign="top">
-<input type="hidden" name="on2" value="T-Shirt">
+<input type="hidden" name="on1" value="T-Shirt">
 <label>T-Shirt:</label>
-<select name="os2">
+<select name="os1">
 	<option value="Small">Small</option>
 	<option value="Medium">Medium</option>
 	<option value="Large">Large</option>

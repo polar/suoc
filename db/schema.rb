@@ -62,11 +62,6 @@ ActiveRecord::Schema.define(:version => 20100712143825) do
     t.datetime "updated_at"
   end
 
-  create_table "acct_actions_acct_action_sets", :id => false, :force => true do |t|
-    t.integer "acct_action_id"
-    t.integer "acct_action_set_id"
-  end
-
   create_table "acct_categories", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -514,7 +509,7 @@ ActiveRecord::Schema.define(:version => 20100712143825) do
   create_table "invitations", :force => true do |t|
     t.string   "email_addresses"
     t.string   "message"
-    t.integer  "user_id"
+    t.string   "user_id"
     t.datetime "created_at"
   end
 
@@ -746,7 +741,7 @@ ActiveRecord::Schema.define(:version => 20100712143825) do
   add_index "users", ["vendor"], :name => "index_users_on_vendor"
 
   create_table "votes", :force => true do |t|
-    t.integer  "user_id"
+    t.string   "user_id"
     t.integer  "poll_id"
     t.integer  "choice_id"
     t.datetime "created_at"
