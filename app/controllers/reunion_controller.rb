@@ -146,9 +146,9 @@ class ReunionController < BaseController
        case a.type
        when "Adult" then @adults += 1
        when "Adult 16+" then @adults += 1
-       when "Kid 10-15" then @kid1015 += 1
-       when "Kid 5-10" then @kid0509 += 1
-       when "Kid 5-9" then @kid0509 += 1
+       when "Kid 10-15" then @kids1015 += 1
+       when "Kid 5-10" then @kids0509 += 1
+       when "Kid 5-9" then @kids0509 += 1
        end
     end
   end
