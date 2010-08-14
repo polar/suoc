@@ -124,6 +124,7 @@ class ReunionController < BaseController
     attr_accessor :status
     attr_accessor :affiliation
     attr_accessor :year
+    attr_accessor :type
   end
   
   def registrants
@@ -151,6 +152,7 @@ class ReunionController < BaseController
     reg.year = registrant.member.club_start_date.year
     reg.status = registrant.member.club_member_status.name
     reg.affiliation = registrant.member.club_affiliation.name
+    reg.type = "Adult"
     atts = [reg]
     for i in registrant.items do
        if i && i.number != "100"
@@ -160,6 +162,7 @@ class ReunionController < BaseController
          reg.year = registrant.member.club_start_date.year
          reg.status = "Guest"
          reg.affiliation = registrant.member.club_affiliation.name
+         reg.type = i.type
          atts <<= reg
        end
     end
