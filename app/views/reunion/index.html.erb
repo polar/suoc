@@ -19,7 +19,7 @@ You may still register other people you may be bringing.
 </tr>
 <% end %>
 
-<% if @registrants %>
+<% if !@registrants.empty? %>
 <tr>
 <td colspan="5">
 You have the following current registrants under your name:
@@ -30,7 +30,7 @@ You have the following current registrants under your name:
 </tr>
 <% end %>
 
-<% if @registrants %>
+<% if !@registrants.empty? %>
 <tr>
 <td colspan="5">
 Please go to <a href="http://suocoldtimers.org">http://suocoldtimers.org</a> to contact somebody if you need to cancel and need a refund.

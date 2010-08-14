@@ -158,6 +158,7 @@ class ReunionController < BaseController
          reg.name = i.full_name
          reg.guest_of = registrant.member.name
          reg.year = registrant.member.club_start_date.year
+         reg.status = "Guest"
          reg.affiliation = registrant.member.club_affiliation.name
          atts <<= reg
        end
