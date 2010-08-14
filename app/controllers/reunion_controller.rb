@@ -7,6 +7,7 @@ class ReunionController < BaseController
   filter_access_to :all
   filter_access_to :registrants, :require => :read
   filter_access_to :who, :require => :read
+  filter_access_to :tshirts, :require => :read
   filter_access_to :steps, :require => :read
   filter_access_to :thanks, :require => :read
   
@@ -139,6 +140,32 @@ class ReunionController < BaseController
     end  
     @attendees = @attendees.sort { |x,y| x.name <=> y.name }
   end
+
+  def tshirts
+    @registrants = PaypalReunionPayment.all.map {|p| Registrant.new(p)}
+    @small = 0
+    @medium = 0
+    @large = 0
+    @largeX = 0
+    @large2X = 0
+    @large3X = 0
+    for r in @registrants do
+      for i in r.items
+        if i
+          case i.tshirt 
+          when "Small" then @small += 1
+          when "Medium" then @medium += 1
+          when "Large" then @large += 1
+          when "X-Large" then @largeX += 1
+          when "2X-Large" then @large2X += 1
+          when "3X-Large" then @lage3X += 1
+          end
+       end
+      end
+
+    end
+  end
+
   
   def thanks
     @registrants = PaypalReunionPayment.all(:conditions => { :member_id => @current_user.id }).map {|p| Registrant.new(p)}
