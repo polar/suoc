@@ -139,6 +139,18 @@ class ReunionController < BaseController
       @attendees += get_attendees(r)
     end  
     @attendees = @attendees.sort { |x,y| x.name <=> y.name }
+    @adults = 0
+    @kids1015 = 0
+    @kids0509 = 0
+    for a in @attendees do
+       case a.type
+       when "Adult" then @adults += 1
+       when "Adult 16+" then @adults += 1
+       when "Kid 10-15" then @kid1015 += 1
+       when "Kid 5-10" then @kid0509 += 1
+       when "Kid 5-9" then @kid0509 += 1
+       end
+    end
   end
 
   def tshirts
