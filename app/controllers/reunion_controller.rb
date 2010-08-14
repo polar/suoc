@@ -6,6 +6,7 @@ class ReunionController < BaseController
   before_filter :login_required
   filter_access_to :all
   filter_access_to :registrants, :require => :read
+  filter_access_to :who, :require => :read
   filter_access_to :steps, :require => :read
   filter_access_to :thanks, :require => :read
   
@@ -89,6 +90,10 @@ class ReunionController < BaseController
       @params = eval payment.ipn_data
     end
     
+    def member
+      @payment.member
+    end
+
     def items
       Item.items(@params)
     end
@@ -111,12 +116,53 @@ class ReunionController < BaseController
     end
 	
   end
-    
+  
+  class Attendee
+    attr_accessor :name
+    attr_accessor :year
+    attr_accessor :guest_of
+    attr_accessor :status
+    attr_accessor :affiliation
+    attr_accessor :year
+  end
+  
   def registrants
     @registrants = PaypalReunionPayment.all.map {|p| Registrant.new(p)}
+  end
+  
+  def who
+    @registrants = PaypalReunionPayment.all.map {|p| Registrant.new(p)}
+    @attendees = []
+    for r in @registrants do
+      @attendees += get_attendees(r)
+    end  
+    @attendees = @attendees.sort { |x,y| x.name <=> y.name }
   end
   
   def thanks
     @registrants = PaypalReunionPayment.all(:conditions => { :member_id => @current_user.id }).map {|p| Registrant.new(p)}
   end
+  
+  private
+
+  def get_attendees(registrant)
+    reg = Attendee.new
+    reg.name = registrant.member.name
+    reg.year = registrant.member.club_start_date.year
+    reg.status = registrant.member.club_member_status.name
+    reg.affiliation = registrant.member.club_affiliation.name
+    atts = [reg]
+    for i in registrant.items do
+       if i && i.number != "100"
+         reg = Attendee.new
+         reg.name = i.full_name
+         reg.guest_of = registrant.member.name
+         reg.year = registrant.member.club_start_date.year
+         reg.affiliation = registrant.member.club_affiliation.name
+         atts <<= reg
+       end
+    end
+    return atts
+  end
+  
 end
