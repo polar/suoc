@@ -31,6 +31,30 @@ class ReunionController < BaseController
     def cost
       mc_gross
     end
+    def friday
+      options.each do |opt|
+	if opt && opt[0] == "Friday"
+	  return opt[1]
+	end
+      end
+      return ""
+    end
+    def saturday
+      options.each do |opt|
+	if opt && opt[0] == "Saturday"
+	  return opt[1]
+	end
+      end
+      return ""
+    end
+    def sunday
+      options.each do |opt|
+	if opt && opt[0] == "Sunday"
+	  return opt[1]
+	end
+      end
+      return ""
+    end
     def tshirt
       options.each do |opt|
 	if opt && opt[0] == "T-Shirt"

@@ -9,6 +9,14 @@
       <td></td>
       <td></td>
     </tr>
+    <tr>
+     <td></td>
+     <td><%= item.friday ? "Friday" : "" %></td>
+     <td><%= item.saturday ? "Saturday" : "" %></td>
+     <td><%= item.sunday ? "Sunday" : "" %></td>
+     <td></td>
+     <td></td>
+    </tr> 
   <% elsif item.number == "101" %>
     <tr>
       <td></td>
@@ -19,5 +27,13 @@
       <td></td>
       <td></td>
     </tr>
+    <tr>
+     <td></td>
+     <td><%= item.friday ? "Friday" : "" %></td>
+     <td><%= item.saturday ? "Saturday" : "" %></td>
+     <td><%= item.sunday ? "Sunday" : "" %></td>
+     <td></td>
+     <td></td>
+    </tr> 
   <% end %>
 <% end %>
