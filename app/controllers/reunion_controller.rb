@@ -161,9 +161,11 @@ class ReunionController < BaseController
     @largeX = 0
     @large2X = 0
     @large3X = 0
+    @total = 0
     for r in @registrants do
       for i in r.items
         if i
+          @total += 1
           case i.tshirt 
           when "Small" then @small += 1
           when "Medium" then @medium += 1
