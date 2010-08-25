@@ -2,6 +2,11 @@
 
 <%= @adults %> Adults, <%= @kids1015 %> Kids 10-15, <%= @kids0509 %> Kids 5-9
 <p>
+<% @options = {"First Name"=>"first", "Last Name" => "last", "Reg Date" => "date", "Year" => "year" } %>
+<% form_tag({:action => "who"}, {:method => :get}) do %>
+Sort By: <%= select_tag "sort", options_for_select(@options, @sort), {:onchange=>  "submit()"} %>
+<% end %>
+<p>
 <table>
 <tr>
   <th>Name</th>
@@ -10,6 +15,7 @@
   <th>Status</th>
   <th>Year</th>
   <th>Type</th>
+  <th>Reg Date</th>
 </tr>
 <%= render :partial => "attendee", :collection => @attendees %>
 </table>

@@ -108,6 +108,9 @@ class ReunionController < BaseController
       @params["mc_fee"]
     end
     
+    def date
+      Time.parse(@params["payment_date"])
+    end
     def self_registered?
       items.each do |item|
 	if item && item.number == "100"
@@ -126,6 +129,7 @@ class ReunionController < BaseController
     attr_accessor :affiliation
     attr_accessor :year
     attr_accessor :type
+    attr_accessor :date
   end
   
   def registrants
@@ -137,8 +141,15 @@ class ReunionController < BaseController
     @attendees = []
     for r in @registrants do
       @attendees += get_attendees(r)
-    end  
-    @attendees = @attendees.sort { |x,y| x.name <=> y.name }
+    end
+    @sort = params[:sort] ? params[:sort] : "first"
+    case params[:sort]
+      when "last" then @attendees = @attendees.sort { |x,y| x.name.split.last <=> y.name.split.last }
+      when "date" then @attendees = @attendees.sort { |x,y| x.date <=> y.date }
+      when "year" then @attendees = @attendees.sort { |x,y| x.year <=> y.year }
+      else
+        @attendees = @attendees.sort { |x,y| x.name <=> y.name }
+    end
     @adults = 0
     @kids1015 = 0
     @kids0509 = 0
@@ -194,6 +205,7 @@ class ReunionController < BaseController
     reg.status = registrant.member.club_member_status.name
     reg.affiliation = registrant.member.club_affiliation.name
     reg.type = "Adult"
+    reg.date = registrant.date
     atts = [reg]
     for i in registrant.items do
        if i && i.number != "100"
@@ -204,6 +216,7 @@ class ReunionController < BaseController
          reg.status = "Guest"
          reg.affiliation = registrant.member.club_affiliation.name
          reg.type = i.type
+	 reg.date = registrant.date
          atts <<= reg
        end
     end
