@@ -14,8 +14,8 @@ class AcctReportsController < BaseController
                                          :conditions => { :account_type_id => AcctAccountType[:Liability] })
     @categories = AcctCategory.all( )
 
-    @start_date = Date.parse (params[:start_date] ? params[:start_date] : fiscal_year_start_date)
-    @end_date = Date.parse (params[:end_date] ? params[:end_date] : fiscal_year_end_date)
+    @start_date = Date.parse(params[:start_date] ? params[:start_date] : fiscal_year_start_date)
+    @end_date = Date.parse(params[:end_date] ? params[:end_date] : fiscal_year_end_date)
 
     @income = calculate(@income_accounts, @categories, @start_date, @end_date)
     @expense = calculate(@expense_accounts, @categories, @start_date, @end_date)

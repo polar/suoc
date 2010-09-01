@@ -14,8 +14,8 @@ class AcctAccountsController < BaseController
   def index
     @page = params[:page]
     @per_page = params[:per_page] ? params[:per_page] : ACCOUNTS_PER_PAGE
-    @start_date = Date.parse (params[:start_date] ? params[:start_date] : fiscal_year_start_date)
-    @end_date = Date.parse (params[:end_date] ? params[:end_date] : fiscal_year_end_date)
+    @start_date = Date.parse(params[:start_date] ? params[:start_date] : fiscal_year_start_date)
+    @end_date = Date.parse(params[:end_date] ? params[:end_date] : fiscal_year_end_date)
     @accounts = AcctAccount.paginate(:all,
         :page => @page, :per_page => @per_page)
     @accounts.replace( @accounts.map do |a|
@@ -31,8 +31,8 @@ class AcctAccountsController < BaseController
   def show
     @page = params[:page]
     @per_page = params[:per_page] ? params[:per_page] : ENTRIES_PER_PAGE
-    @start_date = Date.parse (params[:start_date] ? params[:start_date] : fiscal_year_start_date)
-    @end_date = Date.parse (params[:end_date] ? params[:end_date] : fiscal_year_end_date)
+    @start_date = Date.parse(params[:start_date] ? params[:start_date] : fiscal_year_start_date)
+    @end_date = Date.parse(params[:end_date] ? params[:end_date] : fiscal_year_end_date)
     
     @category = !params[:category].nil? && !params[:category].empty? ? 
                      AcctCategory.find(params[:category]) : 
