@@ -109,7 +109,7 @@ class ReunionController < BaseController
     end
     
     def date
-      Time.parse(@params["payment_date"])
+      @payment.created_at
     end
     def self_registered?
       items.each do |item|
