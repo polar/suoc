@@ -134,6 +134,13 @@ class ReunionController < BaseController
   
   def registrants
     @registrants = PaypalReunionPayment.all.map {|p| Registrant.new(p)}
+    @gross_income = 0
+    @gross_fees = 0
+    @registrants.each do |x|
+      @gross_income += eval x.amount_paid
+      @gross_fees += eval x.fee
+    end
+    @net_income = @gross_income - @gross_fees
   end
   
   def who
