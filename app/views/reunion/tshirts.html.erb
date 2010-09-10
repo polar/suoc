@@ -27,7 +27,7 @@
 </tr>
 </table>
 <p>
-<% @options = {"First Name"=>"first", "Last Name" => "last", "Reg Date" => "date" } %>
+<% @options = {"First Name"=>"first", "Last Name" => "last", "Reg Date" => "date", "Size" => "size" } %>
 <% form_tag({:action => "tshirts"}, {:method => :get}) do %>
 Sort By: <%= select_tag "sort", options_for_select(@options, @sort), {:onchange=>  "submit()"} %>
 <% end %>

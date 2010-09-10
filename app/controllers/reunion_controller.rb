@@ -202,11 +202,13 @@ class ReunionController < BaseController
       @attendees += get_attendees(r)
     end
     
+    
+    # sorts are not stable!!!
     @sort = params[:sort] ? params[:sort] : "first"
     case params[:sort]
       when "last" then @attendees = @attendees.sort { |x,y| x.name.split.last <=> y.name.split.last }
       when "date" then @attendees = @attendees.sort { |x,y| x.date <=> y.date }
-      when "year" then @attendees = @attendees.sort { |x,y| x.year <=> y.year }
+      when "size" then @attendees = @attendees.sort { |x,y| sort_by_size(x,y) }
       else
         @attendees = @attendees.sort { |x,y| x.name <=> y.name }
     end
@@ -219,27 +221,44 @@ class ReunionController < BaseController
   
   private
 
+  # Sorts are not stable in Ruby, this impl is horrible
+  def sort_by_size(x,y)
+    sizes = ["Small","Medium","Large","X-Large","2X-Large","3X-Large"]
+    cmp = sizes.index(x.tshirt) <=> sizes.index(y.tshirt)
+    if cmp == 0
+      x.name <=> y.name
+    else
+      cmp
+    end
+  end
+    
   def get_attendees(registrant)
-    reg = Attendee.new
-    reg.name = registrant.member.name
-    reg.year = registrant.member.club_start_date.year
-    reg.status = registrant.member.club_member_status.name
-    reg.affiliation = registrant.member.club_affiliation.name
-    reg.type = "Adult"
-    reg.date = registrant.date
-    atts = [reg]
+    atts = []
     for i in registrant.items do
-       if i && i.number != "100"
-         reg = Attendee.new
-         reg.name = i.full_name
-         reg.guest_of = registrant.member.name
-         reg.year = registrant.member.club_start_date.year
-         reg.status = "Guest"
-         reg.affiliation = registrant.member.club_affiliation.name
-         reg.type = i.type
-	 reg.date = registrant.date
-	 reg.tshirt = i.tshirt
-         atts <<= reg
+      # Registrant may not be an Attendee, only if item 100
+       if i && i.number == "100"
+	  reg = Attendee.new
+	  reg.name = i.full_name
+	  reg.year = registrant.member.club_start_date.year
+	  reg.status = registrant.member.club_member_status.name
+	  reg.affiliation = registrant.member.club_affiliation.name
+	  reg.type = i.type
+	  reg.date = registrant.date
+	  reg.tshirt = i.tshirt
+          atts <<= reg
+       end
+      # Add Guests of Registrant
+       if i && i.number == "101"
+         guest = Attendee.new
+         guest.name = i.full_name
+         guest.guest_of = registrant.member.name
+         guest.year = registrant.member.club_start_date.year
+         guest.status = "Guest"
+         guest.affiliation = registrant.member.club_affiliation.name
+         guest.type = i.type
+	 guest.date = registrant.date
+	 guest.tshirt = i.tshirt
+         atts <<= guest
        end
     end
     return atts
