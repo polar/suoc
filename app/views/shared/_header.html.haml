@@ -19,7 +19,7 @@
       = topnav_tab :people.l, { :url => users_path, :section => 'users' }
       - if current_user
         = topnav_tab :my_profile.l, { :url => user_path(current_user), :section => 'my_profile'}
-      = topnav_tab :donate.l, { :url => "/page/show/making-donations", :section => 'donate' }
+      !!!= topnav_tab :donate.l, { :url => "/page/show/making-donations", :section => 'donate' }
       - if current_user
         = topnav_tab "75th Reunion", { :url => "/reunion", :section => 'reunion' }
 
