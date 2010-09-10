@@ -190,7 +190,7 @@ class ReunionController < BaseController
           when "Large" then @large += 1
           when "X-Large" then @largeX += 1
           when "2X-Large" then @large2X += 1
-          when "3X-Large" then @lage3X += 1
+          when "3X-Large" then @large3X += 1
           end
        end
       end
