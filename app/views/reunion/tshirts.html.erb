@@ -26,3 +26,18 @@
 <td>Total</td><td class="decimal"><%= @total %></td>
 </tr>
 </table>
+<p>
+<% @options = {"First Name"=>"first", "Last Name" => "last", "Reg Date" => "date" } %>
+<% form_tag({:action => "tshirts"}, {:method => :get}) do %>
+Sort By: <%= select_tag "sort", options_for_select(@options, @sort), {:onchange=>  "submit()"} %>
+<% end %>
+<p>
+<table>
+<tr>
+  <th>Name</th>
+  <th>T-Shirt Size</th>
+  <th>Type</th>
+  <th>Reg Date</th>
+</tr>
+<%= render :partial => "tshirt", :collection => @attendees %>
+</table>

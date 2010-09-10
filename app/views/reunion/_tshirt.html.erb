@@ -1,0 +1,14 @@
+<tr>
+<td><%= if @sort == "last"
+           a = tshirt.name.split
+           l = a.slice!(-1)
+           (l + ", ") + a.join(" ")
+        else
+          tshirt.name
+        end
+     %></td>
+<td><%= tshirt.tshirt %></td>
+<td><%= tshirt.type %></td>
+<td><%= tshirt.date.strftime("%m-%d-%Y") %></td>
+
+</tr>

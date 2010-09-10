@@ -130,6 +130,7 @@ class ReunionController < BaseController
     attr_accessor :year
     attr_accessor :type
     attr_accessor :date
+    attr_accessor :tshirt
   end
   
   def registrants
@@ -194,7 +195,20 @@ class ReunionController < BaseController
           end
        end
       end
-
+    end
+    
+    @attendees = []
+    for r in @registrants do
+      @attendees += get_attendees(r)
+    end
+    
+    @sort = params[:sort] ? params[:sort] : "first"
+    case params[:sort]
+      when "last" then @attendees = @attendees.sort { |x,y| x.name.split.last <=> y.name.split.last }
+      when "date" then @attendees = @attendees.sort { |x,y| x.date <=> y.date }
+      when "year" then @attendees = @attendees.sort { |x,y| x.year <=> y.year }
+      else
+        @attendees = @attendees.sort { |x,y| x.name <=> y.name }
     end
   end
 
@@ -224,6 +238,7 @@ class ReunionController < BaseController
          reg.affiliation = registrant.member.club_affiliation.name
          reg.type = i.type
 	 reg.date = registrant.date
+	 reg.tshirt = i.tshirt
          atts <<= reg
        end
     end
