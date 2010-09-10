@@ -22,14 +22,6 @@
           -if current_user.admin?
             %li=link_to :admin_dashboard.l, admin_dashboard_path
                
-  .box
-    %h3 Donate to the SUOC Alumni Assocation. 
-    %p It's Tax Deductable!
-    %p Use PayPal and send a personal "gift" payment to "alumni@suoc.syr.edu". Apparently, so far, this method avoids nasty PayPal fees.
-    %p If you want to use a credit card, use the "Donate" button below, but we end up paying 3% of your donation + $0.30 transaction fee.
-    %p= render :partial => "pay_pal_donate_button"
-    %p
-    %p It will help us get a cabin and land in the Daks for SUOCers Old and New!
   .box.alt
     %h3=:stats.l
     %ul
