@@ -30,6 +30,7 @@ privileges do
   # submitted trip registrations
   #
   privilege :show_submitted
+  privilege :show_statistics
 end
 
 
@@ -141,7 +142,7 @@ authorization do
     has_permission_on :club_memberships, :to => [:manage]
     has_permission_on :club_offices, :to => [:manage]
     has_permission_on :club_officers, :to => [:manage]
-    has_permission_on :club_trip_registrations, :to => [:show_submitted]
+    has_permission_on :club_trip_registrations, :to => [:show_submitted, :show_statistics]
   end
 
   role :chair do
@@ -149,7 +150,7 @@ authorization do
   end
   role :leader do
     includes :ops_admin
-    has_permission_on :club_trip_registrations, :to => [:create]
+    has_permission_on :club_trip_registrations, :to => [:create, :show_statistics]
     has_permission_on :club_trip_registrations, :to => [:update,:delete] do
       if_attribute :leader_id => is {user.id}
     end

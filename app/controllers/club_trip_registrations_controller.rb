@@ -240,7 +240,7 @@ class ClubTripRegistrationsController < BaseController
     @show_create = permitted_to? :create, :club_trip_registrations
     @show_configure = permitted_to? :configure, :club_trip_registrations
     @show_pending = permitted_to? :read, :club_trip_registrations
-    @show_statistics = permitted_to? :manage, :club_trip_registrations
+    @show_statistics = permitted_to? :show_statistics, :club_trip_registrations
     @show_submitted = permitted_to? :show_submitted, :club_trip_registrations
   end
   
