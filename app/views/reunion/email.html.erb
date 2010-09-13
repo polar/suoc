@@ -1,6 +1,6 @@
 <h3>Registrant Emails</h3>
 
-<%= @registrants.count %> Registrants
+<%= @registrants.size %> Registrants
 <p>
 <% @options = {"First Name"=>"first", "Last Name" => "last", "Reg Date" => "date" } %>
 <% form_tag({:action => "email"}, {:method => :get}) do %>
