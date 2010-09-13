@@ -4,12 +4,15 @@ class ClubTripRegistrationsController < BaseController
   before_filter :login_required
   filter_access_to :all
   filter_access_to [:statistics, :list_submitted], :require => :read
+  filter_access_to [:list_submitted], :require => :manage
   filter_access_to :submit_registration, :require => :update
   filter_access_to [:add_me, :remove_me],
                    :require => [:read, :add_remove]
   filter_access_to [:configure, :update_configuration],
                    :require => [:configure]
 
+  before_filter :show_permissions, :on => [ :show, :new, :edit, :configure, :statistics, :list_submitted ]
+  
   #
   # This makes us load the Rico Javascripts
   #
@@ -19,9 +22,6 @@ class ClubTripRegistrationsController < BaseController
     @club_trip_registrations = ClubTripRegistration.find(:all,
            :order => "departure_date DESC",
            :conditions => "submit_date IS NULL")
-    @show_create = permitted_to? :create, :club_trip_registrations
-    @show_configure = permitted_to? :configure, :club_trip_registrations
-    @show_statistics = permitted_to? :read, :club_trip_registrations
   end
 
   def show
@@ -40,9 +40,6 @@ class ClubTripRegistrationsController < BaseController
     @show_edit =
       !@club_trip_registration.submitted? &&
         @club_trip_registration.leader == current_user
-    @show_create = permitted_to? :create, :club_trip_registrations
-    @show_configure = permitted_to? :configure, :club_trip_registrations
-    @show_statistics = permitted_to? :read, :club_trip_registrations
   end
 
   def new
@@ -182,9 +179,6 @@ class ClubTripRegistrationsController < BaseController
 	@end_date = end_date
 	@trips = []
     end
-    @show_create = permitted_to? :create, :club_trip_registrations
-    @show_configure = permitted_to? :configure, :club_trip_registrations
-    @show_statistics = permitted_to? :read, :club_trip_registrations
   end
   def list_submitted
     start_date = params[:start_date] ?
@@ -211,9 +205,6 @@ class ClubTripRegistrationsController < BaseController
 	@end_date = end_date
 	@trips = []
     end
-    @show_create = permitted_to? :create, :club_trip_registrations
-    @show_configure = permitted_to? :configure, :club_trip_registrations
-    @show_statistics = permitted_to? :read, :club_trip_registrations
   end
   
   def configure
@@ -242,4 +233,15 @@ class ClubTripRegistrationsController < BaseController
 
     redirect_to(club_trip_registrations_url)
   end
+  
+  private
+  
+  def show_permissions
+    @show_create = permitted_to? :create, :club_trip_registrations
+    @show_configure = permitted_to? :configure, :club_trip_registrations
+    @show_pending = permitted_to? :read, :club_trip_registrations
+    @show_statistics = permitted_to? :manage, :club_trip_registrations
+    @show_submitted = permitted_to? :manage, :club_trip_registrations
+  end
+  
 end

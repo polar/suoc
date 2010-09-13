@@ -1,0 +1,22 @@
+<br/><br/><hr/>
+<% if @show_create %>
+<p>
+<%= link_to 'Create New Trip Registration', new_club_trip_registration_path %>
+<% end %>
+<% if @show_pending %>
+<p>
+<%= link_to 'Pending Trip Registrations', url_for(:action => :index) %>
+<% end %>
+<% if @show_submitted %>
+<p>
+<%= link_to 'Submitted Trip Registrations', url_for(:action => :list_submitted) %>
+<% end %>
+<% if @show_statistics %>
+<p>
+<%= link_to "Trip Registration Statistics", url_for(:action => :statistics) %>
+<% end %>
+<p>
+<% if @show_configure %>
+<p>
+<%= link_to 'Configure Trip Registration', url_for(:action => :configure) %>
+<% end %>

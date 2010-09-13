@@ -35,19 +35,4 @@ Important! You must submit the trip before the trip leaves. Once you submit the 
   </tr>
 <% end %>
 </table>
-
-<br />
-<% if @show_create %>
-<p>
-<%= link_to 'Create New Trip Registration', new_club_trip_registration_path %>
-<% end %>
-<p>
-<%= link_to 'Submitted Trip Registrations', url_for(:action => :list_submitted) %>
-<% if @show_statistics %>
-<p>
-<%= link_to "Trip Registration Statistics", url_for(:action => :statistics) %>
-<% end %>
-<% if @show_configure %>
-<p>
-<%= link_to 'Configure Trip Registration', url_for(:action => :configure) %>
-<% end %>
+<%= render :partial => "footer" %>

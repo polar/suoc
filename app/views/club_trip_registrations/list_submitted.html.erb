@@ -26,20 +26,4 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
  </tr>
 <% end %>
 </table>
-
-
-<br />
-<p>
-<%= link_to 'Pending Trip Registrations', url_for(:action => :index) %>
-<% if @show_create %>
-<p>
-<%= link_to 'Create New Trip Registration', new_club_trip_registration_path %>
-<% end %>
-<% if @show_statistics %>
-<p>
-<%= link_to "Trip Registration Statistics", url_for(:action => :statistics) %>
-<% end %>
-<% if @show_configure %>
-<p>
-<%= link_to 'Configure Trip Registration', url_for(:action => :configure) %>
-<% end %>
+<%= render :partial => "footer" %>
