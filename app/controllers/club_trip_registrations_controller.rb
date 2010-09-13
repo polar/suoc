@@ -4,7 +4,7 @@ class ClubTripRegistrationsController < BaseController
   before_filter :login_required
   filter_access_to :all
   filter_access_to [:statistics, :list_submitted], :require => :read
-  filter_access_to [:list_submitted], :require => :manage
+  filter_access_to [:list_submitted], :require => :read_submitted
   filter_access_to :submit_registration, :require => :update
   filter_access_to [:add_me, :remove_me],
                    :require => [:read, :add_remove]
@@ -241,7 +241,7 @@ class ClubTripRegistrationsController < BaseController
     @show_configure = permitted_to? :configure, :club_trip_registrations
     @show_pending = permitted_to? :read, :club_trip_registrations
     @show_statistics = permitted_to? :manage, :club_trip_registrations
-    @show_submitted = permitted_to? :manage, :club_trip_registrations
+    @show_submitted = permitted_to? :show_submitted, :club_trip_registrations
   end
   
 end

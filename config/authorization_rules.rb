@@ -24,6 +24,12 @@ privileges do
   # add transactions.
   #
   privilege :manage_transactions
+  
+  #
+  # This privilege is so that officers can be the only ones to view
+  # submitted trip registrations
+  #
+  privilege :show_submitted
 end
 
 
@@ -72,7 +78,6 @@ authorization do
   #
   role :trip_admin do
     has_permission_on :club_trips, :to => :manage
-    has_permission_on :club_trip_registrations, :to => :manage
   end
 
   #
@@ -136,6 +141,7 @@ authorization do
     has_permission_on :club_memberships, :to => [:manage]
     has_permission_on :club_offices, :to => [:manage]
     has_permission_on :club_officers, :to => [:manage]
+    has_permission_on :club_trip_registrations, :to => [:show_submitted]
   end
 
   role :chair do
