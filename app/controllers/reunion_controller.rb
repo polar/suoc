@@ -10,6 +10,7 @@ class ReunionController < BaseController
   filter_access_to :tshirts, :require => :read
   filter_access_to :steps, :require => :read
   filter_access_to :thanks, :require => :read
+  filter_access_to :email, :require => :read
   
   def get_registrants
     @registrants = PaypalReunionPayment.all(:conditions => { :member_id => @current_user.id }).map {|p| Registrant.new(p)}
@@ -106,6 +107,9 @@ class ReunionController < BaseController
     end
     def fee
       @params["mc_fee"]
+    end
+    def email
+      member.email
     end
     
     def date
@@ -214,7 +218,19 @@ class ReunionController < BaseController
     end
   end
 
-  
+  def email
+    @registrants = PaypalReunionPayment.all.map {|p| Registrant.new(p)}
+    @sort = params[:sort] ? params[:sort] : "first"
+    case params[:sort]
+      when "last" then @registrants = @registrants.sort { |x,y| x.name.split.last <=> y.name.split.last }
+      when "date" then @registrants = @registrants.sort { |x,y| x.date <=> y.date }
+      else
+        @registrants = @registrants.sort { |x,y| x.name <=> y.name }
+    end
+    @emails_only = @registrants.map {|r| r.email }
+    @name_emails = @registrants.map {|r| "#{r.member.name.inspect} &lt;#{r.email}&gt;"}
+  end
+
   def thanks
     @registrants = PaypalReunionPayment.all(:conditions => { :member_id => @current_user.id }).map {|p| Registrant.new(p)}
   end

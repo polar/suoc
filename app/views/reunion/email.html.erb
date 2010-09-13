@@ -1,0 +1,14 @@
+<h3>Registrant Emails</h3>
+
+<%= @registrants.count %> Registrants
+<p>
+<% @options = {"First Name"=>"first", "Last Name" => "last", "Reg Date" => "date" } %>
+<% form_tag({:action => "email"}, {:method => :get}) do %>
+Sort By: <%= select_tag "sort", options_for_select(@options, @sort), {:onchange=>  "submit()"} %>
+<% end %>
+<h3>Comma Separated</h3>
+<%= @emails_only.join ", " %>
+<h3>Name and Email</h3>
+<%= @name_emails.join ", " %>
+<h3>Name and Email List</h3>
+<%= @name_emails.join "<br/>"%>
