@@ -10,5 +10,7 @@
 <td><%= tshirt.tshirt %></td>
 <td><%= tshirt.type %></td>
 <td><%= tshirt.date.strftime("%m-%d-%Y") %></td>
-
+<td><%= tshirt.extra ? "*" : "" %></td>
+<td><%= tshirt.quantity != "1" ? tshirt.quantity : "" %></td>
+<td><%= tshirt.ship ? "MUST SHIP" : "" %></td>
 </tr>

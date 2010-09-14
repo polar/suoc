@@ -1,0 +1,45 @@
+<% if RAILS_ENV=="production" %>
+<form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="LARPFEFQ9VYRG">
+<% else %>
+<form target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="J387VGV8CRK4L">
+<% end %>
+<input type="hidden" name="on2" value="memberid">
+ <%= "<input type='hidden' name='os2' value='#{@current_user.id}'>" %>
+<tr>
+<td></td>
+<td valign="top">
+<input type="hidden" name="on1" value="T-Shirt">
+<label>T-Shirt:</label>
+<select name="os1">
+	<option value="Small">Small</option>
+	<option value="Medium">Medium</option>
+	<option value="Large">Large</option>
+	<option value="X-Large">X-Large</option>
+	<option value="2X-Large">2X-Large</option>
+	<option value="3X-Large">3X-Large</option>
+</select>
+</td>
+<td>$11.00</td>
+<td>$5-11 Shipping</td>
+<tr>
+<td></td>
+<td colspan="3">
+<br/>
+<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_cart_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+<br/>
+<br/>
+Do this for each size you want. You can handle quantities in your shopping cart.
+<br/><br/>
+<b>Shipping</b><p>
+Shipping will be done in a USPS Priority Flat Rate box for $5.00 for 1 shirt. The next size box is $11 which will hold 2-4 shirts.
+<br/><br/>
+<b>Pickup</b><br/>
+If you are just ordering extra shirts to pick up at the reunion choose "Pickup" for a shipping option for $0.00.</td>
+</tr>
+</form>
+

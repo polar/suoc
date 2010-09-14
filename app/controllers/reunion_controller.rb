@@ -31,6 +31,11 @@ class ReunionController < BaseController
   end
   
   class Item < PayPalNotification::Item
+    attr_accessor :registrant
+    def ship
+      registrant.shipping_method != "Pickup"
+    end
+    
     def cost
       mc_gross
     end
@@ -73,7 +78,7 @@ class ReunionController < BaseController
 	  return opt[1]
 	end
       end
-      return ""
+      return registrant.name
     end
     
     def type
@@ -97,10 +102,16 @@ class ReunionController < BaseController
     end
 
     def items
-      Item.items(@params)
+      Item.items(@params).each {|i| if i then i.registrant = self; end}
     end
     def name
       @payment.member.name
+    end
+    def shipping
+      @params["mc_shipping"]
+    end
+    def shipping_method
+      @params["shipping_method"]
     end
     def amount_paid
       @params["mc_gross"]
@@ -175,6 +186,17 @@ class ReunionController < BaseController
        end
     end
   end
+  
+  class TShirt
+    attr_accessor :name
+    attr_accessor :number
+    attr_accessor :quantity
+    attr_accessor :type
+    attr_accessor :date
+    attr_accessor :tshirt
+    attr_accessor :extra
+    attr_accessor :ship
+  end
 
   def tshirts
     @registrants = PaypalReunionPayment.all.map {|p| Registrant.new(p)}
@@ -185,25 +207,39 @@ class ReunionController < BaseController
     @large2X = 0
     @large3X = 0
     @total = 0
+    @attendee_total = 0
+    @extra_pickup = 0
+    @extra_ship = 0
     for r in @registrants do
       for i in r.items
         if i
-          @total += 1
+	  quantity = eval i.quantity
+          @total += quantity
           case i.tshirt 
-          when "Small" then @small += 1
-          when "Medium" then @medium += 1
-          when "Large" then @large += 1
-          when "X-Large" then @largeX += 1
-          when "2X-Large" then @large2X += 1
-          when "3X-Large" then @large3X += 1
+          when "Small" then @small += quantity
+          when "Medium" then @medium += quantity
+          when "Large" then @large += quantity
+          when "X-Large" then @largeX += quantity
+          when "2X-Large" then @large2X += quantity
+          when "3X-Large" then @large3X += quantity
           end
+	  if i.number == "100" || i.number == "101"
+	    @attendee_total += quantity
+	  end
+	  if i.number == "200"
+	    if i.ship
+	      @extra_ship += quantity
+	    else
+	      @extra_pickup += quantity
+	    end
+	  end
        end
       end
     end
     
     @attendees = []
     for r in @registrants do
-      @attendees += get_attendees(r)
+      @attendees += get_tshirts(r)
     end
     
     
@@ -246,6 +282,49 @@ class ReunionController < BaseController
     else
       cmp
     end
+  end
+  
+  def get_tshirts(registrant)
+    atts = []
+    for i in registrant.items do
+      # Registrant may not be an Attendee, only if item 100
+       if i && i.number == "100"
+	  reg = TShirt.new
+	  reg.name = i.full_name
+	  reg.type = i.type
+	  reg.date = registrant.date
+	  reg.tshirt = i.tshirt
+	  reg.extra = false
+	  reg.ship = false
+	  reg.quantity = i.quantity
+          atts <<= reg
+       end
+      # Add TShirt for Guests of Registrant
+       if i && i.number == "101"
+         guest = TShirt.new
+         guest.name = i.full_name
+	 guest.extra = false
+	 guest.ship = false
+         guest.type = i.type
+	 guest.date = registrant.date
+	 guest.tshirt = i.tshirt
+	 guest.quantity = i.quantity
+         atts <<= guest
+       end
+       # Add Extra Tshirts.
+       if i && i.number == "200"
+	 extra = TShirt.new
+	 extra.name = i.full_name
+	 extra.extra = true
+	 extra.ship = i.ship
+	 extra.type = i.type
+	 extra.date = registrant.date
+	 extra.tshirt = i.tshirt
+	 extra.quantity = i.quantity
+	 atts <<= extra
+       end
+    end
+    return atts
   end
     
   def get_attendees(registrant)

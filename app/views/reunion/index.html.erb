@@ -22,7 +22,7 @@ You may still register other people you may be bringing.
 <% if !@registrants.empty? %>
 <tr>
 <td colspan="5">
-You have the following current registrants under your name:
+You have the following items under your name:
 <% @registrants.each do |r| %>
 <%= render :partial => "item", :collection => r.items %>
 <% end %>
@@ -80,6 +80,18 @@ Please go to <a href="http://suocoldtimers.org">http://suocoldtimers.org</a> to 
 
 <tr>
 <td><img alt="Step 3" src="/images/Step3.gif"></td>
+<td colspan="1">Add any extra tshirts you might want.</td>
+<td><a href="images/TShirts.gif"><img src="images/TShirts.gif" width="200" height="70"/></a><br>Click image to enlarge.</td>
+</tr>
+<%= render :partial => "x_tshirt" %>
+<tr>
+<td colspan="5">
+<hr/>
+</td>
+</tr>
+
+<tr>
+<td><img alt="Step 4" src="/images/Step4.gif"></td>
 <td colspan="4">Review your shopping cart and checkout, if you haven't already.<br/>
 Please make sure that you did Step 1.
 </td>

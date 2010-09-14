@@ -584,7 +584,9 @@ TABLE.paypal_button TR TD {
   border-style: hidden;
 }
 
-
+TABLE.reunion TR TH {
+  padding: 5px 10px 2px 0px;
+}
 
 /*
  * Override the CE location chooser that is explicitly

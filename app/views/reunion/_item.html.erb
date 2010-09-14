@@ -34,6 +34,14 @@
      <td><%= item.sunday ? "Sunday" : "" %></td>
      <td></td>
      <td></td>
-    </tr> 
+    </tr>
+  <% elsif item.number == "200" %>
+    <tr>
+      <td></td>
+      <td><%= item.quantity %> <%= item.name %></td>
+      <td><%= item.ship ? "MUST SHIP" : "PICKUP" %></td>
+      <td>T-Shirt: <%= item.tshirt %></td>
+      <td class="decimal"><%= item.cost %></td>
+    </tr>
   <% end %>
 <% end %>
