@@ -132,6 +132,7 @@ class ReunionController < BaseController
 	  return true
 	end
       end
+      return false
     end
 	
   end
