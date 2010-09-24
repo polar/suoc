@@ -1,4 +1,3 @@
-<% if member.has_current_status? %>
   <% cls = "membership_current" if member.has_current_membership?
      cls ||= "membership_#{member.club_member_status.name}" if member.club_member_status
      cls ||= "membership_other" %>
@@ -19,4 +18,3 @@
   <script type="text/javascript">
    <%= "dndMgr.registerDraggable( new Rico.Draggable('eatme',$('drag_user'+#{member.id})) );" %>
   </script>
-<% end %>

@@ -35,7 +35,7 @@
     <h3>Possible Attendees</h3>
       <div class="listBox" id="dropZone2"
               style="width:250px;height:600px;overflow:auto;">
-      <%= render :partial => "member", :collection => @members, :as => :member %>
+      <%= render :partial => "member_filtered", :collection => @members, :as => :member %>
       </div>
     </div>
   </div>
