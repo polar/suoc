@@ -155,7 +155,7 @@ class ReunionController < BaseController
     @gross_fees = 0
     @registrants.each do |x|
       @gross_income += eval x.amount_paid
-      @gross_fees += x.fee ? eval x.fee : eval(x.amount_paid) * 0.0220202020202020202 + 0.30
+      @gross_fees += x.fee ? eval(x.fee) : eval(x.amount_paid) * 0.0220202020202020202 + 0.30
     end
     @net_income = @gross_income - @gross_fees
   end
