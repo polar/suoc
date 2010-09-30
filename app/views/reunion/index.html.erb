@@ -11,11 +11,11 @@ If you want to see who's going, click <a href="http://suoc.syr.edu/reunion/who">
 <tr>
 <td colspan="5">
 <b>Notice to Procrastinators!</b>
-<p>Electronic Registration will be shutdown on Wednesday, Sep 29, 2010. After that, please bring cash to the camp.
-$99 Adult 16+, $50 Kid 10-16, $35 Kid 5-9.
+<p>Electronic Registration has been shutdown as of Wednesday, Sep 29, 2010. If you show up, please bring cash to the camp.
+$99 Adult 16+, $50 Kid 10-16, $35 Kid 5-9. Extra T-Shirts are $11.00.
 <P>
 We have already ordered the T-Shirts! We ordered a little bit more than people who registered, but not much more. 
-Suzie LaMont, the TShirt Girl, informs us that XL, 2X and 3X TShirts are now sold out. What are you people eating?!?!
+Suzie LaMont, the TShirt Girl, informs us that Medium, XL, 2X and 3X TShirts are now sold out.
 </td>
 </tr>
 <% if @self_registered %>
@@ -51,7 +51,9 @@ Please go to <a href="http://suocoldtimers.org">http://suocoldtimers.org</a> to 
 </td>
 </tr>
 <% end %>
-
+<% # Shutting down Registration
+   if false
+%>
 <% if ! @self_registered %>
 <tr>
 <td colspan="5">
@@ -106,5 +108,7 @@ Please make sure that you did Step 1.
 </td>
 </tr>
 <%= render :partial => "view_cart" %>
-
+<% end 
+   # Registratio Shutdown
+%>
 </table>
