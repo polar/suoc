@@ -4,7 +4,7 @@ class ClubTripRegistrationsController < BaseController
   before_filter :login_required
   filter_access_to :all
   filter_access_to [:statistics, :list_submitted], :require => :read
-  filter_access_to [:list_submitted], :require => :read_submitted
+  filter_access_to [:list_submitted], :require => :show_submitted
   filter_access_to :submit_registration, :require => :update
   filter_access_to [:add_me, :remove_me],
                    :require => [:read, :add_remove]
