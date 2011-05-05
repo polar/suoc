@@ -25,6 +25,13 @@
   <%= render :partial => "membership", :collection => @memberships %>
 <% end %>
 </table>
+<h3>Lifers</h3>
+<div id="Lifers">
+<% form_remote_tag :update => "Lifers",
+    :url => { :action => :render_lifers } do %>
+  <%= submit_tag "Show me the Lifers"%>
+<% end %>
+</div>
 <h3>Slackers</h3>
 <div id="Slackers">
 <% form_remote_tag :update => "Slackers",
@@ -32,7 +39,13 @@
   <%= submit_tag "Show me the Slackers"%>
 <% end %>
 </div>
-</table>
+<h3>Retirees</h3>
+<div id="Retirees">
+<% form_remote_tag :update => "Retirees",
+    :url => { :action => :render_retirees } do %>
+  <%= submit_tag "Show me the Retirees"%>
+<% end %>
+</div>
 <h3>Current Memberships</h3>
 Hit the button below to send yourself the current membership list for
 Recreation Services. This button sends you a list of members that have

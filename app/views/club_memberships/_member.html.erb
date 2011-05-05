@@ -15,4 +15,11 @@
   </td>
   <td class="name">
     <%= member.club_member_status.name %>
+  </td>
+  <td class="decimal">
+    <%= member.club_start_date.strftime("%Y") if member.club_start_date %>
+  </td>
+  <td class="decimal">
+    <%= member.club_grad_year.strftime("%Y") if member.club_grad_year %>
+  </td>
 </tr>

@@ -5,6 +5,8 @@ class ClubMembershipsController < BaseController
   filter_access_to :all
   filter_access_to :submit_list, :require => :update
   filter_access_to :render_slackers, :require => :update
+  filter_access_to :render_lifers, :require => :update
+  filter_access_to :render_retirees, :require => :update
   
   def index
     if !params[:year]
@@ -34,14 +36,31 @@ class ClubMembershipsController < BaseController
 	  ClubAffiliation['SU Grad Student'],
 	  ClubAffiliation['ESF Undergrad'],
 	  ClubAffiliation['ESF Grad Student']]
-    active = ClubMemberStatus['Active']
+    status = ClubMemberStatus['Active']
     ms = ClubMember.all(:conditions => { :club_affiliation_id => as, 
-                                         :club_member_status_id => active },
+                                         :club_member_status_id => status },
                         :order => 'login ASC')
-    slackers = ms.reject {|m| m.has_current_membership?}
-    render :partial => "members", :locals => { :members => slackers }
+    members = ms.reject {|m| m.has_current_membership?}
+    render :partial => "members", :locals => { :members => members }
   end
 
+  # This is called by the page.
+  def render_lifers
+    status = ClubMemberStatus['Life']
+    members = ClubMember.all(:conditions => { :club_member_status_id => status },
+                        :order => 'login ASC')
+    render :partial => "members", :locals => { :members => members }
+  end
+  
+  # This is called by the page.
+  def render_retirees
+    status = ClubMemberStatus['Retired']
+    members = ClubMember.all(:conditions => { :club_member_status_id => status },
+                        :order => 'login ASC')
+    render :partial => "members", :locals => { :members => members }
+  end
+
+  
   def submit_list
     # Memberships are from Sept to Sept.
     if Time.now.month > 8
