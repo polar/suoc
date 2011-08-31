@@ -306,7 +306,7 @@ class AcctLedgersController < BaseController
 
   # TODO: Why doesn't this work for update_description_form?
   def default_year
-    Time.now.month <= 8 ? Time.now.year : Time.now.year + 1 
+    Time.now.month <= 5 ? Time.now.year : Time.now.year + 1 
   end
 
   def setup_totals_for_render(targacct)
