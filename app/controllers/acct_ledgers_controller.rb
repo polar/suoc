@@ -117,7 +117,7 @@ class AcctLedgersController < BaseController
     @actions = targacct.actions
     @transaction = AcctTransaction.new(:date => Date.today,
                                        :target_account => targacct)
-    @default_year = Time.now.month <= 8 ? Time.now.year : Time.now.year + 1 
+    @default_year = Time.now.month <= 5 ? Time.now.year : Time.now.year + 1 
     @params = params
   end
   
