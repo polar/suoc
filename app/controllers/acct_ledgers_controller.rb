@@ -276,7 +276,7 @@ class AcctLedgersController < BaseController
 
   def update_description_form
     # TODO: Why can't we call default_year here?
-    default_year = Time.now.month <= 8 ? Time.now.year : Time.now.year + 1 
+    default_year = Time.now.month <= 5 ? Time.now.year : Time.now.year + 1 
     if params[:acct_action_id] && !params[:acct_action_id].empty?
       if AcctAction.find(params[:acct_action_id]).name == "Membership Collection"
         render :update do |page|
