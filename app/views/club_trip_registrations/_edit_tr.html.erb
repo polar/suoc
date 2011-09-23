@@ -4,6 +4,8 @@
  # second, and the third column for member selection to
  # drag over into the members going column.
  %>
+<h2 style="color:red">New Interface. Please read the "HELP"</h2>
+<%= auto_complete_stylesheet %>
 <div class="yui-gb">
   <% form_for @club_trip_registration, :html => { :class => "MainForm" } do |f| %>
     <%
@@ -19,26 +21,62 @@
      # Middle Column
      %>
     <div class="yui-u">
-      <h3>Members Going <%= link_to_function "(Help)", :id => "help_link", :onclick => "$('invisible_help').style.display='block';$('help_link').hide()" %></h3>
+      <h3>Add Members  <%= link_to_function "(Help)", :id => "help_link", :onclick => "$('invisible_help').style.display='block';$('help_link').hide()" %></h3>
+      <script type="text/javascript">
+        clearAutoUpdateList = function(element, update) {
+           $('club_member_login_auto_complete').innerHTML = "";
+           element.clear();
+        };
+	myUpdateFunction = function(text, li) {
+	  text.clear();
+          // There has to be a better way!!  JQuery?
+	  var members = $('dropZone1').getElementsByTagName("div");
+          // for(m in members) doesn't really work here. Uggg.
+          for(i = 0; i < members.length; i++) {
+            if (members[i].id == "drag_user"+li.id) {
+                return;
+            }
+          }
+	  $('dropZone1').insert(li);
+          dndMgr.registerDraggable( new Rico.Draggable('eatme',li));
+          $('club_member_login_auto_complete').innerHTML = "";
+	}
+      </script>
+    <div id="member_name_input">
+      <label>Member Name</label>
+      <input id="club_member_login" name="club_member[login]" size="20" type="text"/>
+      <div id="club_member_login_auto_complete" class="auto_complete">
+      <%= 
+	  completetion_options = {
+		:url => { :action => "auto_complete_for_club_member_login" },
+		:after_update_element => "myUpdateFunction",
+                :on_hide => "clearAutoUpdateList"
+	  }
+	  auto_complete_field("club_member_login", completetion_options)
+      %>
+      </div>
+    </div>
+      Add by typing name then selecting one that comes up.
+      <p>
+    <div class="listBox" id="dropZone2">
+    <h3>Members Not Going</h3>
+      Drag and Drop Non-goers here from the Members Going list if you added them
+and they are now not going.
+      <p>
+    </div>
+   </div>
+
+    <div class="yui-u">
+      <h3>Members Going</h3>
+      
       <div class="listBox" id="dropZone1"
               style="width:250px;height:600px;overflow:auto;">
-        <%= render :partial => "member", :collection => @members_going, :as => :member %>
+        <%= render :partial => "member", :collection => @members_going, :as => :member, :locals => {:distinguish => false} %>
 
       </div>
     </div>
+<br />
   <% end %>
-  <%
-   # Third Column
-   %>
-  <div class="yui-u">
-    <div id="dropBox" style="margin-left:8px;margin-bottom:8px;float:left">
-    <h3>Possible Attendees</h3>
-      <div class="listBox" id="dropZone2"
-              style="width:250px;height:600px;overflow:auto;">
-      <%= render :partial => "member_filtered", :collection => @members, :as => :member %>
-      </div>
-    </div>
-  </div>
 </div>
 <script type="text/javascript">
   dndMgr.registerDropZone( new Rico.Dropzone($('dropZone1')));

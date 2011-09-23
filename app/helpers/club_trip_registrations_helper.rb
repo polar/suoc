@@ -65,5 +65,61 @@ module ClubTripRegistrationsHelper
     end
     return res
   end
-                                 
+  
+  private
+  #
+  # We return the list of users with the avatar, birthday, and internal id
+  # The controller will parse this out.
+  def auto_complete_result_2(users)
+    return unless users
+    items = []
+    i = 0
+    for entry in users
+      pic = image_tag entry.avatar_photo_url(:thumb), :size => "25x25"
+      needs_birthday = (i > 0 && entry.name == users[i-1].name) || 
+	               (users[i+1] && entry.name == users[i+1].name)
+
+      items << content_tag("li id=#{entry.id}",
+                           render(:partial => "member",
+                                  :locals => { :distinguish => needs_birthday, :member => entry }));
+      i = i+1
+    end
+    content_tag("ul", items)
+  end
+                    
+  private
+    def auto_complete_stylesheet
+      content_tag('style', <<-EOT, :type => Mime::CSS)
+div.auto_complete {
+width: 350px;
+background: #fff;
+}
+div.auto_complete ul {
+border:1px solid #888;
+margin:0;
+padding:0;
+width:100%;
+list-style-type:none;
+}
+div.auto_complete ul ul{
+border: 0px;
+margin:0;
+padding:0;
+width:100%;
+list-style-type:none;
+}
+div.auto_complete  ul li {
+margin:0;
+padding:3px;
+}
+div.auto_complete ul li.selected {
+background-color: #ffb;
+}
+div.auto_complete ul strong.highlight {
+color: #800;
+margin:0;
+padding:0;
+}
+EOT
+    end  
 end

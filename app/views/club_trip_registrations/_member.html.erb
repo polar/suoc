@@ -3,18 +3,29 @@
      cls ||= "membership_other" %>
 
   <div <%="id='drag_user#{member.id}'"%> class="member_drag" >
-  <p>
+        <div <%="class='#{cls}'" if cls %> >
+<p>
         <%= image_tag member.avatar_photo_url(:thumb), :size => "25x25" %>
-        <ul <%="class='#{cls}'" if cls %> >
-          <li class="full_name">
-          <%= link_to member.name, user_path(member) %>
-          </li>
-          <li class="contact">
+        <div class="member_content">
+          <div class="full_name">
+          <%= link_to member.name, user_path(member), :class => "member_link", :target => "_BLANK" %>
+          <span class="member_name">&nbsp;<%= member.name %></span>
+          </div>
+<%= if (distinguish)
+          "<div>" + 
+	             content_tag("span class='informal'", 
+	                 " Birthday: #{member.birthday.strftime("%m-%d-%Y")}") +
+          "</div>"
+    end %>
+          <div class="contact">
           <%= member.club_contact %>
-          </li>
-        </ul>
-    <%= hidden_field_tag "member#{member.id}", member.id, :name => "club_trip_registration[club_member_ids][]" %>
+          </div>
+        </div>
+       </div>
+    <%= hidden_field_tag "member#{member.id}", member.id, :name => "club_trip_registration[club_member_ids][]" %>  
+    <% if (member != current_user ) %>
+    <script type="text/javascript">
+      dndMgr.registerDraggable( new Rico.Draggable('eatme', $(<%= "'drag_user#{member.id}'" %>)));
+    </script>
+    <% end %>
   </div>
-  <script type="text/javascript">
-   <%= "dndMgr.registerDraggable( new Rico.Draggable('eatme',$('drag_user'+#{member.id})) );" %>
-  </script>

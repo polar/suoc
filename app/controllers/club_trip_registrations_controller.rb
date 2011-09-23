@@ -3,6 +3,7 @@ class ClubTripRegistrationsController < BaseController
 
   before_filter :login_required
   filter_access_to :all
+  filter_access_to [:auto_complete_for_club_member_login], :require => :read
   filter_access_to [:statistics, :list_submitted], :require => :read
   filter_access_to [:list_submitted], :require => :show_submitted
   filter_access_to :submit_registration, :require => :update
@@ -13,6 +14,41 @@ class ClubTripRegistrationsController < BaseController
 
   before_filter :show_permissions, :on => [ :show, :new, :edit, :configure, :statistics, :list_submitted ]
   
+  # This is the entry limit at which the auto_complete_for_club_member_login
+  # will return.
+  AC_CLUB_MEMBER_NAME_LIMIT = 15
+
+  # We need to skip this for the auto complete to work.
+  skip_before_filter :verify_authenticity_token,
+                           :auto_complete_for_club_member_login
+  #
+  # Responder for view function
+  #      text_file_auto_complete(:club_member, :login)
+  #
+  # This returns a <ul> list for the auto_complete text Ajax drop down
+  # list.
+  # The text "Ji Ge" is interpreted as
+  #    LOWER(name) LIKE '%ji%' AND LOWER(name LIKE '%ge%'
+  # The default auto_complete_for functions do not separate spaces.
+  #
+  def auto_complete_for_club_member_login
+    # split by spaces, downcase and create query for each.
+    # Remember to Sanitize the SQL
+    conditions = params[:club_member][:login].downcase.split.map {
+		    #             Sanitize       ***********************************
+		    |w| "LOWER(login) LIKE '%" + (w.gsub(/\\/, '\&\&').gsub(/'/, "''")) +"%'" }
+                                                         # AND the queries."
+    find_options = {
+      :conditions => conditions.join(" AND "),
+      :order => "login ASC",
+      :limit => AC_CLUB_MEMBER_NAME_LIMIT }
+
+    @items = ClubMember.find(:all, find_options)
+
+    render :inline => "<%= auto_complete_result_2 @items %>"
+  end
+
+
   #
   # This makes us load the Rico Javascripts
   #
@@ -59,10 +95,6 @@ class ClubTripRegistrationsController < BaseController
     #
     @members_going = [current_user]
 
-    # TODO: Ajax Page all the members lists.
-    @members = ClubMember.all( :order => "login ASC" )
-    @members = @members.reject {|x| @members_going.include? x}
-
     @submit = "Create"
   end
 
@@ -75,8 +107,6 @@ class ClubTripRegistrationsController < BaseController
       @leader = current_user
       @leaderships = ClubLeadership.all(:order => "name ASC")
       @members_going = @club_trip_registration.club_members.sort {|x,y| x.name <=> y.name }
-      @members = ClubMember.all( :order => "login ASC" )
-      @members = @members.reject {|x| @members_going.include? x}
       @submit = "Update"
    end
   end
@@ -93,8 +123,6 @@ class ClubTripRegistrationsController < BaseController
       @submit = "Create"
       @leaderships = ClubLeadership.all(:order => "name ASC")
       @members_going = @club_trip_registration.club_members.sort {|x,y| x.name <=> y.name }
-      @members = ClubMember.all( :order => "login ASC" )
-      @members = @members.reject {|x| @members_going.include? x}
       render :action => "new"
     end
   end
@@ -109,8 +137,6 @@ class ClubTripRegistrationsController < BaseController
       @submit = "Update"
       @leaderships = ClubLeadership.all(:order => "name ASC")
       @members_going = @club_trip_registration.club_members.sort {|x,y| x.name <=> y.name }
-      @members = ClubMember.all( :order => "login ASC" )
-      @members = @members.reject {|x| @members_going.include? x}
       render :action => "edit"
     end
   end

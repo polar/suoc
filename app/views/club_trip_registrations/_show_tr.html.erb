@@ -85,6 +85,6 @@ This trip registration is PENDING.
   </div>
   <div class="yui-u">
     <h3>Members Going</h3>
-    <%= render :partial => "member", :collection => @members_going %>
+    <%= render :partial => "member", :collection => @members_going, :locals => { :distinguish => false } %>
   </div>
 </div>

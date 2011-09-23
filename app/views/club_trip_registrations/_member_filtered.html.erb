@@ -1,3 +1,3 @@
 <% if member.has_current_status? %>
-  <%= render :partial => "member", :object => member %>
+  <%= render :partial => "member", :object => member, :locals => {:distinguish => false } %>
 <% end %>

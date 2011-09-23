@@ -666,9 +666,10 @@ strong {
 .member_drag img{
   float: left;
 }
-.member_drag ul{
+.member_drag .member_content{
   margin-left: 30px;
   vertical-align: middle;
+  text-align: left;
 }
 .member_drag .membership_current .full_name a,
 .membership_help .membership_current{
@@ -691,4 +692,16 @@ strong {
 .member_drag .membership_other .full_name a,
 .membership_help .membership_other{
   color: #dd1111;
+}
+div.auto_complete ul li .member_drag .full_name .member_link {
+  display: none;
+}
+div.auto_complete ul li .member_drag .full_name .member_name {
+  display: block;
+}
+#dropZone1 .member_drag .full_name .member_link {
+  display: block;
+}
+#dropZone1 .member_drag .full_name .member_name {
+  display: none;
 }
