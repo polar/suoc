@@ -58,7 +58,7 @@
     </div>
       Add by typing name then selecting one that comes up.
       <p>
-    <div class="listBox" id="dropZone2">
+    <div class="listBox drop_zone" id="dropZone2">
     <h3>Members Not Going</h3>
       Drag and Drop Non-goers here from the Members Going list if you added them
 and they are now not going.
@@ -69,7 +69,7 @@ and they are now not going.
     <div class="yui-u">
       <h3>Members Going</h3>
       
-      <div class="listBox" id="dropZone1"
+      <div class="listBox drop_zone" id="dropZone1"
               style="width:250px;height:600px;overflow:auto;">
         <%= render :partial => "member", :collection => @members_going, :as => :member, :locals => {:distinguish => false} %>
 

@@ -699,9 +699,9 @@ div.auto_complete ul li .member_drag .full_name .member_link {
 div.auto_complete ul li .member_drag .full_name .member_name {
   display: block;
 }
-#dropZone1 .member_drag .full_name .member_link {
+.drop_zone .member_drag .full_name .member_link {
   display: block;
 }
-#dropZone1 .member_drag .full_name .member_name {
+.drop_zone .member_drag .full_name .member_name {
   display: none;
 }
