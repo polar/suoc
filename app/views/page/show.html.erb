@@ -1,6 +1,6 @@
 <% @meta = { :description => AppConfig.meta_description, :keywords => AppConfig.meta_keywords, :robots => AppConfig.robots_meta_list_content } %>
 
-  <div id="yui-main"
+  <div id="yui-main">
     <div class="yui-b box">
       <%= render :comatose => !@page.parent ? "" : @page.full_path %>
     </div>
