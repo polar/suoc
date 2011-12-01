@@ -7,7 +7,7 @@ cwd: /var/www/suoc/current
 port: "8000"
 environment: production
 address: 127.0.0.1
-pid_file: "/var/run/mongrel_cluster/suoc.pid"
+pid_file: "tmp/pids/suoc.pid"
 log_file: "log/mongrel.log"
 servers: 3
 
