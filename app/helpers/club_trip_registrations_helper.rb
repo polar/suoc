@@ -67,7 +67,7 @@ module ClubTripRegistrationsHelper
       days = 0
       ls = trips_by_leadership(trips.select {|t| t.leader == l}).reject {|v| v[:totals][:trips] == 0}
       ls.each {|x| total += x[:totals][:trips]; people += x[:totals][:members]; days += x[:totals][:days]; people_days += x[:totals][:people_days]}
-      res << { :leader => l, :name => l.name, :trips => total, :people => people, :leaderships => ls }
+      res << { :leader => l, :name => l.name, :trips => total, :people => people, :people_days => people_days, :leaderships => ls }
     end
     return res
   end
