@@ -33,6 +33,7 @@ set :user, "deploy"
 #   The following gets evaluation delayed.
 set(:mongrel_conf) { "#{current_path}/config/deploy/#{stage}/mongrel_cluster.yml" }
 
+after "deploy:finalize_update", "deploy:after_finalize_update"
 
 # Custom Tasks
 namespace :deploy do
@@ -59,6 +60,12 @@ namespace :deploy do
 
   desc "Transfer db and assests from production to staging."
   task :after_finalize_update do
+    # Move forward uploads and index directories along with new release.
+    # These are photos page_photos and homepage_features attachments.
+    %w{photos page_photos homepage_features}.each do |share|
+      run "ln -s #{shared_path}/system/#{share} #{release_path}/public/#{share}"
+    end
+
     if rails_env == "staging"
       run "cd #{release_path}; rake RAILS_ENV=staging db:stage PRODUCTION_PATH=#{_PRODUCTION_PATH}"
     end
