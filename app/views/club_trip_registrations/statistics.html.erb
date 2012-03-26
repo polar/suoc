@@ -17,6 +17,8 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
   <th>Leadership</th>
   <th>Trips</th>
   <th>People</th>
+  <th>Days</th>
+  <th>People Days</th>
   <% for a in as do %>
     <th><%= a.name %></th>
   <% end %>
@@ -27,6 +29,8 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
     <td><%= link_to l[:name], l[:leadership] %></td>
     <td class="decimal"><%= l[:totals][:trips] %></td>
     <td class="decimal"><%= l[:totals][:members] %></td>
+    <td class="decimal"><%= l[:totals][:days] %></td>
+    <td class="decimal"><%= l[:totals][:people_days] %></td>
     <% for a in as do %>
        <td class="decimal"><%= sprintf "%.1d%", l[:totals][:percent][a.id] %></td>
     <% end %>
@@ -37,6 +41,8 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
   <td>Total</td>
   <td class="decimal"><%= ts[:trips] %></td>
   <td class="decimal"><%= ts[:members] %></td>
+  <td class="decimal"><%= ts[:days] %></td>
+  <td class="decimal"><%= ts[:people_days] %></td>
   <% for a in as do %>
       <td class="decimal"><%= sprintf "%.1d%", ts[:percent][a.id] %></td>
   <% end %>
@@ -50,9 +56,11 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
   <th>Leader</th>
   <th>Total Trips</th>
   <th>People</th>
+  <th>People Days</th>
   <th>Leaderships</th>
   <th>Trips</th>
   <th>People</th>
+  <th>People Days</th>
 </tr>
 <% ls = trips_by_leader(@trips) %>
 <% for l in ls.sort {|x,y| x[:name] <=> y[:name]} do %>
@@ -60,14 +68,17 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
    <td><%= link_to l[:name], user_path(l[:leader]) %></td>
    <td class="decimal"><%= l[:trips] %></td>
    <td class="decimal"><%= l[:people] %></td>
+   <td class="decimal"><%= l[:people_days] %></td>
    <% leaderships = l[:leaderships].sort {|x,y| x[:name] <=> y[:name]} %>
    <% if leaderships.size > 1 %>
        <% for x in leaderships do %>
          <td><%= x[:name] %></td>
          <td class="decimal"><%= x[:totals][:trips] %></td>
          <td class="decimal"><%= x[:totals][:members] %></td>
+         <td class="decimal"><%= x[:totals][:people_days] %></td>
          </tr>
          <tr>
+         <td></td>
          <td></td>
          <td></td>
          <td></td>
@@ -77,6 +88,7 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
          <td><%= x[:name] %></td>
          <td class="decimal"><%= x[:totals][:trips] %></td>
          <td class="decimal"><%= x[:totals][:members] %></td>
+         <td class="decimal"><%= x[:totals][:people_days] %></td>
    <% end %>
   </tr>
 <% end %>

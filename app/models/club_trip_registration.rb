@@ -11,7 +11,25 @@ class ClubTripRegistration < ActiveRecord::Base
   validates_presence_of :email
   validates_presence_of :location
 
+  def days
+      ret = ((return_date - departure_date)).floor + 1
+      if ret < 0 || ret > 10 # Its a mistake, so say it's 1
+          ret = 1
+      end
+      ret
+  end
+
+  def people_days
+      days * club_members.count
+  end
+
   def submitted?
     !submit_date.nil?
+  end
+
+  private
+
+  def abs(x)
+      x < 0  ? -x : x
   end
 end
