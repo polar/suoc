@@ -5,7 +5,43 @@
 Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag :end_date, @end_date %>
 <%= submit_tag "GO" %>
 <% end %>
-<H3>By Leadership</H3>
+<H3>People Makeup By Leadership</H3>
+<table class="tripstats">
+<% as = ClubAffiliation.all %>
+<tr class="tripstats">
+  <th></th>
+  <th colspan="2">Totals</th>
+  <th colspan='<%= as.size %>' align="center">People Makeup per Trip</th>
+</tr>
+<tr class="tripstats">
+  <th>Leadership</th>
+  <th>Trips</th>
+  <% for a in as do %>
+    <th><%= a.name %></th>
+  <% end %>
+</tr>
+<% ls = trips_by_leadership(@trips).sort {|x,y| x[:name] <=> y[:name]} %>
+<% for l in ls do %>
+  <tr class="leaderhipstats">
+    <td><%= link_to l[:name], l[:leadership] %></td>
+    <td class="decimal"><%= l[:totals][:trips] %></td>
+    <% for a in as do %>
+       <td class="decimal"><%= sprintf "%.1d", l[:totals][:affil][a.id] %></td>
+    <% end %>
+  </tr>
+<% end %>
+<% ts = add(@trips.map{|t| members_of_trip(t)}) %>
+<tr>
+  <td>Total</td>
+  <td class="decimal"><%= ts[:trips] %></td>
+  <% for a in as do %>
+      <td class="decimal"><%= sprintf "%.1d", ts[:affil][a.id] %></td>
+  <% end %>
+</tr>
+
+</table>
+
+<H3>Percentage Makeup By Leadership</H3>
 <table class="tripstats">
 <% as = ClubAffiliation.all %>
 <tr class="tripstats">
@@ -16,21 +52,14 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
 <tr class="tripstats">
   <th>Leadership</th>
   <th>Trips</th>
-  <th>People</th>
-  <th>Days</th>
-  <th>People Days</th>
   <% for a in as do %>
     <th><%= a.name %></th>
   <% end %>
 </tr>
-<% ls = trips_by_leadership(@trips) %>
-<% for l in ls.sort {|x,y| x[:name] <=> y[:name]} do %>
+<% for l in ls do %>
   <tr class="leaderhipstats">
     <td><%= link_to l[:name], l[:leadership] %></td>
     <td class="decimal"><%= l[:totals][:trips] %></td>
-    <td class="decimal"><%= l[:totals][:members] %></td>
-    <td class="decimal"><%= l[:totals][:days] %></td>
-    <td class="decimal"><%= l[:totals][:people_days] %></td>
     <% for a in as do %>
        <td class="decimal"><%= sprintf "%.1d%", l[:totals][:percent][a.id] %></td>
     <% end %>
@@ -40,14 +69,68 @@ Dates: From <%= text_field_tag :start_date, @start_date %> to <%= text_field_tag
 <tr>
   <td>Total</td>
   <td class="decimal"><%= ts[:trips] %></td>
-  <td class="decimal"><%= ts[:members] %></td>
-  <td class="decimal"><%= ts[:days] %></td>
-  <td class="decimal"><%= ts[:people_days] %></td>
   <% for a in as do %>
       <td class="decimal"><%= sprintf "%.1d%", ts[:percent][a.id] %></td>
   <% end %>
 </tr>
 
+</table>
+
+<H3>Totals By Leadership</H3>
+<table class="tripstats">
+<% as = ClubAffiliation.all %>
+<tr class="tripstats">
+  <th>Leadership</th>
+  <th>Trips</th>
+  <th>People</th>
+  <th>Days</th>
+  <th>People Days</th>
+</tr>
+<% for l in ls do %>
+  <tr class="leaderhipstats">
+    <td><%= link_to l[:name], l[:leadership] %></td>
+    <td class="decimal"><%= l[:totals][:trips] %></td>
+    <td class="decimal"><%= l[:totals][:members] %></td>
+    <td class="decimal"><%= l[:totals][:days] %></td>
+    <td class="decimal"><%= l[:totals][:people_days] %></td>
+  </tr>
+<% end %>
+<% ts = add(@trips.map{|t| members_of_trip(t)}) %>
+<tr>
+  <td>Total</td>
+  <td class="decimal"><%= ts[:trips] %></td>
+  <td class="decimal"><%= ts[:members] %></td>
+  <td class="decimal"><%= ts[:days] %></td>
+  <td class="decimal"><%= ts[:people_days] %></td>
+</tr>
+
+</table>
+
+<H3>Percentages By Leadership</H3>
+<table class="tripstats">
+<tr class="tripstats">
+  <th></th>
+  <th colspan="2">Totals</th>
+  <th colspan='<%= as.size %>' align="center">Percentages of Total</th>
+</tr>
+<tr class="tripstats">
+  <th>Leadership</th>
+  <th>Trips</th>
+  <th>Trips</th>
+  <th>People</th>
+  <th>Days</th>
+  <th>People Days</th>
+</tr>
+<% for l in ls do %>
+  <tr class="leaderhipstats">
+    <td><%= link_to l[:name], l[:leadership] %></td>
+    <td class="decimal"><%= l[:totals][:trips] %></td>
+    <td class="decimal"><%= sprintf "%.1d%", (l[:totals][:trips].to_f / ts[:trips])*100 %></td>
+    <td class="decimal"><%= sprintf "%.1d%", (l[:totals][:members].to_f / ts[:members])*100 %></td>
+    <td class="decimal"><%= sprintf "%.1d%", (l[:totals][:days].to_f / ts[:days])*100 %></td>
+    <td class="decimal"><%= sprintf "%.1d%", (l[:totals][:people_days].to_f / ts[:people_days])*100 %></td>
+  </tr>
+<% end %>
 </table>
 
 <H3>By Leader</H3>
