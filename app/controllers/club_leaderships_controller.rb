@@ -17,7 +17,7 @@
 class ClubLeadershipsController < BaseController
 
   layout "club_operations"
-  
+
   include Viewable
   #
   # We use the editor to modify the description field only.
@@ -25,7 +25,7 @@ class ClubLeadershipsController < BaseController
   #
   uses_tiny_mce :options => AppConfig.default_mce_options.merge({:editor_selector => "rich_text_editor"}),
     :only => [:new, :create, :update, :edit]
-  
+
   # Declaritive Authorization
   filter_access_to :all
   filter_access_to :auto_complete_for_club_member_login, :require => :update
@@ -41,17 +41,17 @@ class ClubLeadershipsController < BaseController
   # This filter determines whether the modification links should be viewed.
   #
   before_filter :filter_view_modify
-  
+
   # We need to skip this for the auto complete to work.
   skip_before_filter :verify_authenticity_token, :auto_complete_for_club_member_login
-  
+
   # This is the entry limit at which the auto_complete_for_suoc_profile_name
-  # will return.  
+  # will return.
   AC_CLUB_MEMBER_NAME_LIMIT = 15
-  
+
   # This constant is the number of past leaders we allow in a page.
   AC_PAST_OFFICER_PER_PAGE = 4
-  
+
   #
   # This is a filter that determines if the modification links should be viewed,
   # which is communicated in to the views.
@@ -61,19 +61,19 @@ class ClubLeadershipsController < BaseController
   def filter_view_modify
     @view_modify = permitted_to? :update, :club_leaderships
   end
-  
+
   #
   # Responder for view function
   #      text_file_auto_complete(:club_member, :login)
   #
   # This returns a <ul> list for the auto_complete text Ajax drop down
-  # list. 
+  # list.
   # The text "Ji Ge" is interpreted as
   #    LOWER(name) LIKE '%ji%' AND LOWER(name LIKE '%ge%'
   # The default auto_complete_for functions do not separate spaces.
   #
   def auto_complete_for_club_member_login
-  
+
     # split by spaces, downcase and create query for each.
     # Remember to Sanitize the SQL
     conditions = params[:club_member][:login].downcase.split.map {
@@ -81,16 +81,16 @@ class ClubLeadershipsController < BaseController
 		    |w| "LOWER(login) LIKE '%" + (w.gsub(/\\/, '\&\&').gsub(/'/, "''")) +"%'" }   # AND the queries.
 
     # AND the queries.
-    find_options = { 
+    find_options = {
       :conditions => conditions.join(" AND "),
       :order => "login ASC",
       :limit => AC_CLUB_MEMBER_NAME_LIMIT }
-    
+
     @items = ClubMember.find(:all, find_options)
 
     render :inline => "<%= auto_complete_result @items, :login %>"
   end
-  
+
   def index
     @club_leaderships = ClubLeadership.find(:all, :order => "position ASC")
   end
@@ -98,7 +98,7 @@ class ClubLeadershipsController < BaseController
   def show
     @club_leadership = ClubLeadership.find(params[:id])
     @current_leaders = @club_leadership.current_leaders
-    @past_leaders = 
+    @past_leaders =
         @club_leadership.past_leaders(params[:page], AC_PAST_OFFICER_PER_PAGE)
   end
 
@@ -111,17 +111,17 @@ class ClubLeadershipsController < BaseController
     @club_leadership = ClubLeadership.find(params[:id])
     @club_activities = ClubActivity.all
 
-    if !current_user.admin? 
+    if !current_user.admin?
       flash[:notice] = "You do not have privileges to modify."
     end
   end
-  
+
   def create
     @club_leadership = ClubLeadership.new(params[:club_leadership])
 
     if @club_leadership.save
       flash[:notice] = "Club Leadership #{@club_leadership.name} was successfully created."
-      redirect_to(:action => :edit, :id => @club_leadership)
+      redirect_to(:action => :show, :id => @club_leadership)
     else
       render :action => "new"
     end
@@ -129,7 +129,7 @@ class ClubLeadershipsController < BaseController
 
   def update
     @club_leadership = ClubLeadership.find(params[:id])
-    
+
     if @club_leadership.update_attributes(params[:club_leadership])
       flash[:notice] = "Club Leadership #{@club_leadership.name} was successfully updated."
       redirect_to(:action => :show)
@@ -151,39 +151,39 @@ class ClubLeadershipsController < BaseController
     leadership.move_higher
     redirect_to :action => :index
   end
-  
+
   # POST /suoc_leaderships/1/move_down
   def move_down
     leadership = ClubLeadership.find(params[:id])
     leadership.move_lower
     redirect_to :action => :index
   end
-  
+
   # GET /suoc_leaderships/1/select_new_leader
   def select_new_leader
     @club_leadership = ClubLeadership.find(params[:id])
     @current_leaders = @club_leadership.current_active_leaders
-    
+
     # Shut off buttons on current leader.
     @view_modify = false
   end
-  
+
   #
   # PUT /suoc_leaderships/1/new_leader
   #
   # NB: This is a PUT because it seems to be the only thing that works.
-  # We have a form in the select_new_leader view because of the 
+  # We have a form in the select_new_leader view because of the
   # text completion.
   #
   def new_leader
     @club_leadership      = ClubLeadership.find(params[:id])
     @current_leaders = @club_leadership.current_active_leaders
-    
+
     #
     # Shut off buttons on current leaders.
     #
     @view_modify = false;
-    
+
     #
     # If we have a selected member then we just render with that.
     #
@@ -195,7 +195,7 @@ class ClubLeadershipsController < BaseController
                                       :end_date => Time.now + 50.year)
       render
     end
-    
+
     #
     # We didn't have a selected one. Check to see if user supplied a name.
     # If we have a typed in name, then find the new leader
@@ -209,10 +209,10 @@ class ClubLeadershipsController < BaseController
         :conditions => conditions.join(" AND "),
         :order => "login ASC",
         :limit => AC_CLUB_MEMBER_NAME_LIMIT }
-        
+
       @selected_leaders = ClubMember.find(:all, find_options);
     end
-    
+
     #
     # If we have multiple matching names, we have to select on other criteria.
     # Render a different view that shows them for selection.
@@ -234,11 +234,11 @@ class ClubLeadershipsController < BaseController
       end
     end
     #
-    # We may have no selected leaders that this point. The view should 
+    # We may have no selected leaders that this point. The view should
     # handle that situation.
     #
   end
-  
+
   #
   # PUT /suoc_leaderships/1/update_leaders
   #
@@ -259,13 +259,13 @@ class ClubLeadershipsController < BaseController
     @club_leadership      = ClubLeadership.find(params[:id])
     @current_leaders = @club_leadership.current_leaders
     @new_leader      = ClubLeader.new(params[:club_leader])
-    
+
     if (params[:leaders])
        for leader in @current_leaders do
         # NB: It seems that I must convert the id to symbol for this to work.
         attrs = params[:leaders][leader.id.to_s]
         if (attrs)
-          if !leader.update_attributes(attrs) 
+          if !leader.update_attributes(attrs)
              # TODO: Find a better way to do transactions and rollbacks if this
              # doesn't work.
             flash[:error] = "Leader #{leader.id} didn't update"
@@ -273,7 +273,7 @@ class ClubLeadershipsController < BaseController
         end
       end
     end
-    
+
     if @new_leader.save
       flash[:notice] = "Successful Update of New Leader"
       redirect_to :action => :show
@@ -322,7 +322,7 @@ class ClubLeadershipsController < BaseController
       render :action => :edit_leader
     end
   end
-  
+
   #
   # PUT /suoc_leaderships/1/retire_leader
   #
@@ -342,7 +342,7 @@ class ClubLeadershipsController < BaseController
       redirect_to eadership
     end
   end
-  
+
   # AccessControl, this method stands by itself
   # Only officer "Leadership" has :verify_leader
   #
