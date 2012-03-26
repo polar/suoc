@@ -123,6 +123,7 @@ class ClubLeadershipsController < BaseController
       flash[:notice] = "Club Leadership #{@club_leadership.name} was successfully created."
       redirect_to(:action => :show, :id => @club_leadership)
     else
+      @club_activities = ClubActivity.all
       render :action => "new"
     end
   end
@@ -134,6 +135,7 @@ class ClubLeadershipsController < BaseController
       flash[:notice] = "Club Leadership #{@club_leadership.name} was successfully updated."
       redirect_to(:action => :show)
     else
+      @club_activities = ClubActivity.all
       render :action => "edit"
     end
   end
