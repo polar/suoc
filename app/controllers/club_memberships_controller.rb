@@ -22,7 +22,8 @@ class ClubMembershipsController < BaseController
     @memberships = ClubMembership.all(:include => :member,
                                       :conditions => ['year = ?', @year])
     @memberships = @memberships.sort {|x,y| x.member.name <=> y.member.name}
-    @total_dollars = @memberships.reduce(0.0) {|t,v| t + v.acct_transaction.amount }
+    @total_dollars = 0.0
+    @memberships.map {|m| @total_dollars += m.acct_transaction.amount }
     @total_memberships = @memberships.size
   end
 

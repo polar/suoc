@@ -1,8 +1,8 @@
 class ClubMembersController < ApplicationController
-  
+
   def index
   end
-  
+
   def new
     @club_member = ClubMember.new
     @successful = true
@@ -12,13 +12,13 @@ class ClubMembersController < ApplicationController
         if @successful
           @options = { :action => "create" }
           render :partial => "form", :layout => true
-        else 
+        else
           redirect_to_main
         end
       end
     end
   end
-  
+
   def create
     begin
       @club_member = ClubMember.new(params[:club_member])
@@ -26,15 +26,15 @@ class ClubMembersController < ApplicationController
     rescue
       flash[:error], @successful  = $!.to_s, false
     end
-    
+
     flash[:info] = "ClubMember created" if @successful
-    
+
     respond_to do |type|
       type.html do
         if not @successful
           @options = { :action => "create" }
           render :partial => "form", :layout => true
-        else 
+        else
           redirect_to_main
         end
       end
@@ -48,13 +48,13 @@ class ClubMembersController < ApplicationController
     rescue
       flash[:error], @successful  = $!.to_s, false
     end
-    
+
     respond_to do |type|
       type.html do
         if @successful
           @options = { :action => "update", :id => params[:id] }
           render :partial => "form", :layout => true
-        else 
+        else
           redirect_to_main
         end
       end
@@ -68,15 +68,15 @@ class ClubMembersController < ApplicationController
     rescue
       flash[:error], @successful  = $!.to_s, false
     end
-    
+
     flash[:info] = "ClubMember updated" if @successful
-    
+
     respond_to do |type|
       type.html do
         if not @successful
           @options = { :action => "update", :id => params[:id] }
           render :partial => "form", :layout => true
-        else 
+        else
           redirect_to_main
         end
       end
@@ -89,17 +89,17 @@ class ClubMembersController < ApplicationController
     rescue
       flash[:error], @successful  = $!.to_s, false
     end
-    
+
     flash[:info] = "ClubMember deleted" if @successful
-    
+
     respond_to do |type|
       type.html {return redirect_to_main}
     end
   end
-  
+
   def cancel
     @successful = true
-    
+
     respond_to do |type|
       type.html {return redirect_to_main}
     end
@@ -109,7 +109,7 @@ protected
   def redirect_to_main
     redirect_to common_redirection
   end
-  
+
   def common_redirection
     { :action => 'index' }
   end
