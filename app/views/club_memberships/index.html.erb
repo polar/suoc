@@ -55,7 +55,7 @@ total is presented here to aid in solving some accounting anamolies, if they exi
 <p>
 Slackers are people that have been registered on more than one trip and do not
 have a recorded membership for a given year regardless of their stated Club Status,
-e.g. "Active", "Inactive", "Life", etc.
+e.g. "Active", "Inactive", "Life", "Retired", etc.
 <p>
 Note, people may have been registered for a trip, but that does not mean they actually went on that trip.
 Contraversally, there may be people who have not been registered for more than one trip,
@@ -64,13 +64,13 @@ People who were not registered on more than one trip for the specified year will
 <p>
 This information is historical regardless of Club Member status.
 There is no date associated with a Club Member's status as they may change it at will.
-People who are Life members that did not pay will show up for that year if you click
-the life box, so you may check to see if they actually got a membership for that particular year.
+People who are Life/Retired members that did not pay will show up for that year if you click
+the Life/Retired box, so you may check to see if they actually got a membership for that particular year.
 <p>
 <% form_remote_tag :update => "Slackers",
     :url => { :action => :render_slackers } do %>
   Year: <%= text_field_tag "year", @year %>
-  Life: <%= check_box_tag "life", false %>
+  Life/Retired: <%= check_box_tag "life", false %>
   <%= submit_tag "Show me the Slackers"%>
 <% end %>
 <p>

@@ -50,7 +50,7 @@ class ClubMembershipsController < BaseController
                          :conditions => conditions,
                         :order => 'login ASC')
     members = ms.reject {|m| m.has_membership_for?(@year) }
-    members = members.reject {|m| m.club_member_status == ClubMemberStatus['Life'] } if !params[:life]
+    members = members.reject {|m| [ClubMemberStatus['Life'],ClubMemberStatus["Retired"]].include? m.club_member_status } if !params[:life]
     members = members.select {|m| m.trips_for(@year).size > 1 }
     render :partial => "members", :locals => { :members => members }
   end
