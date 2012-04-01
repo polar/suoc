@@ -22,4 +22,9 @@
   <td class="decimal">
     <%= member.club_grad_year.strftime("%Y") if member.club_grad_year %>
   </td>
+  <% if @year %>
+  <td class="decimal">
+    <%= member.trips_for(@year).size %>
+  </td>
+  <% end %>
 </tr>

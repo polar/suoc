@@ -7,7 +7,7 @@ class ClubMembershipsController < BaseController
   filter_access_to :render_slackers, :require => :update
   filter_access_to :render_lifers, :require => :update
   filter_access_to :render_retirees, :require => :update
-  
+
   def index
     if !params[:year]
       # Memberships are from Sept to Sept.
@@ -19,28 +19,38 @@ class ClubMembershipsController < BaseController
     else
       @year = params[:year]
     end
-    @memberships = ClubMembership.all(:include => :member, 
+    @memberships = ClubMembership.all(:include => :member,
                                       :conditions => ['year = ?', @year])
     @memberships = @memberships.sort {|x,y| x.member.name <=> y.member.name}
-    
-    if params[:slackers]
-    end
+    @total_dollars = @memberships.reduce(0.0) {|t,v| t + v.acct_transaction.amount }
+    @total_memberships = @memberships.size
   end
-  
+
   def show
   end
-  
+
   # This is called by the page.
   def render_slackers
-    as = [ClubAffiliation['SU Undergrad'],
-	  ClubAffiliation['SU Grad Student'],
-	  ClubAffiliation['ESF Undergrad'],
-	  ClubAffiliation['ESF Grad Student']]
-    status = ClubMemberStatus['Active']
-    ms = ClubMember.all(:conditions => { :club_affiliation_id => as, 
-                                         :club_member_status_id => status },
+    if !params[:year]
+      # Memberships are from Sept to Sept.
+      if Time.now.month > 8
+    @year = Time.now.year + 1
+      else
+    @year = Time.now.year
+      end
+    else
+      @year = params[:year].to_i
+    end
+    begin_date = Date.civil(@year-1,9,1)
+    end_date = Date.civil(@year,9,1)
+
+    conditions = [ "club_trip_registrations.departure_date BETWEEN ? AND ?", begin_date, end_date]
+    ms = ClubMember.find(:all, :include => :trip_registrations,
+                         :conditions => conditions,
                         :order => 'login ASC')
-    members = ms.reject {|m| m.has_current_membership?}
+    members = ms.reject {|m| m.has_membership_for?(@year) }
+    members = members.reject {|m| m.club_member_status == ClubMemberStatus['Life'] } if !params[:life]
+    members = members.select {|m| m.trips_for(@year).size > 1 }
     render :partial => "members", :locals => { :members => members }
   end
 
@@ -51,7 +61,7 @@ class ClubMembershipsController < BaseController
                         :order => 'login ASC')
     render :partial => "members", :locals => { :members => members }
   end
-  
+
   # This is called by the page.
   def render_retirees
     status = ClubMemberStatus['Retired']
@@ -60,7 +70,7 @@ class ClubMembershipsController < BaseController
     render :partial => "members", :locals => { :members => members }
   end
 
-  
+
   def submit_list
     # Memberships are from Sept to Sept.
     if Time.now.month > 8
@@ -80,8 +90,8 @@ class ClubMembershipsController < BaseController
                         as.include?(m.club_affiliation) }
     members = members.sort { |x,y| x.name <=> y.name }
     ClubMembershipsNotifier.deliver_members(members, year, current_user.email)
-    
-    
+
+
     flash[:notice] = "Club members list has been submitted"
     redirect_to :action => :index
   end

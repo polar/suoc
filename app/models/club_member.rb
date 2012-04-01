@@ -10,6 +10,8 @@ class ClubMember < User
   has_many :certifications,  :class_name => "CertMemberCert", :foreign_key => :member_id
   has_many :memberships,     :class_name => "ClubMembership", :foreign_key => :member_id
 
+  has_and_belongs_to_many :trip_registrations, :class_name => "ClubTripRegistration"
+
   validates_date :club_start_date, :allow_nil => false
   validates_date :club_end_date, :allow_nil => true
   validates_date :club_grad_year, :allow_nil => true
@@ -47,12 +49,12 @@ class ClubMember < User
 
   # Make sure the SUID is just nine digits
   before_validation :normalize_club_memberid
-  
+
   def validate
     validate_club_member_status
   end
 
-  
+
   #
   # Inorder to be a life member, you have to have a member since date of at
   # least 4 years ago, i.e. the possibility of 4 paid memberships. They should
@@ -97,7 +99,7 @@ class ClubMember < User
   end
   #
   # We add roles and roles_symbols for the
-  # Declarative Authorization plugin
+  # Declarative Authorization plugin, :class_name => "ClubTripRegistration"
   #
   has_many :roles, :class_name => "ClubRole", :uniq => true
 
@@ -193,17 +195,31 @@ class ClubMember < User
     ! memberships.select { |x| x.current? }.empty?
   end
 
+  def has_membership_for?(year)
+    ! memberships.select { |x| x.year == year }.empty?
+  end
+
+  def trips_for(year)
+      begin_date = Date.civil(year-1, 9, 1)
+      end_date = Date.civil(year, 9, 1)
+      trip_registrations.select { |x| begin_date <= x.departure_date && x.departure_date < end_date }
+  end
+
+  def has_trips_for?(year)
+      !trips_for(year).empty?
+  end
+
   def is_slacker?
-    club_member_status == ClubMemberStatus[:Active] && 
+    club_member_status == ClubMemberStatus[:Active] &&
 	!has_current_membership? &&
 	memberships.size < 4
   end
-  
+
   def is_current_leader?
     [ClubMemberStatus[:Active], ClubMemberStatus[:Life]].include?(club_member_status) &&
     !current_leaders.empty?
   end
-  
+
   def has_current_status?
       [ClubMemberStatus[:Active],
        ClubMemberStatus[:Life]].include?(club_member_status)

@@ -10,6 +10,9 @@
   <th>Status</th>
   <th>Start Year</th>
   <th>Grad Year</th>
+  <% if @year %>
+  <th><%= @year %> Trips</th>
+  <% end %>
 </tr>
 <%= render :partial => "member", :collection => members %>
 </table>

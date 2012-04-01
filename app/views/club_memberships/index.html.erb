@@ -1,8 +1,17 @@
 <h3>Club Memberships</h3>
+<p>
+Memberships are from September of the previous year to the September of the specified year. The "year" is the year the membership ends.
+For example, a 2011 membership signifies membership that ends on August 31, 2011. There are two types
+of membershps, "Year" and "Spring". Usually the Year membership is sold in the fall, and the Spring membership
+is sold in the spring.
+
+<h3>Paid Memberships</h3>
+<p>
 <% form_tag "", :method => :get do %>
   Year: <%= text_field_tag "year", @year %>
   <%= submit_tag "GO" %>
 <% end %>
+<p>
 <table class="memberships">
 <tr>
   <th>Name</th>
@@ -20,26 +29,67 @@
     <td colspan="9">
     <%= "There are no memberships recorded for the year #{@year}." %>
     </td>
-  </tr>
+  </tr>Lifers
 <% else %>
   <%= render :partial => "membership", :collection => @memberships %>
 <% end %>
+<tr class="membership row">
+ <td><b>Total Memberships</b></td>
+ <td><%= @total_memberships %></td>
+ <td></td>
+ <td></td>
+ <td></td>
+ <td></td>
+ <td><b>Total</b></td>
+ <td class="decimal"><%= "%.2f" % @total_dollars %></td>
+ <td></td>
+</tr>
 </table>
+<br />
+<p>
+Note, the total is for the membership year, and it does not signify the actual money collected
+for memberships during a fiscal year. Please see the Account Reports for fiscal information. This
+total is presented here to aid in solving some accounting anamolies, if they exist.
+<p>
+<h3>Slackers</h3>
+<p>
+Slackers are people that have been registered on more than one trip and do not
+have a recorded membership for a given year regardless of their stated Club Status,
+e.g. "Active", "Inactive", "Life", etc.
+<p>
+Note, people may have been registered for a trip, but that does not mean they actually went on that trip.
+Contraversally, there may be people who have not been registered for more than one trip,
+have not paid their specified membership, and went on more trips, due to lack in trip registrations.
+People who were not registered on more than one trip for the specified year will not show up here.
+<p>
+This information is historical regardless of Club Member status.
+There is no date associated with a Club Member's status as they may change it at will.
+People who are Life members that did not pay will show up for that year if you click
+the life box, so you may check to see if they actually got a membership for that particular year.
+<p>
+<% form_remote_tag :update => "Slackers",
+    :url => { :action => :render_slackers } do %>
+  Year: <%= text_field_tag "year", @year %>
+  Life: <%= check_box_tag "life", false %>
+  <%= submit_tag "Show me the Slackers"%>
+<% end %>
+<p>
+<div id="Slackers">
+</div>
 <h3>Lifers</h3>
+<p>
+SUOC Lifers have set their Club Status set to "Life".
+<p>
 <div id="Lifers">
 <% form_remote_tag :update => "Lifers",
     :url => { :action => :render_lifers } do %>
   <%= submit_tag "Show me the Lifers"%>
 <% end %>
 </div>
-<h3>Slackers</h3>
-<div id="Slackers">
-<% form_remote_tag :update => "Slackers",
-    :url => { :action => :render_slackers } do %>
-  <%= submit_tag "Show me the Slackers"%>
-<% end %>
-</div>
 <h3>Retirees</h3>
+<p>
+SUOC Retirees have set their Club Status set to "Retired".
+<p>
 <div id="Retirees">
 <% form_remote_tag :update => "Retirees",
     :url => { :action => :render_retirees } do %>
@@ -47,6 +97,7 @@
 <% end %>
 </div>
 <h3>Current Memberships</h3>
+<p>
 Hit the button below to send yourself the current membership list for
 Recreation Services. This button sends you a list of members that have
 currently paid memberships, and that state they are student, undergraduate
