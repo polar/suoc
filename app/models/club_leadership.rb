@@ -4,12 +4,12 @@
 class ClubLeadership < ActiveRecord::Base
   belongs_to :activity, :class_name => "ClubActivity"
   has_many :leaders, :class_name => "ClubLeader", :foreign_key => :leadership_id
-  
-  acts_as_list 
+
+  acts_as_list
 
   validates_presence_of   :activity
   validates_uniqueness_of :name
-  
+
   #
   # This function returns true if the given User
   # is already a leader in this leadership, but not whether
@@ -19,13 +19,13 @@ class ClubLeadership < ActiveRecord::Base
     ClubLeader.find(:first, :conditions => {
              :leadership_id => self, :member_id => member})
   end
-  
+
   def current_leaders(page = nil, per_page = 4)
-    conditions = 
+    conditions =
       "leadership_id = '#{id}' AND start_date <= '#{Date.parse(Time.now.to_s)}' AND '#{
 Date.parse(Time.now.to_s)}' <= end_date"
     if page
-      ClubLeader.paginate(:page => page, :per_page => per_page, 
+      ClubLeader.paginate(:page => page, :per_page => per_page,
         :order => "start_date DESC", :conditions => conditions)
     else
       ClubLeader.find(:all,
@@ -42,9 +42,9 @@ Date.parse(Time.now.to_s)}' <= end_date"
     life_id   = ClubMemberStatus.find(:first, :conditions => "name = 'Life'").id
 
     ClubLeader.find(:all,
-      :order => "start_date DESC", 
+      :order => "start_date DESC",
       :joins => "club_leaders, users u",
-      :conditions => 
+      :conditions =>
       "leadership_id = '#{id}' AND start_date <= '#{Date.parse(Time.now.to_s)}' AND '#{Date.parse(Time.now.to_s)}' <= end_date AND member_id = u.id AND (u.club_member_status_id = '#{active_id}' OR u.club_member_status_id = '#{life_id}')")
   end
 
@@ -53,9 +53,9 @@ Date.parse(Time.now.to_s)}' <= end_date"
     life_id   = ClubMemberStatus.find(:first, :conditions => "name = 'Life'").id
 
     ClubLeader.paginate( :page => page, :per_page => per_page,
-      :order => "start_date DESC", 
+      :order => "start_date DESC",
       :joins => "club_leaders, users u",
-      :conditions => 
+      :conditions =>
       "leadership_id = '#{id}' AND member_id = u.id AND (start_date > '#{Date.parse(Time.now.to_s)}' OR '#{Date.parse(Time.now.to_s)}' > end_date OR NOT (u.club_member_status_id = '#{active_id}' OR u.club_member_status_id = '#{life_id}'))")
   end
 end

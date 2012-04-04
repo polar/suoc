@@ -147,7 +147,7 @@ Comatose.define_drop "leaderships" do
     leaderships = ClubLeadership.find(:all, :order => "position ASC")
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
-    view.render :partial => "club_leaderships/leaderships", :locals => { :leaderships => leaderships }
+    view.render :partial => "club_leaderships/drop_leaderships", :locals => { :leaderships => leaderships }
   end
 
   #
@@ -158,10 +158,10 @@ Comatose.define_drop "leaderships" do
   # the office name, with any non letter characters changed
   # to an underbar (_).
   #
-  # leaderships.get_leaders_for.flatwater
-  # leaderships.get_leaders_for.rock_climbing
+  # leaderships.current_leaders_for.flatwater
+  # leaderships.current_leaders_for.rock_climbing
   #
-  def get_leaders_for
+  def current_leaders_for
     self
   end
 
@@ -175,11 +175,11 @@ Comatose.define_drop "leaderships" do
 
   def render_leaders(id)
     leadership = ClubLeadership.find id
-    leaders = leadership.leaders.sort {|x,y| y.end_date <=> x.end_date}
+    leaders = leadership.leaders.sort {|x,y| y.member.name <=> x.member.name}
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
-    view.render :partial => "club_leaderships/leader_list",
-                :locals => {:leaders => leaders}
+    view.render :partial => "club_leaderships/drop_leader_list",
+                :locals => {:leaders => leaders, :leadership => leadership}
   end
 end
 

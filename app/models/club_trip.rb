@@ -1,7 +1,7 @@
 class ClubTrip < ActiveRecord::Base
   require "stringio"
   require "faster_csv"
-  
+
   def self.read(file)
     FasterCSV.parse(file, :headers => true) do |opts|
       t = self.new
@@ -28,11 +28,11 @@ class ClubTrip < ActiveRecord::Base
       FasterCSV::Table.new(ts.collect { |x| x.to_csv})
     end
   end
-  
+
   def self.trip_table
     render :partial => "club_trips/trip_table", :locals => { :club_trips => ClubTrip.all }
   end
-  
+
   def to_csv
     FasterCSV::Row.new(["Trip","When","Where","Meet","E-Room","Limit","Leader","Contact"],
                        [trip,swhen,where,meet,e_room,limit,leader,contact]);

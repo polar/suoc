@@ -7,7 +7,7 @@ class ClubRole < ActiveRecord::Base
   # The Declarative Authorization
   # plugin needs the user attribute.
   #
-  belongs_to :user, :class_name => "ClubMember", 
+  belongs_to :user, :class_name => "ClubMember",
                     :foreign_key => :club_member_id
 end
 

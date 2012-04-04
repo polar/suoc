@@ -1,5 +1,5 @@
 <h3>My Officerships (<%= @current_user.name %>)</h3>
-  <%= render :partial => "edit_club_officer", 
+  <%= render :partial => "edit_club_officer",
              :locals => { :officer => @club_officer } %>
 <h3>My Current Officerships</h3>
   <% if @current_officers.empty? %>
@@ -12,6 +12,6 @@
   <% if @past_officers.empty? %>
     You have no past officerships.
   <% else %>
-    <%= render :partial => "member_officers", 
+    <%= render :partial => "member_officers",
                :locals => { :member_officers => @past_officers } %>
   <% end %>

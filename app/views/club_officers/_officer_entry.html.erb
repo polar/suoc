@@ -2,7 +2,7 @@
  # This partial creates a table row for a single officer.
  # badge and then a vertical table of the office name,
  # start and end date.
- # 
+ #
  #
  # Local Variables
  #        officer : SuocOfficer to be displayed.
@@ -10,7 +10,7 @@
  #        rowclass : CSS Class for row
  #
  %>
-<tr <%= "class='#{rowclass}'" if rowclass %> > 
+<tr <%= "class='#{rowclass}'" if rowclass %> >
   <td><%= render_member_badge(officer.member, link) %></td>
   <td><table>
     <tr>
