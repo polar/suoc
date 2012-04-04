@@ -6,6 +6,9 @@ class ClubLeader < ActiveRecord::Base
   validates_presence_of :member
   validates_presence_of :leadership
 
+  # We need to validates else it parses the date with the day first.
+  validates_date :start_date
+  validates_date :end_date
   validates_date :start_date, :before => Proc.new { Date.today }
   validates_date :end_date, :after => :start_date
   validates_date :verified_date, :allow_nil => true
@@ -31,8 +34,8 @@ class ClubLeader < ActiveRecord::Base
   end
 
   def self.current(member)
-    self.find(:all, 
-              :conditions => [ 
+    self.find(:all,
+              :conditions => [
                 "member_id = #{member.id} AND start_date <= :today AND :today <= end_date",
                 { :today => Date.today }])
   end
