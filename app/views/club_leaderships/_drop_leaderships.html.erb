@@ -4,7 +4,10 @@
 #     leaderships  Collection of ClubLeadership
 %>
 <% for leadership in leaderships do %>
- <% leaders = leadership.leaders.sort {|x,y| x.member.name <=> y.member.name} %>
+ <%
+    leaders = leadership.leaders.sort {|x,y| x.member.name <=> y.member.name}
+    leaders = leaders.select {|x| [ClubMemberStatus['Active'], ClubMemberStatus['Life']].include? x.member.club_member_status }
+ %>
  <%= render :partial => "club_leaderships/drop_leader_list",
             :locals => { :leadership => leadership, :leaders => leaders } %>
  <p>
