@@ -1,0 +1,11 @@
+<%
+# This partial lists the years and name of the leaderrs
+# locals :
+#     leaders  Collection of ClubLeader
+%>
+<table>
+<tr>
+  <th colspan="2"><%= leadership.name %></th>
+</tr>
+<%= render :partial => "club_leaderships/drop_leader", :collection => leaders %>
+</table>
