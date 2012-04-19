@@ -57,7 +57,8 @@ end
 Comatose.define_drop "offices" do
 
   def current_officers
-    offices = ClubOffice.find(:all, :order => "position ASC")
+    offices = ClubOffice.find(:all, :order => "position ASC", :include => ["current_officers"])
+    puts offices[0].current_officers.inspect
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_offices/offices", :locals => { :offices => offices }
@@ -90,8 +91,9 @@ Comatose.define_drop "offices" do
   end
 
   def render_officers(id)
-    office = ClubOffice.find id
-    officers = office.officers.sort {|x,y| y.end_date <=> x.end_date}
+    office = ClubOffice.find(id, :include => ["current_officers"])
+    #officers = office.current_officers.sort {|x,y| y.end_date <=> x.end_date}
+    officers = office.current_officers
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_offices/officer_list",
@@ -102,7 +104,7 @@ end
 Comatose.define_drop "activities" do
 
   def current_chairs
-    activities = ClubActivity.find(:all, :order => "position ASC")
+    activities = ClubActivity.find(:all, :order => "position ASC", :include => "current_chairs")
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_activities/activities", :locals => { :activities => activities }
@@ -132,8 +134,7 @@ Comatose.define_drop "activities" do
   end
 
   def render_chairs(id)
-    activity = ClubActivity.find id
-    chairs = activity.chairs.sort {|x,y| x.end_date <=> y.end_date}
+    activity = ClubActivity.find(:all, :order => "position ASC", :include => "current_chairs")
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_activities/chair_list",
@@ -144,7 +145,7 @@ end
 Comatose.define_drop "leaderships" do
 
   def current_leaders
-    leaderships = ClubLeadership.find(:all, :order => "position ASC")
+    leaderships = ClubLeadership.find(:all, :order => "position ASC", :include => "current_active_leaders")
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_leaderships/drop_leaderships", :locals => { :leaderships => leaderships }
@@ -174,10 +175,8 @@ Comatose.define_drop "leaderships" do
   end
 
   def render_leaders(id)
-    leadership = ClubLeadership.find(id)
-    leaders = leadership.leaders.sort {|x,y| x.member.name <=> y.member.name}
-    leaders = leaders.select {|x| [ClubMemberStatus['Active'], ClubMemberStatus['Life']].include?(x.member.club_member_status) &&
-                                  x.end_date > Date.today }
+    leadership = ClubLeadership.find(id, :order => "position ASC", :include => :current_active_leaders)
+    leaders = leadership.current_active_leaders
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_leaderships/drop_leader_list",

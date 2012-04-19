@@ -5,6 +5,9 @@ class ClubLeadership < ActiveRecord::Base
   belongs_to :activity, :class_name => "ClubActivity"
   has_many :leaders, :class_name => "ClubLeader", :foreign_key => :leadership_id
 
+  has_many :current_active_leaders, :foreign_key => "leadership_id", :class_name => "ClubLeader", :include => "member",
+          :conditions => ["start_date <= NOW() AND NOW() <= end_date AND users.club_member_status_id IN (?,?)", ClubMemberStatus["Active"], ClubMemberStatus["Life"]], :order => "users.login ASC"
+
   acts_as_list
 
   validates_presence_of   :activity
@@ -37,7 +40,7 @@ Date.parse(Time.now.to_s)}' <= end_date"
   # This returns the current active leaders. That is
   # members that are "Active" or "Life".
   #
-  def current_active_leaders
+  def current_active_leaders2
     active_id = ClubMemberStatus.find(:first, :conditions => "name = 'Active'").id
     life_id   = ClubMemberStatus.find(:first, :conditions => "name = 'Life'").id
 
