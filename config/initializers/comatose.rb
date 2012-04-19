@@ -135,6 +135,7 @@ Comatose.define_drop "activities" do
 
   def render_chairs(id)
     activity = ClubActivity.find(:all, :order => "position ASC", :include => "current_chairs")
+    chairs = activity.current_chairs
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_activities/chair_list",
