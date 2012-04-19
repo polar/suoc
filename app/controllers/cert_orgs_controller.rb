@@ -58,9 +58,10 @@ class CertOrgsController < BaseController
   def create
     @cert_org = CertOrg.new(params[:cert_org])
     if @cert_org.save
-      flash[:notice] = 'CertOrg was successfully created.'
+      flash[:notice] = "Certificaton Organization #{@cert_org.name} for type #{@cert_org.cert_type.name} has been created."
       redirect_to(@cert_org)
     else
+      flash[:error] = "Certificaton Organization was not created."
       @submit = "Create"
       @types = CertType.all
       render :action => "new"
@@ -71,9 +72,10 @@ class CertOrgsController < BaseController
     @cert_org = CertOrg.find(params[:id])
 
     if @cert_org.update_attributes(params[:cert_org])
-      flash[:notice] = 'CertOrg was successfully updated.'
+      flash[:notice] = "Certificaton Organization #{@cert_org.name} for type #{@cert_org.cert_type.name} has been updated."
       redirect_to(@cert_org)
     else
+      flash[:error] = "Certificaton Organization was not updated."
       @submit = "Update"
       @types = CertType.all
       render :action => "edit"
@@ -88,7 +90,7 @@ class CertOrgsController < BaseController
                       "It is already referenced by some members."
     else
       @cert_org.destroy
-      flash[:notice] = "Certificaton Organisation #{@cert_org.name} for type #{@cert_org.cert_type.name} has been deleted."
+      flash[:notice] = "Certificaton Organization #{@cert_org.name} for type #{@cert_org.cert_type.name} has been deleted."
     end
     redirect_to :action => :index
   rescue

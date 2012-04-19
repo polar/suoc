@@ -68,9 +68,6 @@ authorization do
     has_permission_on :acct_account_types, :to => :manage
     has_permission_on :acct_ledgers, :to => :manage
     has_permission_on :acct_action_sets, :to => :manage
-    has_permission_on :cert_types, :to => :manage
-    has_permission_on :cert_orgs, :to => :manage
-    has_permission_on :cert_certifications, :to => :manage
     has_permission_on :club_trip_registrations, :to => :configure
   end
 
@@ -143,6 +140,9 @@ authorization do
     has_permission_on :club_memberships, :to => [:manage]
     has_permission_on :club_offices, :to => [:manage]
     has_permission_on :club_officers, :to => [:manage]
+    has_permission_on :cert_types, :to => :manage
+    has_permission_on :cert_orgs, :to => :manage
+    has_permission_on :cert_certifications, :to => :manage
     has_permission_on :club_trip_registrations, :to => [:show_submitted, :show_statistics]
   end
 
