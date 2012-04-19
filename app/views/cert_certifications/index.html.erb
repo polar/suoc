@@ -1,0 +1,40 @@
+<div class="box">
+  <h3>Club Certifications</h3>
+  <p>
+  Club Certifications are certifications from professional organziations such as
+  the American Heart Association, the Red Cross, etc. When a club member states
+  he/she has a certfication, he/she must list both the certfication type and
+  the professional organization from which it was issued.
+  <p>
+  As a technical matter, you must have at least one organization for each certification
+  type. You must create a certfication type before you create the organization that issues
+  it.
+
+  <h3>Manage Certification Types</h3>
+  <p>
+  A Certification Type is the type of certification offered by an organization, such as
+  "Widerness First Responder". These certifications may be issued by different organizations.
+  You must create a Certfication Type before you add a Certification Organzation.
+  <p>
+  <%= link_to "Manage Certification Types",
+         url_for(:controller => "cert_types", :action => "index") %>
+
+  <h3>Manage Certification Organziations</h3>
+  <p>
+  A Certification Organization is the professional organization that offers
+  a certification, such as the "Red Cross". You must add the Certification Type
+  to the system before you create the organization. However, check first if the
+  certification type already exists.
+  <P>
+  You must also re-enter the organization for each membership type that it offers.
+  For instance, if you have two types of certifications,
+  "Wilderness First Responder (WFR)" and "Wilderness First Aid Responder (WFAR)" and
+  they both come from "Wilderness Medicial Associates" you must enter both types above
+  and then you must add "Wilderness Medical Associates" twice, once for each type.
+  This is a pain, but that's the way it works. The name field for the organization
+  will try to find the organizations that already exist as you type in order to
+  alievate any spelling mistakes.
+  <p>
+  <%= link_to "Manage Certification Organizations",
+         url_for(:controller => "cert_orgs", :action => "index") %>
+</div>

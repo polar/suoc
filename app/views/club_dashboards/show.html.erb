@@ -54,7 +54,7 @@
   office of the Treasury writing checks and making deposits.
   <h4><%= link_to "Memberships", club_memberships_path %></h4>
   <p>
-  This section contains the memberships managment. Currently there is only a 
+  This section contains the memberships managment. Currently there is only a
   button there to send yourself an email containing the current student members
   of the club. You only have access to this if you are a current club officer.
   <h4><%= link_to "Documents", club_documents_path %></h4>
@@ -66,6 +66,10 @@
   <p>
   This section allows you to edit, add, manage the SUOC home pages using
   wiki format, if you have privileges to do this.
+  <h4><%= link_to "Certifications", cert_certifications_path %></h4>
+  <p>
+  This section allows you to edit, add, and manage the various professional
+  certifications that can be recorded for a member.
   <h4>
     <%= link_to "My Officerships",
          url_for( :controller => :club_officers, :action => "my_index", :id => "me") %>
@@ -75,6 +79,9 @@
     |
     <%= link_to "My Leaderships",
          url_for( :controller => :club_leaders, :action => "my_index", :id => "me") %>
+    |
+    <%= link_to "My Certifications",
+         url_for( :controller => :cert_member_certs, :action => "my_index", :id => "me") %>
   </h4>
   <p>
   These sections allow you to add records concering your historical and current appointments

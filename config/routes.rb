@@ -1,16 +1,18 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :payments
-    
+
   map.resource  :reunion, :controller => "reunion"
   map.resources :acct_action_sets
   map.resources :acct_reports
 
   map.resources :club_memberships, :collection => {
     :submit_list => :post }
-  
+
   map.resources :cert_member_certs
 
-  map.resources :cert_orgs
+  map.resources :cert_orgs, :member => {
+      :auto_complete_for_cert_org_name => :post
+  }
 
   map.resources :cert_types
 
@@ -65,6 +67,7 @@ ActionController::Routing::Routes.draw do |map|
     :update_transaction => :post,
     :update_description_form => :post}
 
+  map.resources :cert_certifications
 
 
   # The priority is based upon order of creation: first created -> highest priority.

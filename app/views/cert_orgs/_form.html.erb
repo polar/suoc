@@ -1,13 +1,13 @@
   <% form_for(@cert_org,
         :html => { :class => "MainForm" }) do |f| %>
     <%= f.error_messages %>
-    <%= f.label "Organization Name" %>
-    <%= f.text_field "name" %>
-    <%= f.label "Certification Type" %>
-    <%= f.collection_select :cert_type_id, @types, 
+    <%= f.label :name, "Organization Name" %>
+    <%= text_field_with_auto_complete :cert_org, :name  %>
+    <%= f.label :cert_type_id, "Certification Type" %>
+    <%= f.collection_select :cert_type_id, @types,
               :id, :name,
               :prompt => "Please Select" %>
-    <%= f.label "Description" %>
+    <%= f.label :description, "Description" %>
     <%= f.text_area "description",
          {:size => "86x5", :class => "rich_text_editor"} %>
     <p>

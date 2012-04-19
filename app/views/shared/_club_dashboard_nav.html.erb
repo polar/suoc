@@ -78,6 +78,11 @@
     <tr>
     <tr>
       <td>
+        <%= link_to "Certifications", cert_certifications_path %>
+      </td>
+    <tr>
+    <tr>
+      <td>
         <%= link_to "My Officerships",
              url_for( :controller => :club_officers, :action => "my_index", :id => "me") %>
       </td>
@@ -91,6 +96,12 @@
       <td>
         <%= link_to "My Leaderships",
              url_for( :controller => :club_leaders, :action => "my_index", :id => "me") %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= link_to "My Certifications",
+             url_for( :controller => :cert_member_certs, :action => "my_index", :id => "me") %>
       </td>
     </tr>
   </table>

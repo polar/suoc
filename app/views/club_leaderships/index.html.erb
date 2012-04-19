@@ -11,7 +11,7 @@
     <%= render :partial => "leadership_row",
                :collection => @club_leaderships, :as => :leadership %>
   </table>
-  
+
   <br />
   <% if @view_modify %>
     <%= link_to 'Create new Club Leadership', new_club_leadership_path %>

@@ -8,7 +8,7 @@
     -if @meta
       -@meta.each do |key|
         %meta{:name=>key[0], :content=>key[1]}
-  
+
     = render :partial => "shared/scripts_and_styles"
     - if controller =~ /comatose/
       = stylesheet_link_tag "comatose.css"
@@ -16,7 +16,7 @@
     - if @rss_title && @rss_url
       = auto_discovery_link_tag(:rss, @rss_url, {:title => @rss_title})
     = render :partial => "shared/rico"
-    
+
   %body
     #doc4{:class => "yui-t4"}
       #hd
@@ -24,6 +24,7 @@
       #bd
         #yui-main
           .yui-b.box
+            = render :partial => "shared/messages"
             = @content_for_layout
         .yui-b
           = render :partial => "shared/club_dashboard_nav"

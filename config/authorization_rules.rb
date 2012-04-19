@@ -24,7 +24,7 @@ privileges do
   # add transactions.
   #
   privilege :manage_transactions
-  
+
   #
   # This privilege is so that officers can be the only ones to view
   # submitted trip registrations
@@ -70,6 +70,7 @@ authorization do
     has_permission_on :acct_action_sets, :to => :manage
     has_permission_on :cert_types, :to => :manage
     has_permission_on :cert_orgs, :to => :manage
+    has_permission_on :cert_certifications, :to => :manage
     has_permission_on :club_trip_registrations, :to => :configure
   end
 
