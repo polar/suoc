@@ -175,8 +175,9 @@ Comatose.define_drop "leaderships" do
 
   def render_leaders(id)
     leadership = ClubLeadership.find(id)
-    leaders = leaders.select {|x| [ClubMemberStatus['Active'], ClubMemberStatus['Life']].include? x.member.club_member_status }
     leaders = leadership.leaders.sort {|x,y| x.member.name <=> y.member.name}
+    leaders = leaders.select {|x| [ClubMemberStatus['Active'], ClubMemberStatus['Life']].include?(x.member.club_member_status) &&
+                                  x.end_date > Date.today }
     view = ActionView::Base.new
     view.view_paths = RAILS_ROOT+"/app/views"
     view.render :partial => "club_leaderships/drop_leader_list",
