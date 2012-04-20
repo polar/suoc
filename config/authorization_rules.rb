@@ -54,7 +54,6 @@ authorization do
     has_permission_on :acct_transactions, :to => :delete
     has_permission_on :club_login_messages, :to => :manage
 
-    has_permission_on :club_leaderships, :to => :manage
     includes :officer
   end
 
@@ -144,6 +143,8 @@ authorization do
     has_permission_on :cert_orgs, :to => :manage
     has_permission_on :cert_certifications, :to => :manage
     has_permission_on :club_trip_registrations, :to => [:show_submitted, :show_statistics]
+    has_permission_on :club_leaders, :to => :manage
+    has_permission_on :club_leaderships, :to => :manage
   end
 
   role :chair do
