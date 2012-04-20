@@ -36,6 +36,7 @@ class ClubLeadershipsController < BaseController
   filter_access_to :delete_leader, :require => :update
   filter_access_to :edit_leader, :require => :update
   filter_access_to :update_leader, :require => :update
+  filter_access_to :update_leaders, :require => :update
 
   #
   # This filter determines whether the modification links should be viewed.
