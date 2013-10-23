@@ -75,7 +75,7 @@ class ClubMembershipsController < BaseController
   def submit_list
     # Memberships are from Sept to Sept.
     if Time.now.month > 8
-      year = Time.now.year +1
+      year = Time.now.year + 1
     else
       year = Time.now.year 
     end
