@@ -2,7 +2,6 @@
   <div class="box">
     <h3><%= "Why Sign up?".l %></h3>
     <ul class="list checks">
-      <li><b>You are attending the SUOC 75th Reunion!</b></li>
       <li>Required if you are a student member of SUOC.</li>
       <li>You are an alumni member of SUOC for fun</li>
     </ul>
@@ -12,6 +11,7 @@
     <p><%= "After signing up, you'll receive an e-mail confirmation message.".l %>
     <p><%= "Click the activation link in the e-mail to log in.".l %>
     <p><%= link_to "Already have an account?".l, "/login" %>
+    <p><%= link_to "Need another activation email?".l, "/resend_activation" %>
   </div>
 </div>
 <div id="yui-main">
@@ -32,10 +32,10 @@
         </label>
         <%= f.text_field :login, :tabindex => 1 %>
 
-        <label for="user_email">
-          <%= "E-mail address".l %>
-          <em><%= "(Required: We will send a confirmation e-mail to the address you enter.)".l %>
-        </label>
+          <label for="user_email">
+            <%= "E-mail address".l %>
+            <em><%= "(Required: We will send a confirmation e-mail to the address you enter.)".l %></em>
+          </label>
         <%= f.text_field :email, :tabindex => 2 %>
 
         <label for="user_club_memberid">
