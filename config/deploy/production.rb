@@ -17,7 +17,7 @@ set :use_sudo, false
 
 set :scm_username, "polar"
 
-set :gateway, "polar@adiron.com:922"
+set :gateway, "polar@adiron.com:22"
 set :user, "deploy"
 
 set :rails_env, "production"
