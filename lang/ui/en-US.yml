@@ -53,3 +53,5 @@ en:
   # Bio Stories Stuff
 
   user_bio_help: "<p>Your bio is one of the things people see on your profile. Some ideas:<ul><li> Describe your ephatical devotion to the outdoors</li><li> Explain what you love about caving.</li><li> What woud you do with Harry's Mom?</li></ul></p>"
+  need_another_activation_email: "Need another activation email?"
+  click_here_to_send_it: "Click here to send it"

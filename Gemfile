@@ -1,0 +1,11 @@
+source "https://rubygems.org"
+
+gem "rails", "2.2.2"
+gem "RedCloth", "4.1.9"
+gem "haml", "2.0.9"
+gem "mysql", "2.7"
+gem "rake", "0.8.3"
+gem "ruby_parser", "2.0.2"
+gem "hpricot", "0.6.164"
+gem "rmagick", "2.9.1"
+gem "fastercsv", "1.4.0"
