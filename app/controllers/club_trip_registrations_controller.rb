@@ -245,10 +245,10 @@ class ClubTripRegistrationsController < BaseController
     @config = ClubTripRegistrationsConfiguration.first;
 
     if @config.update_attributes(params[:club_trip_registrations_configuration])
-      flash[:error] = "Could not save configuration"
+      flash[:error] = "Configuration changed"
       redirect_to :action => :index
     else
-      flash[:error] = "Configuration changed."
+      flash[:error] = "Configuration not saved. Bad format."
       render :action => :configure
     end
   end
