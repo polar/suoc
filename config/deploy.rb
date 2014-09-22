@@ -63,7 +63,7 @@ namespace :deploy do
     # Move forward uploads and index directories along with new release.
     # These are photos page_photos and homepage_features attachments.
     %w{photos page_photos homepage_features}.each do |share|
-      run "ln -s #{shared_path}/system/#{share} #{release_path}/public/#{share}"
+      run "ln -s #{shared_path}/system/#{share} #{release_path}/public || ls #{release_path}/public"
     end
 
     if rails_env == "staging"
